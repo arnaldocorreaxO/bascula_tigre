@@ -3,19 +3,14 @@ from core.bascula.views.bascula.movimiento.views import *
 from core.bascula.views.bascula.cliente.views import *
 from core.bascula.views.bascula.producto.views import *
 from core.bascula.views.bascula.marcavehiculo.views import *
+from core.bascula.views.bascula.vehiculo.views import *
+from core.bascula.views.bascula.transportista.views import *
 
 from django.urls import path
 
 
 
-urlpatterns = [
-    # Marca Vehiculo
-    # path('marca_vehiculo', MarcaVehiculoListView.as_view(), name='marca_vehiculo_list'),
-    # path('marca_vehiculo/add/', MarcaVehiculoCreateView.as_view(), name='marca_vehiculo_create'),
-    # path('marca_vehiculo/update/<int:pk>/', MarcaVehiculoUpdateView.as_view(), name='marca_vehiculo_update'),
-    # path('marca_vehiculo/delete/<int:pk>/', MarcaVehiculoDeleteView.as_view(), name='marca_vehiculo_delete'),
-    # Movimiento
-    
+urlpatterns = [    
     # URL para lectura de Puerto COM
 	path('ajax_puerto_serial/<str:puerto>/',leer_puerto_serial,name='leer_puerto_serial'),
 	path('ajax_peso_bascula/',leer_peso_bascula,name='leer_peso_bascula'),
@@ -41,5 +36,15 @@ urlpatterns = [
     path('marcavehiculo/add/', MarcaVehiculoCreate.as_view(), name='marcavehiculo_create'),
     path('marcavehiculo/update/<int:pk>/', MarcaVehiculoUpdate.as_view(), name='marcavehiculo_update'),
     path('marcavehiculo/delete/<int:pk>/', MarcaVehiculoDelete.as_view(), name='marcavehiculo_delete'),
+    # VEHICULO
+    path('vehiculo', VehiculoList.as_view(), name='vehiculo_list'),
+    path('vehiculo/add/', VehiculoCreate.as_view(), name='vehiculo_create'),
+    path('vehiculo/update/<int:pk>/', VehiculoUpdate.as_view(), name='vehiculo_update'),
+    path('vehiculo/delete/<int:pk>/', VehiculoDelete.as_view(), name='vehiculo_delete'),
+    # TRANSPORTISTA
+    path('transportista', TransportistaList.as_view(), name='transportista_list'),
+    path('transportista/add/', TransportistaCreate.as_view(), name='transportista_create'),
+    path('transportista/update/<int:pk>/', TransportistaUpdate.as_view(), name='transportista_update'),
+    path('transportista/delete/<int:pk>/', TransportistaDelete.as_view(), name='transportista_delete'),
 
    ]
