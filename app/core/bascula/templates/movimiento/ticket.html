@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        @page {
+            width: 48mm;
+            height: {{ height }}mm;
+            margin: 0;
+        }
+
+        body {
+            font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+            font-size: 5px;
+            color: black !important;
+        }
+
+        p {
+            font-size: 5px;
+        }
+
+        .content {
+            width: 48mm;
+            height: {{ height }}mm;
+            padding: 10px;
+        }
+
+        .salto {
+
+            padding: 30px;
+        }
+
+        .client {
+            font-size: 5px;
+            margin-top: 0;
+            padding-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .name-company {
+            margin-top: 10px;
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 0;
+            text-align: center;
+        }
+
+        .desc-company {
+            font-size: 5px;
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .border-dotted {
+            border-top-width: 1px;
+            border-top-style: dotted;
+            border-bottom-width: 1px;
+            border-bottom-style: dotted;
+        }
+
+        .ruc {
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .izq {
+            font-size: 5px;
+            /* font-weight: bold;
+            text-transform: uppercase; */
+            text-align: justify;
+            /* margin-bottom: 5px; */
+        }
+        .linea {
+            font-size: 5px;
+            /* font-weight: bold; */
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .producto {
+            font-size: 8px;
+            /* font-weight: bold; */
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .table {
+            font-size: 5px;
+            color: black;
+        }
+
+        .table td, .table th {
+            padding: 0;
+            color: black;
+        }
+
+        .img-logo {
+            margin-top: 5px;
+            width: 20px;
+            height: 20px;
+            margin-bottom: 5px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="content">
+   <p class="salto"></p>
+    <p class="ruc border-dotted">
+        {{ movimiento.nro_ticket|stringformat:"i" }}
+    </p>
+    <p class="client">
+        <b>Operador:</b> {{ movimiento.usu_insercion.get_full_name }}<br>
+        <!-- <b>Nro. Ticket:</b> {{ movimiento.nro_ticket }}<br>         -->
+        <b>Chapa:</b> {{ movimiento.vehiculo.matricula }}<br>
+        <b>Conductor:</b> {{ movimiento.chofer.get_full_name }}<br>
+        <p class="producto" > {{ movimiento.producto.denominacion }}</p>
+        <p class="linea border-dotted">ENTRADA</p>
+        <b class="izq">Fecha:</b> {{ movimiento.fec_insercion|date:"d/m/Y H:i:s" }}<br>
+        <b class="izq">Peso:</b> {{ movimiento.peso_entrada }} kg<br><br>
+        <p class="linea border-dotted">SALIDA</p>
+        <b>Fecha:</b> {{ movimiento.fec_modificacion|date:"d/m/Y H:i:s" }}<br>
+        <b>Peso Tara:</b> {{ movimiento.peso_tara}} kg<br>
+        <b>Peso Bruto:</b> {{ movimiento.peso_bruto}} kg TP<br>
+        <b>Peso Neto:</b> {{ movimiento.peso_neto}} kg L<br>
+      
+    </p>
+
+</div>
+</body>
+</html>

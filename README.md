@@ -1,2 +1,2 @@
-# bascula
-Sistema de Bascula
+# electoral
+Sistema Electoral
