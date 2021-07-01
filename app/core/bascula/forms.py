@@ -6,7 +6,7 @@ from django.db.models import Max
 from django.forms import ModelForm
 from core.base.forms import readonly_fields
 
-from core.bascula.models import Movimiento, Transportista, Vehiculo, Cliente
+from core.bascula.models import Movimiento, Transportista, Vehiculo, Cliente,Producto,MarcaVehiculo
 
 
 
@@ -36,6 +36,60 @@ class ClienteForm(ModelForm):
         exclude = readonly_fields
         widgets = {
             'denominacion': forms.TextInput(attrs={'placeholder': 'Ingrese un Cliente'}),
+        }
+
+    def save(self, commit=True):
+        data = {}
+        try:
+            if self.is_valid():
+                super().save()
+            else:
+                data['error'] = self.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data
+''' 
+======================
+=== MARCA VEHICULO ===
+====================== '''
+class MarcaVehiculoForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.fields['codigo'].widget.attrs['autofocus'] = True
+
+    class Meta:
+        model = MarcaVehiculo
+        fields = '__all__'
+        exclude = readonly_fields
+        widgets = {
+            'denominacion': forms.TextInput(attrs={'placeholder': 'Ingrese una Marca Vehiculo'}),
+        }
+
+    def save(self, commit=True):
+        data = {}
+        try:
+            if self.is_valid():
+                super().save()
+            else:
+                data['error'] = self.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data
+''' 
+====================
+===   PRODUCTO   ===
+==================== '''
+class ProductoForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['codigo'].widget.attrs['autofocus'] = True
+
+    class Meta:
+        model = Producto
+        fields = '__all__'
+        exclude = readonly_fields
+        widgets = {
+            'denominacion': forms.TextInput(attrs={'placeholder': 'Ingrese un Producto'}),
         }
 
     def save(self, commit=True):
@@ -197,12 +251,43 @@ class MovimientoSalidaForm(ModelForm):
         fields =['fecha','nro_ticket','vehiculo','chofer',
                  'nro_mic','nro_remision','peso_embarque',
                  'cliente','producto','peso_salida']
-        # widgets = {
-        #     'vehiculo': forms.Select(attrs={
-        #         'class': 'custom-select select2',
-        #         # 'style': 'width: 100%'
-        #     }),
-        #  }
+        widgets = {
+            'vehiculo': forms.Select(attrs={
+                'class': 'custom-select',
+                'disabled': True,
+                }
+            ),
+            'chofer': forms.Select(attrs={
+                'class': 'custom-select',
+                'disabled': True,
+                }
+            ),
+            'cliente': forms.Select(attrs={
+                'class': 'custom-select',
+                'disabled': True,
+                }
+            ),
+            'producto': forms.Select(attrs={
+                'class': 'custom-select',
+               'disabled': True,
+                }
+            ),
+            'fecha': forms.TextInput(attrs={
+                'readonly': True,
+                # 'style': 'width: 100%'
+                }
+            ),
+            'nro_ticket': forms.TextInput(attrs={
+                'readonly': True,
+                # 'style': 'width: 100%'
+                }
+            ),
+            'peso_entrada': forms.TextInput(attrs={
+                'readonly': True,
+                # 'style': 'width: 100%'
+                }
+            ),
+        }
    
     def save(self, commit=True):
         data = {}

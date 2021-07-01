@@ -1,6 +1,7 @@
 #SYSTEM
 import json
 import os
+from django.db.models.aggregates import Max
 
 from django.http.response import HttpResponseRedirect
 
@@ -47,7 +48,7 @@ class MovimientoList(PermissionMixin,ListView):
 			action = request.POST['action']
 			if action == 'searchdata':
 				data =[]
-				for i in Movimiento.objects.all():
+				for i in Movimiento.objects.filter(peso_salida__lte=0):
 					data.append(i.toJSON())
 			else:	
 				data['error']= 'No ha ingresado a ninguna opción'
@@ -144,6 +145,10 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 						form = self.get_form()
 						data = form.save()
 						movimiento = self.get_object()
+						max_nro_ticket = Movimiento.objects.aggregate(Max('nro_ticket'))['nro_ticket__max']
+						if max_nro_ticket is None:
+							max_nro_ticket = 0 
+						movimiento.nro_ticket = max_nro_ticket + 1
 						if movimiento.peso_entrada > movimiento.peso_salida:
 							movimiento.peso_neto = movimiento.peso_entrada - movimiento.peso_salida
 							movimiento.peso_bruto = movimiento.peso_entrada

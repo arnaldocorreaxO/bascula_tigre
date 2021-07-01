@@ -351,7 +351,7 @@ $(function () {
         var select_local_votacion = $('#frmForm #id_local_votacion')
         select_seccional.prop("disabled", false);
         select_local_votacion.prop("disabled", false);
-
+        
 
         var form = $(this);
         

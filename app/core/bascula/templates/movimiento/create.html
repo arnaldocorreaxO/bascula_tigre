@@ -94,22 +94,27 @@
                                     <label for="{{ form.vehiculo.id_for_label }}">{{form.vehiculo.label}}*</label>
                                     <div class="input-group">                                    
                                         {{ form.vehiculo}}
+                                        {% if action == 'add' %}
                                         <div class="input-group-append">
                                             <button class="btn btn-success btn-flat btn-xs btnAddVehiculo" type="button">
                                                 <i class="fas fa-plus"></i>                                                
                                             </button>
-                                        </div>
+                                        </div>                                        
+                                        {% endif %} 
+                                        
                                     </div>
                                 </div>
                                 <div class="from-group col-md-6 mb-0">
                                     <label for="{{ form.chofer.id_for_label }}">{{form.chofer.label}}*</label>
                                     <div class="input-group">                                    
                                         {{ form.chofer}}
+                                        {% if action == 'add' %}
                                         <div class="input-group-append">
                                             <button class="btn btn-success btn-flat btn-xs btnAddChofer" type="button">
                                                 <i class="fas fa-plus"></i>                                                
                                             </button>
                                         </div>
+                                        {% endif %} 
                                     </div>
                                 </div>
                             </div>

@@ -92,7 +92,7 @@ def leerPuertoSerial(config):
 					break
 	
 			ser.close()
-			return str(data[0])
+			return str(data[:])
 		except Exception as e:
 			print ("ERROR DE COMUNICACION...: " + str(e))
 			return f'error:{str(e)}'
