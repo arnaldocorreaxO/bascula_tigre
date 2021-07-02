@@ -290,6 +290,7 @@ class MovimientoSalidaForm(ModelForm):
             'nro_ticket': forms.TextInput(attrs={
                 'readonly': False,
                 # 'style': 'width: 100%'
+                # '-'
                 }
             ),
             'peso_entrada': forms.TextInput(attrs={
