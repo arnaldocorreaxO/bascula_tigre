@@ -18,17 +18,17 @@
             font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
             padding: 0;
             margin: 0;
-            font-size: 10px;
+            font-size: 14px;
             color: black !important;
         }
 
         p {
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .content {
-            width: 58mm;
-            height: {{ height }}mm;
+            width: 110mm;
+            height: 297mm;
             padding: 10px;
         }
 
@@ -38,7 +38,7 @@
         }
 
         .client {
-            font-size: 10px;
+            font-size: 14px;
             margin-top: 0;
             padding-top: 0;
             margin-bottom: 5px;
@@ -67,7 +67,7 @@
         }
 
         .ticket {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: bold;
             text-transform: uppercase;
             text-align: center;
@@ -81,7 +81,7 @@
             /* margin-bottom: 5px; */
         }
         .linea {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: bold;
             text-transform: uppercase;
             text-align: center;
@@ -124,20 +124,20 @@
     <p class="client"> 
         <!-- <p class="linea border-dotted">ORIGEN</p>        -->
         <b>ID:</b> {{ movimiento.id}}<br>        
-        <b>Cliente:</b> {{ movimiento.cliente.get_full_name }}<br>        
-        <b>Chapa:</b> {{ movimiento.vehiculo.get_full_name }}<br>
-        <b>Conductor:</b> {{ movimiento.chofer.get_full_name }}<br>
+        <b>CLIENTE:</b> {{ movimiento.cliente.get_full_name }}<br>        
+        <b>CHAPA:</b> {{ movimiento.vehiculo.get_full_name }}<br>
+        <b>CONDUCTOR:</b> {{ movimiento.chofer.get_full_name }}<br>
         <p class="producto" > {{ movimiento.producto.denominacion }}</p>
         <p class="linea border-dotted">ENTRADA</p>
-        <b>Operador:</b> {{ movimiento.usu_insercion.get_full_name }}<br>
-        <b>Fecha:</b> {{ movimiento.fec_insercion|date:"d/m/Y H:i:s" }}<br>
-        <b>Peso:</b> {{ movimiento.peso_entrada }} kg<br><br>
+        <b>OPERADOR:</b> {{ movimiento.usu_insercion.get_full_name }}<br>
+        <b>FECHA:</b> {{ movimiento.fec_insercion|date:"d/m/Y H:i:s" }}<br>
+        <b>PESO:</b> {{ movimiento.peso_entrada }} kg<br><br>
         <p class="linea border-dotted">SALIDA</p>
-        <b>Operador:</b> {{ movimiento.usu_modificacion.get_full_name }}<br>
-        <b>Fecha:</b> {{ movimiento.fec_modificacion|date:"d/m/Y H:i:s" }}<br>
-        <b>Peso Tara:</b> {{ movimiento.peso_tara}} kg<br>
-        <b>Peso Bruto:</b> {{ movimiento.peso_bruto}} kg TP<br>
-        <b>Peso Neto:</b> {{ movimiento.peso_neto}} kg L<br>
+        <b>OPERADOR:</b> {{ movimiento.usu_modificacion.get_full_name }}<br>
+        <b>FECHA:</b> {{ movimiento.fec_modificacion|date:"d/m/Y H:i:s" }}<br>
+        <b>PESO TARA:</b> {{ movimiento.peso_tara}} kg<br>
+        <b>PESO BRUTO:</b> {{ movimiento.peso_bruto}} kg TP<br>
+        <b>PESO NETO:</b> {{ movimiento.peso_neto}} kg L<br>
       
     </p>
 
