@@ -4,10 +4,12 @@ $(function () {
     /*HABILITA EDICION DE PESO PARA VILLETA INTERNO */
     var select_cliente = $('select[name="cliente"]');
     select_cliente.change(function () {
-        if (select_cliente.val() == 1) {
-            $('input[name="peso_entrada"]').prop('readonly', false);
-        } else {
-            $('input[name="peso_entrada"]').prop('readonly', true);
+        if (action == 'add') {
+            if (select_cliente.val() == 1) {
+                $('input[name="peso_entrada"]').prop('readonly', false);
+            } else {
+                $('input[name="peso_entrada"]').prop('readonly', true);
+            }
         }
     });
 
