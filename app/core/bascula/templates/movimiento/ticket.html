@@ -6,16 +6,16 @@
     <title>Title</title>
     <style>
         @page {
-            width: 48mm;
+            width: 58mm;
             height: {{ height }}mm;
             margin: 0;
         }
 
         body {
-            font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+            font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
             padding: 0;
             margin: 0;
-            font-size: 5px;
+            font-size: 10px;
             color: black !important;
         }
 
@@ -24,7 +24,7 @@
         }
 
         .content {
-            width: 48mm;
+            width: 58mm;
             height: {{ height }}mm;
             padding: 10px;
         }
@@ -35,7 +35,7 @@
         }
 
         .client {
-            font-size: 5px;
+            font-size: 10px;
             margin-top: 0;
             padding-top: 0;
             margin-bottom: 5px;
@@ -64,7 +64,7 @@
         }
 
         .ticket {
-            font-size: 8px;
+            font-size: 12px;
             font-weight: bold;
             text-transform: uppercase;
             text-align: center;
@@ -78,16 +78,16 @@
             /* margin-bottom: 5px; */
         }
         .linea {
-            font-size: 5px;
-            /* font-weight: bold; */
+            font-size: 12px;
+            font-weight: bold;
             text-transform: uppercase;
             text-align: center;
             margin-bottom: 5px;
         }
 
         .producto {
-            font-size: 8px;
-            /* font-weight: bold; */
+            font-size: 14px;
+            font-weight: bold;
             text-transform: uppercase;
             text-align: center;
             margin-bottom: 5px;
@@ -127,8 +127,8 @@
         <p class="producto" > {{ movimiento.producto.denominacion }}</p>
         <p class="linea border-dotted">ENTRADA</p>
         <b>Operador:</b> {{ movimiento.usu_insercion.get_full_name }}<br>
-        <b class="izq">Fecha:</b> {{ movimiento.fec_insercion|date:"d/m/Y H:i:s" }}<br>
-        <b class="izq">Peso:</b> {{ movimiento.peso_entrada }} kg<br><br>
+        <b>Fecha:</b> {{ movimiento.fec_insercion|date:"d/m/Y H:i:s" }}<br>
+        <b>Peso:</b> {{ movimiento.peso_entrada }} kg<br><br>
         <p class="linea border-dotted">SALIDA</p>
         <b>Operador:</b> {{ movimiento.usu_modificacion.get_full_name }}<br>
         <b>Fecha:</b> {{ movimiento.fec_modificacion|date:"d/m/Y H:i:s" }}<br>

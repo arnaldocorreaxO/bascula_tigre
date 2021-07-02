@@ -169,10 +169,10 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 						form = self.get_form()
 						data = form.save()
 						movimiento = self.get_object()
-						max_nro_ticket = Movimiento.objects.aggregate(Max('nro_ticket'))['nro_ticket__max']
-						if max_nro_ticket is None:
-							max_nro_ticket = 0 
-						movimiento.nro_ticket = max_nro_ticket + 1
+						# max_nro_ticket = Movimiento.objects.aggregate(Max('nro_ticket'))['nro_ticket__max']
+						# if max_nro_ticket is None:
+						# 	max_nro_ticket = 0 
+						# movimiento.nro_ticket = max_nro_ticket + 1
 						if movimiento.peso_entrada > movimiento.peso_salida:
 							movimiento.peso_neto = movimiento.peso_entrada - movimiento.peso_salida
 							movimiento.peso_bruto = movimiento.peso_entrada
@@ -297,7 +297,7 @@ class MovimientoPrint(View):
 
 	def get_height_ticket(self):
 		movimiento = Movimiento.objects.get(pk=self.kwargs['pk'])
-		height = 100		
+		height = 180		
 		# increment = movimiento.all().count() * 5.45
 		increment = 1 * 5.45
 		height += increment
