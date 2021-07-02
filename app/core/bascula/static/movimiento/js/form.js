@@ -1,14 +1,16 @@
 $(function () {
-
+    var action = $('input[name="action"]').val()
+    var peso_entrada = $('input[name="peso_entrada"]')
 
     /*HABILITA EDICION DE PESO PARA VILLETA INTERNO */
     var select_cliente = $('select[name="cliente"]');
     select_cliente.change(function () {
         if (action == 'add') {
             if (select_cliente.val() == 1) {
-                $('input[name="peso_entrada"]').prop('readonly', false);
+                peso_entrada.prop('readonly', false);
             } else {
-                $('input[name="peso_entrada"]').prop('readonly', true);
+                peso_entrada.val(0);
+                peso_entrada.prop('readonly', true);
             }
         }
     });
@@ -19,9 +21,10 @@ $(function () {
         $('select').prop('disabled',false);               
         
         var parameters = new FormData(this);
-        var action = $('input[name="action"]').val()
-        var peso_entrada = $('input[name="peso_entrada"]').val()
-        var peso_salida = $('input[name="peso_salida"]').val()
+        // var action = $('input[name="action"]').val()
+        // var peso_entrada = $('input[name="peso_entrada"]').val()
+        peso_entrada.val();
+        var peso_salida = $('input[name="peso_salida"]').val();
         if (action == 'add') {
             // alert(peso_entrada);
             if (peso_entrada <= 0) {
