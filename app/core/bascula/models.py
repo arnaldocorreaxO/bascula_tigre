@@ -125,7 +125,7 @@ class Transportista(ModeloBase):
 		return self.get_full_name()
 
 	def get_full_name(self):
-		return f"{self.codigo}-{self.nombre} {self.apellido}"
+		return f"{format(self.codigo,',.0f').replace(',','.')} - {self.nombre} {self.apellido}"
 	
 	class Meta:
 	# ordering = ['1',]
