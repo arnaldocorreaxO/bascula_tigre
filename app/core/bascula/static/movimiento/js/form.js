@@ -8,7 +8,7 @@ $(function () {
     //EVENTO SUBMIT     
     $('#frmMovimiento').on('submit', function (e) {
         e.preventDefault();
-        $('select').prop('disabled',false);
+        $('select').prop('disabled',false);               
         
         var parameters = new FormData(this);
         var action = $('input[name="action"]').val()
@@ -29,13 +29,13 @@ $(function () {
             }
 
         };      
-
+        
         parameters.append('action', action);
         submit_formdata_with_ajax('Notificación',
             '¿Estas seguro de realizar la siguiente acción?',
             window.location.pathname,
             parameters,
-            function (request) {                
+            function (request) {                 
                 if (action != 'add') {
                     dialog_action('Notificación', '¿Desea Imprimir el Comprobante?', function () {
                         window.open('/bascula/movimiento/print/' + request.id + '/', '_blank');
@@ -46,9 +46,8 @@ $(function () {
                 } else {
                     location.href = '/bascula/movimiento';
                 }
-
-
             });
+            $('select').prop('disabled',true);               
     });
     
 

@@ -252,7 +252,7 @@ class MovimientoSalidaForm(ModelForm):
         self.initial['nro_ticket'] = max_nro_ticket + 1
 
         for form in self.visible_fields():
-            form.field.widget.attrs['readonly'] = 'readonly'
+            # form.field.widget.attrs['readonly'] = 'readonly'
             form.field.widget.attrs['class'] = 'form-control'
             # form.field.widget.attrs['autocomplete'] = 'off'
       
@@ -294,6 +294,26 @@ class MovimientoSalidaForm(ModelForm):
                 }
             ),
             'peso_entrada': forms.TextInput(attrs={
+                'readonly': True,
+                # 'style': 'width: 100%'
+                }
+            ),
+            'peso_salida': forms.TextInput(attrs={
+                'readonly': True,
+                # 'style': 'width: 100%'
+                }
+            ),
+            'nro_mic': forms.TextInput(attrs={
+                'readonly': True,
+                # 'style': 'width: 100%'
+                }
+            ),
+            'nro_remision': forms.TextInput(attrs={
+                'readonly': True,
+                # 'style': 'width: 100%'
+                }
+            ),
+            'peso_embarque': forms.TextInput(attrs={
                 'readonly': True,
                 # 'style': 'width: 100%'
                 }
