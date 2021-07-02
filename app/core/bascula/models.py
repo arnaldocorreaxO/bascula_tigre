@@ -225,11 +225,12 @@ class Movimiento(ModeloBase):
 		item['chofer'] = str(self.chofer)
 		# item['producto'] = self.producto.toJSON()
 		item['producto'] = str(self.producto)
-		item['porc_humedad'] = format(self.porc_humedad,',.2f')
-		item['nro_remision'] = format(self.nro_remision,',.2f')
-		item['peso_entrada'] = format(self.peso_entrada,',.2f')
-		item['peso_salida'] = format(self.peso_salida,',.2f')
-		item['peso_neto'] = format(self.peso_neto,',.2f')
+		item['porc_humedad'] = format(self.porc_humedad,',.0f')
+		item['nro_remision'] = format(self.nro_remision,',.0f')
+		item['peso_entrada'] = format(self.peso_entrada,',.0f')
+		item['peso_salida'] = format(self.peso_salida,',.0f')
+		item['peso_neto'] = format(self.peso_neto,',.0f')
+		
 		return item
 	
 	def __str__(self):

@@ -14,12 +14,24 @@ from core.bascula.models import Movimiento, Transportista, Vehiculo, Cliente,Pro
 ====================
 ===   SHEARCH    ===
 ==================== '''
-class ShearchForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)        
-        self.fields['term'].widget.attrs['autofocus'] = True
-    # Rango de fechas 
-    date_range = forms.CharField()
+class SearchForm(forms.ModelForm):
+    # Extra Fields
+    date_range = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'autocomplete': 'off'
+    }))
+
+    class Meta:
+        model = Movimiento
+        fields = '__all__'
+        widgets = {
+            'cliente': forms.Select(attrs={'class': 'form-control select2', }),
+            'producto': forms.Select(attrs={'class': 'form-control select2', }),
+            'vehiculo': forms.Select(attrs={'class': 'form-control select2', }),
+            'chofer': forms.Select(attrs={'class': 'form-control select2', }),
+            # 'tipo_voto': forms.Select(attrs={'class': 'form-control select2', }),
+        }
+      
 
 ''' 
 ====================
@@ -213,8 +225,6 @@ class MovimientoEntradaForm(ModelForm):
             ),
         }
 
-        
-   
     def save(self, commit=True):
         data = {}
         form = super()

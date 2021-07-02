@@ -1,25 +1,24 @@
 #SYSTEM
 import json
 import os
-from django.db.models.aggregates import Max
-
-from django.http.response import HttpResponseRedirect
+from datetime import date, datetime
 
 from config import settings
 from core.bascula.forms import (ChoferForm, MovimientoEntradaForm,
-								MovimientoSalidaForm, ShearchForm,
+								MovimientoSalidaForm, SearchForm,
 								VehiculoForm)
-#MODELS
-from core.bascula.models import ConfigSerial, Movimiento
 #LOCALS
+from core.bascula.models import ConfigSerial, Movimiento
 from core.base.comserial import *
 from core.base.models import Empresa
 from core.base.views import printSeparador
 from core.security.mixins import PermissionMixin
+#DJANGO
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db import transaction
-#DJANGO
+from django.db.models.aggregates import Max
 from django.http import HttpResponse, JsonResponse
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.urls import reverse_lazy
@@ -28,15 +27,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from django.views.generic.base import View
 from django.views.generic.edit import FormView
+from weasyprint import CSS, HTML
 
-from weasyprint import HTML, CSS
-
-"""Listado de Movimiento de Bascula"""
-class MovimientoList(PermissionMixin,ListView):	
+"""LISTADO DE MOVIMIENTO DE BASCULA"""
+class MovimientoList(PermissionMixin,FormView):	
 	model = Movimiento
 	template_name = 'movimiento/list.html'
 	permission_required = 'view_movimiento'
-	# form_class = ShearchForm
+	form_class = SearchForm
 	
 	@method_decorator(csrf_exempt)
 	def dispatch(self, request, *args, **kwargs):
@@ -46,9 +44,35 @@ class MovimientoList(PermissionMixin,ListView):
 		data ={}		
 		try:
 			action = request.POST['action']
-			if action == 'searchdata':
+			if action == 'search':
 				data =[]
-				for i in Movimiento.objects.filter(peso_salida__lte=0):
+				start_date = request.POST['start_date']
+				end_date = request.POST['end_date']
+				cliente = request.POST['cliente']
+				producto = request.POST['producto']
+				chofer = request.POST['chofer']
+				vehiculo = request.POST['vehiculo']
+
+				_where = "1 = 1"
+				if len(cliente):
+					_where += f" AND bascula_movimiento.cliente_id = '{cliente}'"
+				if len(producto):
+					_where += f" AND bascula_movimiento.producto_id = '{producto}'"
+				if len(chofer):
+					_where += f" AND bascula_movimiento.chofer_id = '{chofer}'"
+				if len(vehiculo):
+					_where += f" AND bascula_movimiento.vehiculo_id = '{vehiculo}'"
+				# peso_salida__lte=0
+				# qs = Movimiento.objects.filter()\
+				# 					.extra(where=[_where])\
+				# 					.order_by('id')
+				
+				search = Movimiento.objects.filter()
+				if len(start_date) and len(end_date):
+					search = search.filter(fecha__range=[start_date, end_date])\
+									.extra(where=[_where])\
+									.order_by('-id')
+				for i in search:
 					data.append(i.toJSON())
 			else:	
 				data['error']= 'No ha ingresado a ninguna opción'
@@ -67,7 +91,7 @@ class MovimientoList(PermissionMixin,ListView):
 		return context
 
 
-"""Crear Movimiento de Bascula"""
+"""CREAR MOVIMIENTO DE BASCULA"""
 class MovimientoCreate(PermissionMixin,CreateView):
 	model = Movimiento
 	form_class=MovimientoEntradaForm
@@ -116,7 +140,7 @@ class MovimientoCreate(PermissionMixin,CreateView):
 		return context
 
 
-"""Actualizar Movimiento de Bascula"""
+"""ACTUALIZAR MOVIMIENTO DE BASCULA"""
 class MovimientoUpdate(PermissionMixin,UpdateView):
 	model = Movimiento
 	form_class=MovimientoSalidaForm
@@ -180,6 +204,7 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 		context['puerto_bascula2'] = ConfigSerial.objects.get(cod='BSC2').puerto
 		return context
 
+'''ELIMINAR MOVIMIENTO DE BASCULA'''
 class MovimientoDelete(PermissionMixin, DeleteView):
 	model = Movimiento
 	template_name = 'bascula/movimiento/delete.html'
@@ -204,14 +229,14 @@ class MovimientoDelete(PermissionMixin, DeleteView):
 		context['list_url'] = self.success_url
 		return context
 
-"""Pruebas de Lectura"""
+"""PRUEBAS DE LECTURA"""
 def test_bascula(request):
 	return render(
 		request=request,
 		template_name='bascula/bascula.html',
 	)
 
-"""Obtener peso directamente del Puerto Serial"""
+"""OBTENER PESO DIRECTAMENTE DEL PUERTO SERIAL"""
 @method_decorator(csrf_exempt)
 def leer_puerto_serial(request,puerto):
 	config = ConfigSerial.objects.get(puerto=puerto)	
@@ -228,7 +253,7 @@ def leer_puerto_serial(request,puerto):
 	printSeparador()
 	return JsonResponse({ 'resultado': data })          
 
-"""Obtener peso de archivo txt"""
+"""OBTENER PESO DE ARCHIVO TXT"""
 @method_decorator(csrf_exempt)
 def leer_peso_bascula(request):
 	peso = 0
@@ -245,8 +270,7 @@ def leer_peso_bascula(request):
 	return JsonResponse({ 'resultado': peso })          
 
 def getPeso(config,buffer):
-
-	"""Obtener valores del buffer de la Bascula 1"""
+	"""OBTENER VALORES DEL BUFFER DE LA BASCULA 1"""
 	if config.cod == 'BSC1': 
 		pos_ini = buffer.find('+') + 1
 		print('Posicion Inicial:', pos_ini)
@@ -254,7 +278,7 @@ def getPeso(config,buffer):
 		print('Posicion Final\t:', pos_fin)
 		return buffer[pos_ini:pos_fin]
 	
-	"""Obtener valores del buffer de la Bascula 2"""
+	"""OBTENER VALORES DEL BUFFER DE LA BASCULA 2"""
 	if config.cod == 'BSC2': 
 		pos_ini = config.pos_ini
 		print('Posicion Inicial:', pos_ini)

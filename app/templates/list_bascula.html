@@ -43,19 +43,19 @@
                     {% endblock %}
                   
                     {% block box_header %}
-                        <div>
+                        <div class="text-right">
                         <!--Block box footer buttons-->
                         {% block box_header_buttons %}
                             {% if create_url %}
-                            <a href="{{ create_url }}" class="btn btn-primary btn-flat" data-toggle="tooltip" title="Entrada Báscula">
+                            <a href="{{ create_url }}" class="btn btn-primary btn-flat  data-toggle="tooltip" title="Entrada Báscula">
                                 <i class="fas fa-truck"></i> ENTRADA
                             </a>
                             {% endif %}
                         <!--Block box footer add buttons-->
                             {% block box_header_add_button %}{% endblock %}
-                            <a href="{{ list_url }}" class="btn btn-success btn-flat">
+                            <!-- <a href="{{ list_url }}" class="btn btn-success btn-flat">
                                 <i class="fas fa-sync-alt"></i> Actualizar
-                            </a>
+                            </a> -->
                         {% endblock %}
                         </div>
                     {% endblock %}

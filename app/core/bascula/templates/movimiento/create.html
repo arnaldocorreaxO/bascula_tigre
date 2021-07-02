@@ -54,15 +54,15 @@
 
 
                             <div class="form-row">
-                                <div class="from-group col-md-2 mb-0">
+                                <div class="from-group col-md-3 mb-0">
                                     <label for="{{ form.fecha.id_for_label }}">{{form.fecha.label}}*</label>
                                     {{ form.fecha|add_class:'form-control'|attr:'autocomplete:off'}}
                                 </div>
-                                <div class="from-group col-md-2 mb-0">
+                                <div class="from-group col-md-3 mb-0">
                                     <label for="{{ form.nro_ticket.id_for_label }}">{{form.nro_ticket.label}}*</label>
                                     {{ form.nro_ticket|add_class:'form-control'|attr:'autocomplete:off'}}
                                 </div>
-                                <div class="from-group col-md-8 mb-0">
+                                <div class="from-group col-md-6 mb-0">
                                     {% if action == 'add' %}
                                         <label for="{{ form.peso_entrada.id_for_label }}">{{form.peso_entrada.label}}*</label>                                   
                                     {% else %}
