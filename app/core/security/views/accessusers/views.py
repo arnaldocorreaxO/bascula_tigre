@@ -26,7 +26,7 @@ class UsersListView(PermissionMixin, TemplateView):
                 data = []
                 search = AccessUsers.objects.filter()
                 start_date = request.POST['start_date']
-                end_date = request.POST['start_date']
+                end_date = request.POST['end_date']
                 if len(start_date) and len(end_date):
                     search = search.filter(date_joined__range=[start_date, end_date])
                 for a in search:
