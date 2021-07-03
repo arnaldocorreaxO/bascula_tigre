@@ -23,11 +23,10 @@ $(function () {
         var parameters = new FormData(this);
         // var action = $('input[name="action"]').val()
         // var peso_entrada = $('input[name="peso_entrada"]').val()
-        peso_entrada.val();
+        
         var peso_salida = $('input[name="peso_salida"]').val();
-        if (action == 'add') {
-            // alert(peso_entrada);
-            if (peso_entrada <= 0) {
+        if (action == 'add') {            
+            if (peso_entrada.val() <= 0) {
                 message_error('Peso entrada es Cero');
                 return false;
             }
