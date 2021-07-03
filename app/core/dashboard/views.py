@@ -1,3 +1,4 @@
+from django.db.models.aggregates import Count
 from core.base.models import Empresa
 from datetime import datetime
 
@@ -38,9 +39,15 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         try:
             action = request.POST['action']
             if action == 'get_graph_stock_products':
-                info = []
-                for i in Product.objects.filter(stock__gt=0).order_by('-stock')[0:10]:
-                    info.append([i.name, i.stock])
+                info = []          
+                hoy = datetime.now()  
+                for i in Movimiento.objects.values('producto__denominacion') \
+                        .filter(fecha=hoy)\
+                        .annotate(tot_recepcion=Sum('peso_neto')) \
+                        .order_by('-tot_recepcion'):
+                        info.append([i['producto__denominacion'],
+                                     i['tot_recepcion']])
+                        
                 data = {
                     'name': 'Stock de Productos',
                     'type': 'pie',

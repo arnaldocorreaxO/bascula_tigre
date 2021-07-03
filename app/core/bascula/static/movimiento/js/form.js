@@ -1,6 +1,7 @@
 $(function () {
-    var action = $('input[name="action"]').val()
-    var peso_entrada = $('input[name="peso_entrada"]')
+    var action = $('input[name="action"]').val();
+    var peso_entrada = $('input[name="peso_entrada"]');
+    var peso_salida = $('input[name="peso_salida"]');
 
     /*HABILITA EDICION DE PESO PARA VILLETA INTERNO */
     var select_cliente = $('select[name="cliente"]');
@@ -20,11 +21,8 @@ $(function () {
         e.preventDefault();
         $('select').prop('disabled',false);               
         
-        var parameters = new FormData(this);
-        // var action = $('input[name="action"]').val()
-        // var peso_entrada = $('input[name="peso_entrada"]').val()
+        var parameters = new FormData(this);        
         
-        var peso_salida = $('input[name="peso_salida"]').val();
         if (action == 'add') {            
             if (peso_entrada.val() <= 0) {
                 message_error('Peso entrada es Cero');
@@ -33,7 +31,7 @@ $(function () {
         }
         else {
             // alert(peso_salida);
-            if (peso_salida <= 0) {
+            if (peso_salida.val() <= 0) {
                 message_error('Peso Salida es Cero');
                 return false;
             }
@@ -52,24 +50,18 @@ $(function () {
                         location.href = '/bascula/movimiento';
                     }, function () {
                         location.href = '/bascula/movimiento';
-                    });
+                    });                    
                 } else {
                     location.href = '/bascula/movimiento';
                 }
             });
-            $('select').prop('disabled',true);               
+            if (action != 'add') {
+                $('select').prop('disabled',true); 
+            }
+                          
     });
     
-
-    $('.select2').select2({
-        theme: "bootstrap4",
-        language: 'es'
-    });
-
-
-
     //VEHICULO
-
     $('.btnAddVehiculo').on('click', function () {
         $('#myModalVehiculo').modal('show');
     });
@@ -116,30 +108,57 @@ $(function () {
             });
     });
 
+    //////////////////////////////
+    // CAPTURAR PESO DE BASCULA
+    //////////////////////////////
     $('.btnBascula').on('click', function (e) {
         e.preventDefault();
-        var url = "/bascula/ajax_puerto_serial/" + this.value +"/";
+        var url = "/bascula/ajax_puerto_serial/" + this.value + "/";
         var parameters = {}
-        submit_formdata_with_ajax('Notificación', '¿Capturar Peso de Bascula?',url,  parameters, function (data) {
-            var action = $('#action').val();
-            var result = data['resultado'];
-            
-            if (isNaN(result)){
-                // alert(result);
-                result = 0;
-            }
-            // alert(action);
-            if (action == 'add'){
-                $('#id_peso_entrada').val(parseInt(result));
-            }else{
-                $('#id_peso_salida').val(parseInt(result));
+        submit_formdata_with_ajax('Notificación', '¿Capturar Peso de Bascula?', url, parameters, function (data) {
+            var peso = data['peso'];
+            if (isNaN(peso)) {
+                peso = 0;
+            }; 
+            console.log(action);
+            if (action == 'add') {
+                peso_entrada.val(parseInt(peso));
+            } else {
+                peso_salida.val(parseInt(peso));
             };
-                 
-        
-
         });
     });
 
 
+    // IMPLEMENTACION DE SELECT2
+    $('.select2').select2({
+        theme: "bootstrap4",
+        language: 'es'
+    });
+
+
+    // HABILITA BOTON SAVE
+    setInterval(validarCampos, 500);
+
+    function validarCampos() {
+        if (action == 'add') {
+            if (peso_entrada.val() == 0){ //si el input es cero
+                $('#btnGuardar').attr('disabled', 'disabled');
+            }
+            else { // si tiene un valor diferente a cero
+                $('#btnGuardar').removeAttr("disabled");
+            }
+        }
+        else {
+            if (peso_salida.val()==0){ //si el input es cero
+                $('#btnGuardar').attr('disabled', 'disabled');
+            }
+            else { // si tiene un valor diferente a cero
+                $('#btnGuardar').removeAttr("disabled");
+            }
+        }
+    }
+
+    
 
 });

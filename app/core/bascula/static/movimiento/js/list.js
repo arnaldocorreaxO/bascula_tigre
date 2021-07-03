@@ -77,7 +77,7 @@ function getData(all) {
                 className: 'btn btn-danger btn-flat btn-xs',
                 download: 'open',
                 orientation: 'landscape',
-                pageSize: 'LEGAL',
+                pageSize: 'A4',
                 customize: function (doc) {
                     doc.styles = {
                         header: {
@@ -128,10 +128,11 @@ function getData(all) {
         columns: [
             {data: "id"},
             {data: "nro_ticket"},
-            {data: "fecha"},
+            {data: "fec_insercion"},
             {data: "vehiculo"},
             {data: "chofer"},
             {data: "producto"},
+            {data: "tiempo_descarga"},
             {data: "peso_entrada"},
             {data: "peso_salida"},
             {data: "peso_neto"},
@@ -139,6 +140,15 @@ function getData(all) {
         ],
         columnDefs: [
             {
+                targets: [-2,-3,-4],
+                class: 'text-right',
+                orderable: false,
+                render: function (data, type, row) {
+                    return data + ' kg';
+                }
+            },
+            {
+            
                 targets: [-1],
                 class: 'text-center',
                 orderable: false,

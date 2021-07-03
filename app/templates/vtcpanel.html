@@ -6,6 +6,13 @@
     <script src="{% static 'lib/highcharts-8.0.4/modules/exporting.js' %}" type="text/javascript"></script>
     <script src="{% static 'lib/highcharts-8.0.4/modules/data.js' %}" type="text/javascript"></script>
     <script src="{% static 'lib/highcharts-8.0.4/modules/drilldown.js' %}" type="text/javascript"></script>
+    <style>
+        .table {
+            font-size: 12px;
+            color: black;
+        }
+    </style>
+
 {% endblock %}
 {% load widget_tweaks %}
 {% block breadcrumb %}
@@ -143,30 +150,24 @@
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table m-0">
+                                <table class="table table-sm m-0">
                                     <thead>
                                     <tr>
-                                        <th>Ticket</th>
                                         <th>Fecha</th>
                                         <th>Vehiculo</th>
                                         <th>Chofer</th>
                                         <th>Producto</th>
-                                        <th>Entrada</th>
-                                        <th>Salida</th>
-                                        <th>Neto</th>
+                                        <th class="text-right">Neto</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {% for m in movimiento %}
-                                        <tr>
-                                            <td>{{ m.nro_ticket }}</td>
+                                        <tr>              
                                             <td>{{ m.fecha|date:"d/m/Y" }}</td>
                                             <td>{{ m.vehiculo.get_full_name }}</td>
                                             <td>{{ m.chofer.get_full_name }}</td>
                                             <td>{{ m.producto }}</td> 
-                                            <td>{{ m.peso_entrada }}</td>
-                                            <td>{{ m.peso_salida }}</td>
-                                            <td>{{ m.peso_neto }}</td>
+                                            <td class="text-right">{{ m.peso_neto }}</td>
                                             
                                         </tr>
                                     {% endfor %}
@@ -179,7 +180,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-box"></i> Stock de Productos</h3>
+                            <h3 class="card-title"><i class="fas fa-box"></i> Recepción de Productos del Día</h3>
                         </div>
                         <div class="card-body p-0">
                             <div id="graphstockproducts" style="height: 64vh;"></div>
@@ -333,11 +334,11 @@
 
                 function init() {
                     get_graph_stock_products();
-                    get_graph_purchase_vs_sale();
+                    // get_graph_purchase_vs_sale();
                 }
 
                 $(function () {
-                    // init();
+                    init();
                 });
             </script>
         </div>

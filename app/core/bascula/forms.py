@@ -1,12 +1,11 @@
 import datetime
 
 from django import forms
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Max
 from django.forms import ModelForm
 from core.base.forms import readonly_fields
 
-from core.bascula.models import Movimiento, Transportista, Vehiculo, Cliente,Producto,MarcaVehiculo
+from core.bascula.models import Movimiento, Chofer, Vehiculo, Cliente,Producto,MarcaVehiculo
 
 
 
@@ -144,7 +143,7 @@ class ChoferForm(ModelForm):
         super().__init__(*args, **kwargs)
         
     class Meta:
-        model = Transportista
+        model = Chofer
         fields =['codigo','nombre','apellido']
                    
     def save(self, commit=True):

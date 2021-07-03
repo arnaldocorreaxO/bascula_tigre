@@ -1,14 +1,11 @@
-
 from core.bascula.views.bascula.movimiento.views import *
 from core.bascula.views.bascula.cliente.views import *
 from core.bascula.views.bascula.producto.views import *
 from core.bascula.views.bascula.marcavehiculo.views import *
 from core.bascula.views.bascula.vehiculo.views import *
-from core.bascula.views.bascula.transportista.views import *
+from core.bascula.views.bascula.chofer.views import *
 
 from django.urls import path
-
-
 
 urlpatterns = [    
     # URL para lectura de Puerto COM
@@ -41,10 +38,10 @@ urlpatterns = [
     path('vehiculo/add/', VehiculoCreate.as_view(), name='vehiculo_create'),
     path('vehiculo/update/<int:pk>/', VehiculoUpdate.as_view(), name='vehiculo_update'),
     path('vehiculo/delete/<int:pk>/', VehiculoDelete.as_view(), name='vehiculo_delete'),
-    # TRANSPORTISTA
-    path('transportista', TransportistaList.as_view(), name='transportista_list'),
-    path('transportista/add/', TransportistaCreate.as_view(), name='transportista_create'),
-    path('transportista/update/<int:pk>/', TransportistaUpdate.as_view(), name='transportista_update'),
-    path('transportista/delete/<int:pk>/', TransportistaDelete.as_view(), name='transportista_delete'),
+    # CHOFER
+    path('chofer', ChoferList.as_view(), name='chofer_list'),
+    path('chofer/add/', ChoferCreate.as_view(), name='chofer_create'),
+    path('chofer/update/<int:pk>/', ChoferUpdate.as_view(), name='chofer_update'),
+    path('chofer/delete/<int:pk>/', ChoferDelete.as_view(), name='chofer_delete'),
 
    ]

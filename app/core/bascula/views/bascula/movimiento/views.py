@@ -1,22 +1,20 @@
 #SYSTEM
 import json
 import os
-from datetime import date, datetime
 
 from config import settings
 from core.bascula.forms import (ChoferForm, MovimientoEntradaForm,
-								MovimientoSalidaForm, SearchForm,
-								VehiculoForm)
+                                MovimientoSalidaForm, SearchForm, VehiculoForm)
 #LOCALS
 from core.bascula.models import ConfigSerial, Movimiento
 from core.base.comserial import *
 from core.base.models import Empresa
 from core.base.views import printSeparador
 from core.security.mixins import PermissionMixin
+
 #DJANGO
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db import transaction
-from django.db.models.aggregates import Max
 from django.http import HttpResponse, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
@@ -24,7 +22,7 @@ from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.views.generic import ListView,CreateView, UpdateView, DeleteView
 from django.views.generic.base import View
 from django.views.generic.edit import FormView
 from weasyprint import CSS, HTML
@@ -251,23 +249,22 @@ def leer_puerto_serial(request,puerto):
 	printSeparador()
 	print('Resultado\t:', data)
 	printSeparador()
-	return JsonResponse({ 'resultado': data })          
+	return JsonResponse({ 'peso': data })          
 
 """OBTENER PESO DE ARCHIVO TXT"""
 @method_decorator(csrf_exempt)
 def leer_peso_bascula(request):
-	peso = 0
+	data = 0
 	if os.path.exists("peso.txt"):
 		with open("peso.txt", "r") as archivo:
 			archivo.seek(0)
 			linea = archivo.readline()
 			print(linea)
 			if linea: 
-				peso = float(linea[29:8])
-				print(peso)
-				#os.remove("peso.txt")
-			
-	return JsonResponse({ 'resultado': peso })          
+				data = float(linea[29:8])
+				print(data)
+				#os.remove("peso.txt")			
+	return JsonResponse({ 'peso': data })          
 
 def getPeso(config,buffer):
 	"""OBTENER VALORES DEL BUFFER DE LA BASCULA 1"""
