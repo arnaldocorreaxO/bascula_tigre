@@ -1,21 +1,18 @@
-from django.db.models.aggregates import Count
-from core.base.models import Empresa
+import locale
 from datetime import datetime
 
+from core.bascula.models import Categoria, Cliente, Movimiento, Producto
+from core.base.models import Empresa
+from core.security.models import Dashboard
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
-from django.db.models.functions import Coalesce
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
 from django.views.generic import TemplateView
 
-from core.reports.choices import months
-from core.pos.models import Product, Sale, Client, Provider, Category, Purchase, Company
-from core.security.models import Dashboard
-from core.bascula.models import Categoria, Cliente, Movimiento, Producto
-
+locale.setlocale(locale.LC_TIME, '')
 
 class DashboardView(LoginRequiredMixin, TemplateView):
 
@@ -43,7 +40,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 hoy = datetime.now()  
                 for i in Movimiento.objects.values('producto__denominacion') \
                         .filter(fecha=hoy)\
-                        .annotate(tot_recepcion=Sum('peso_neto')) \
+                        .annotate(tot_recepcion=Sum('peso_neto')/1000) \
                         .order_by('-tot_recepcion'):
                         info.append([i['producto__denominacion'],
                                      i['tot_recepcion']])
@@ -55,20 +52,25 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                     'data': info,
                 }
             elif action == 'get_graph_purchase_vs_sale':
+                data = []               
+                now = datetime.now() 
+                for i in Movimiento.objects.values('producto__denominacion') \
+                        .filter(fecha = now)\
+                        .annotate(tot_recepcion=Sum('peso_neto')/1000) \
+                        .order_by('-tot_recepcion'):
+                        data.append({'name':  i['producto__denominacion'],
+                                     'data': [i['tot_recepcion']]})              
+            elif action == 'get_graph_purchase_vs_sale2':
                 data = []
+                month = datetime.now().month 
                 year = datetime.now().year
-                rows = []
-                for i in months[1:]:
-                    result = Sale.objects.filter(date_joined__month=i[0], date_joined__year=year).aggregate(
-                        resp=Coalesce(Sum('total'), 0.00))['resp']
-                    rows.append(float(result))
-                data.append({'name': 'Ventas', 'data': rows})
-                rows = []
-                for i in months[1:]:
-                    result = Purchase.objects.filter(date_joined__month=i[0], date_joined__year=year).aggregate(
-                        resp=Coalesce(Sum('subtotal'), 0.00))['resp']
-                    rows.append(float(result))
-                data.append({'name': 'Compras', 'data': rows})
+                for i in Movimiento.objects.values('fecha') \
+                        .filter(producto=2,fecha__month=month, fecha__year=year)\
+                        .annotate(tot_recepcion=Sum('peso_neto')/1000) \
+                        .order_by('fecha'):
+                        data.append({'name':  i['fecha'],
+                                     'data': [i['tot_recepcion']]})     
+                        print(data)         
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
@@ -78,9 +80,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Panel de administración'
+        context['current_day'] = datetime.now().strftime("%c")
+        context['current_month'] = datetime.now().strftime("%B de %Y")
         context['company'] = Empresa.objects.first()
         context['clientes'] = Cliente.objects.all().count()
-        context['provider'] = Provider.objects.all().count()
         context['categorias'] = Categoria.objects.filter().count()
         context['productos'] = Producto.objects.all().count()
         context['movimiento'] = Movimiento.objects.filter().order_by('-id')[0:10]
