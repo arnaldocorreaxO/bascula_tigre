@@ -171,15 +171,19 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 						# if max_nro_ticket is None:
 						# 	max_nro_ticket = 0 
 						# movimiento.nro_ticket = max_nro_ticket + 1
-						if movimiento.peso_entrada > movimiento.peso_salida:
-							movimiento.peso_neto = movimiento.peso_entrada - movimiento.peso_salida
-							movimiento.peso_bruto = movimiento.peso_entrada
-							movimiento.peso_tara = movimiento.peso_salida
+						if movimiento.peso_entrada == movimiento.peso_salida:
+							data['error'] = 'Peso Entrada y Salida son iguales'
 						else:
-							movimiento.peso_neto = movimiento.peso_salida - movimiento.peso_entrada
-							movimiento.peso_bruto = movimiento.peso_salida
-							movimiento.peso_tara = movimiento.peso_entrada
-					movimiento.save()
+							if movimiento.peso_entrada > movimiento.peso_salida:
+								movimiento.peso_neto = movimiento.peso_entrada - movimiento.peso_salida
+								movimiento.peso_bruto = movimiento.peso_entrada
+								movimiento.peso_tara = movimiento.peso_salida
+							else:
+								movimiento.peso_neto = movimiento.peso_salida - movimiento.peso_entrada
+								movimiento.peso_bruto = movimiento.peso_salida
+								movimiento.peso_tara = movimiento.peso_entrada
+						movimiento.save()					
+							
 			elif action == 'create-vehiculo':
 				with transaction.atomic():
 					frmVehiculo = VehiculoForm(request.POST)

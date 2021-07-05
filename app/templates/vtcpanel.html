@@ -146,7 +146,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header border-transparent">
-                            <h3 class="card-title"><i class="fas fa-shopping-cart"></i> Las últimas 10 Recepciones</h3>
+                            <h3 class="card-title"><i class="fas fa-truck"></i> Las últimas 10 Recepciones</h3>
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
@@ -180,7 +180,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-box"></i> Recepción del Día {{ current_date }}</h3>
+                            <h3 class="card-title"><i class="fas fa-industry"></i> Recepción del Día {{ current_date }}</h3>
                         </div>
                         <div class="card-body p-0">
                             <div id="graphstockproducts" style="height: 64vh;"></div>
@@ -304,7 +304,7 @@
                                 yAxis: {
                                     min: 0,
                                     title: {
-                                        text: 'TONELADAS'
+                                        text: 'KILOGRAMOS'
                                     }
                                 },
                                 tooltip: {
@@ -373,13 +373,13 @@
                                 yAxis: {
                                     min: 0,
                                     title: {
-                                        text: 'TONELADAS'
+                                        text: 'KILOGRAMOS'
                                     }
                                 },
                                 tooltip: {
                                     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                                     pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                                        '<td style="padding:0"><b>{point.y:,.0f} kg</b></td></tr>',
+                                        '<td style="padding:0"><b>{point.y:,.0f} Kg</b></td></tr>',
                                     footerFormat: '</table>',
                                     shared: true,
                                     useHTML: true

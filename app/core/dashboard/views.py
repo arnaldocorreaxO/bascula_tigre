@@ -56,7 +56,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 now = datetime.now() 
                 for i in Movimiento.objects.values('producto__denominacion') \
                         .filter(fecha = now)\
-                        .annotate(tot_recepcion=Sum('peso_neto')/1000) \
+                        .annotate(tot_recepcion=Sum('peso_neto')) \
                         .order_by('-tot_recepcion'):
                         data.append({'name':  i['producto__denominacion'],
                                      'data': [i['tot_recepcion']]})              
@@ -65,8 +65,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 month = datetime.now().month 
                 year = datetime.now().year
                 for i in Movimiento.objects.values('fecha') \
-                        .filter(producto=2,fecha__month=month, fecha__year=year)\
-                        .annotate(tot_recepcion=Sum('peso_neto')/1000) \
+                        .filter(cliente=2,producto=2,fecha__month=month, fecha__year=year)\
+                        .annotate(tot_recepcion=Sum('peso_neto')) \
                         .order_by('fecha'):
                         data.append({'name':  i['fecha'],
                                      'data': [i['tot_recepcion']]})     
