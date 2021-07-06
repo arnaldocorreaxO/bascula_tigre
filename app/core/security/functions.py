@@ -1,6 +1,6 @@
 import socket
 
-from core.pos.models import Company
+from core.base.models import Empresa
 from core.security.models import Dashboard
 from datetime import datetime
 
@@ -8,7 +8,7 @@ from datetime import datetime
 def system_information(request):
     data = {
         'dshboard': get_dashboard(),
-        'company': Company.objects.first(),
+        'company': Empresa.objects.first(),
         'hostname': socket.gethostname(),
         'menu': get_layout(),
         'localhost': socket.gethostbyname(socket.gethostname()),

@@ -3,6 +3,7 @@
 {% load static %}
 {% block head_form %}
     <script src="{% static 'movimiento/js/form.js' %}"></script>
+    <script src="{% static '/js/select2_cliente_producto.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -152,7 +153,7 @@
 </div>
 
 <!-- Modal Vehiculo-->
-<div class="modal fade" id="myModalVehiculo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="modalVehiculo" role="dialog" aria-labelledby="exampleModalLabel"
 aria-hidden="true">
 <form id="frmVehiculo" enctype="multipart/form-data" method="post">
    <div class="modal-dialog" role="document">
@@ -184,7 +185,7 @@ aria-hidden="true">
 </div>
 
 <!-- Modal Chofer-->
-<div class="modal fade" id="myModalChofer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="modalChofer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 aria-hidden="true">
 <form id="frmChofer" enctype="multipart/form-data" method="post">
    <div class="modal-dialog" role="document">
@@ -214,30 +215,4 @@ aria-hidden="true">
    </div>
 </form>
 </div>
-
-<!-- 
-<script>
-
-
-        {% if form.errors %}
-        var errors = '';        
-            {% for field in form %}
-                {% for error in field.errors %}
-                    errors += '{{ error }}\n';
-                {% endfor %}
-            {% endfor %}
-
-            {% for error in form.non_field_errors %}
-                errors += '{{ error }}\n';
-            {% endfor %}
-        Swal.fire({
-            title: 'Error!',
-            text: errors,
-            icon: 'error'
-            });
-        {% endif %}
-
-    
-</script> -->
-
 {% endblock %}

@@ -1,9 +1,11 @@
+import os
+
 from config import settings
 from core.base.choices import choiceOperacionSaldo, choiceSiNo
-#APPS
 from crum import get_current_user
 from django.core.validators import MinLengthValidator
 from django.db import models
+from django.forms import model_to_dict
 
 # Create your models here.
 
@@ -74,26 +76,57 @@ class Modulo(ModeloBase):
 
 #EMPRESA
 class Empresa(ModeloBase):
-    #ID
     ruc = models.CharField(verbose_name='RUC',max_length=10,validators=[MinLengthValidator(6)])
     denominacion = models.CharField(verbose_name='Denominación',max_length=100,unique=True)
     nombre_fantasia = models.CharField(verbose_name='Nombre de Fantasía',max_length=100,unique=True)
     direccion = models.CharField(verbose_name='Dirección',max_length=100)
-    telefono = models.CharField(verbose_name='Teléfono',max_length=100)
+    telefono = models.CharField(verbose_name='Teléfono',max_length=20)    
+    celular = models.CharField(verbose_name='Celular',max_length=20,null=True,blank=True)    
+    email = models.CharField(max_length=50, verbose_name='Email',null=True,blank=True)
+    website = models.CharField(max_length=250, verbose_name='Página web',null=True,blank=True)
+    desc = models.CharField(max_length=500, null=True, blank=True, verbose_name='Descripción')
+    imagen = models.ImageField(null=True, blank=True, upload_to='empresa/%Y/%m/%d', verbose_name='Logo')
+    iva = models.DecimalField(default=0.00, decimal_places=2, max_digits=9, verbose_name='Iva')
 
     def __str__(self):
-        return '{}'.format(self.denominacion)
+        return self.denominacion
     
     def getNombreFantasia(self):
-        return '{}'.format(self.nombre_fantasia)
+        return self.nombre_fantasia
+
+    def get_image(self):
+        if self.image:
+            return '{}{}'.format(settings.MEDIA_URL, self.image)
+        return '{}{}'.format(settings.STATIC_URL, 'img/default/empty.png')
+
+    def get_iva(self):
+        return format(self.iva, '.2f')
+
+    def remove_image(self):
+        try:
+            if self.image:
+                os.remove(self.image.path)
+        except:
+            pass
+        finally:
+            self.image = None
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        return item
 
     class Meta:
         # ordering = ['1',]
         db_table = 'base_empresa'
         verbose_name = 'empresa'
         verbose_name_plural = 'empresas'
+        default_permissions = ()
+        permissions = (
+            ('view_empresa', 'Can view Empresa'),
+        )
+        ordering = ['-id']
 
-#SUCURSAL
+'''SUCURSAL'''
 class Sucursal(ModeloBase):
     #ID
     empresa = models.ForeignKey(Empresa,verbose_name='Empresa',on_delete=models.CASCADE,related_name='empresa')

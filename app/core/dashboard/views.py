@@ -70,7 +70,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                         .order_by('fecha'):
                         data.append({'name':  i['fecha'],
                                      'data': [i['tot_recepcion']]})     
-                        print(data)         
+                        # print(data)         
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
@@ -80,7 +80,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Panel de administración'
-        context['current_day'] = datetime.now().strftime("%c")
+        context['current_day'] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         context['current_month'] = datetime.now().strftime("%B de %Y")
         context['company'] = Empresa.objects.first()
         context['clientes'] = Cliente.objects.all().count()

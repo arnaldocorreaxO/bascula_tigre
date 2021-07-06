@@ -16,12 +16,11 @@
     <script src="{% static 'lib/datatables-1.10.20/plugins/pdfmake-0.1.36/vfs_fonts.js' %}" type="text/javascript"></script>
     <script src="{% static 'lib/datatables-1.10.20/plugins/buttons-1.6.1/js/buttons.html5.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'lib/datatables-1.10.20/plugins/buttons-1.6.1/js/buttons.print.min.js' %}" type="text/javascript"></script>
-    <!-- Select2 Libs -->
+    <!-- SELECT2 LIBS -->
     <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
     <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
     <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}">
     <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}">
-    <!--Block head list-->
     <style>
         .table{
             font-size: 13px;
@@ -29,7 +28,8 @@
         .card-body{
             font-size: 13px;
         }
-    </style>
+    </style>  
+    <!--Block head list-->
     {% block head_list %}{% endblock %}
 {% endblock %}
 
@@ -107,81 +107,41 @@
         {% endblock %}
         <!--Block box footer after-->
         {% block box_footer_after %}{% endblock %}
-        {% block content_modals %}{% endblock %}
-    </div>
-    {% block javascript_list %}
+        {% block content_modals %}
+            <!-- MODAL LG -->
+            <div class="modal fade" id="modal-ventana-lg">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
 
-
-         <!-- MODAL LG -->
-    <div class="modal fade" id="modal-ventana-lg">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <!-- MODAL SM -->
-    <div class="modal fade" id="modal-ventana-sm">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
+            <!-- MODAL SM -->
+            <div class="modal fade" id="modal-ventana-sm">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
 
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <!-- MODAL DEFAULT -->
-    <div class="modal fade" id="modal-ventana">
-        <div class="modal-dialog">
-            <div class="modal-content">
+            <!-- MODAL DEFAULT -->
+            <div class="modal fade" id="modal-ventana">
+                <div class="modal-dialog">
+                    <div class="modal-content">
 
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-
-    <!-- DEFAULT -->
-    <!-- <script>
-
-        var vSucursal = $('select[name="sucursal"').val();
-        if (!vSucursal) {
-            vSucursal = '{{request.user.sucursal.id}}';
-            console.log(vSucursal);
-        }
-        $('select[name="sucursal"').val(vSucursal).change();
-        $('input[name="fecha"').val(moment().format('YYYY-MM-DD'));
-
-    </script> -->
-
-    <!-- ERRORS -->
-    <script>
-        $(function() {
-                {% if form.errors %}
-                    var errors = '';
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                        errors += '{{ error }}\n';
-                        {% endfor %}
-                    {% endfor %}
-
-                    {% for error in form.non_field_errors %}
-                        errors += '{{ error }}\n';
-                    {% endfor %}
-
-                    Swal.fire({
-                        title: 'Error!',
-                        text: errors,
-                        icon: 'error'
-                    });
-                {% endif %}
-        });
-    </script>
-
-       
+        {% endblock %}
+    </div>    
+{% endblock %}
+{% block javascript_list %}
         <script type="application/javascript">
 
             $('.select2').select2({
                 theme: "bootstrap4",
                 language: 'es'
             });
- 
 
             var table;
             $(function () {
@@ -204,6 +164,26 @@
                         load_image(src);
                     });
             });
-        </script>
+
+            $(function () {
+                {% if form.errors %}
+                var errors = '';
+                {% for field in form %}
+                {% for error in field.errors %}
+                errors += '{{ error }}\n';
+                {% endfor %}
+                {% endfor %}
+
+                {% for error in form.non_field_errors %}
+                errors += '{{ error }}\n';
+                {% endfor %}
+
+                Swal.fire({
+                    title: 'Error!',
+                    text: errors,
+                    icon: 'error'
+                });
+                {% endif %}
+            });
+        </script>       
     {% endblock %}
-{% endblock %}

@@ -1,15 +1,16 @@
 #SYSTEM
 import json
 import os
+import datetime
 
 from config import settings
 from core.bascula.forms import (ChoferForm, MovimientoEntradaForm,
                                 MovimientoSalidaForm, SearchForm, VehiculoForm)
 #LOCALS
-from core.bascula.models import ConfigSerial, Movimiento
+from core.views import printSeparador
+from core.bascula.models import ClienteProducto, ConfigSerial, Movimiento
 from core.base.comserial import *
 from core.base.models import Empresa
-from core.base.views import printSeparador
 from core.security.mixins import PermissionMixin
 
 #DJANGO
@@ -118,6 +119,26 @@ class MovimientoCreate(PermissionMixin,CreateView):
 				with transaction.atomic():
 					frmChofer = ChoferForm(request.POST)
 					data = frmChofer.save()
+			elif action == 'search_peso_tara_interno':
+				data = {'peso':'0'}
+				if request.POST['id']:
+					movimiento = Movimiento.objects.filter(fecha = datetime.datetime.now() ,
+														vehiculo_id=request.POST['id'])\
+												.order_by('-id')
+					if movimiento:				
+						# Retornamos data como diccionario y recuperos directo data['peso']
+						# Si enviamos como lista de diccionarios debemos definir una lista 
+						# data[] y usar append
+						# data.append({'peso':movimiento.first().peso_tara}) y recuperar
+						# data[0]['peso'], pero en este caso solo enviamos una clave y valor 
+						data = {'peso':movimiento.first().peso_tara}					
+					# print(data)
+
+			elif action == 'search_producto_id':
+				data = [{'id': '', 'text': '------------'}]
+				for i in ClienteProducto.objects.values('producto__id','producto__codigo','producto__denominacion').filter(cliente_id=request.POST['id']):	
+					data.append({'id': i['producto__id'], 'text': i['producto__codigo'] +" - "+ i['producto__denominacion']})
+			
 			else:
 				data['error'] = 'No ha ingresado a ninguna opción'
 		except Exception as e:

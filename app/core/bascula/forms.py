@@ -5,7 +5,8 @@ from django.db.models import Max
 from django.forms import ModelForm
 from core.base.forms import readonly_fields
 
-from core.bascula.models import Movimiento, Chofer, Vehiculo, Cliente,Producto,MarcaVehiculo
+from core.bascula.models import (Categoria, ClienteProducto, Movimiento, Chofer, Vehiculo, 
+                                 Cliente,Producto,MarcaVehiculo)
 
 
 
@@ -88,6 +89,34 @@ class MarcaVehiculoForm(ModelForm):
         return data
 ''' 
 ====================
+===   CATEGORIA   ===
+==================== '''
+class CategoriaForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['denominacion'].widget.attrs['autofocus'] = True
+
+    class Meta:
+        model = Categoria
+        fields = '__all__'
+        exclude = readonly_fields
+        widgets = {
+            'denominacion': forms.TextInput(attrs={'placeholder': 'Ingrese una Categoria'}),
+        }
+
+    def save(self, commit=True):
+        data = {}
+        try:
+            if self.is_valid():
+                super().save()
+            else:
+                data['error'] = self.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data
+
+''' 
+====================
 ===   PRODUCTO   ===
 ==================== '''
 class ProductoForm(ModelForm):
@@ -122,7 +151,10 @@ class VehiculoForm(ModelForm):
         
     class Meta:
         model = Vehiculo
-        fields =['matricula','marca',]
+        fields =['matricula','marca',]    
+        widgets = {
+            'marca': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
+        }
    
     def save(self, commit=True):
         data = {}
@@ -146,6 +178,38 @@ class ChoferForm(ModelForm):
         model = Chofer
         fields =['codigo','nombre','apellido']
                    
+    def save(self, commit=True):
+        data = {}
+        form = super()
+        try:
+            if form.is_valid():
+                instance = form.save()
+                data = instance.toJSON()
+            else:
+                data['error'] = form.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data
+
+"""FORMULARIO DE CLIENTE PRODUCTO"""
+class ClienteProductoForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+    class Meta:
+        model = ClienteProducto
+        fields = '__all__'
+        exclude = readonly_fields
+        widgets = {
+            'cliente': forms.Select(attrs={
+                'class': 'custom-select select2',
+                # 'style': 'width: 100%'
+                }
+            ),
+            'producto': forms.SelectMultiple(
+                attrs={'class': 'form-control select2', 'multiple': 'multiple', 'style': 'width:100%'}),
+        }
+
     def save(self, commit=True):
         data = {}
         form = super()

@@ -1,18 +1,16 @@
-# Create your models here.
 import datetime
+import locale
 
 from core.base.models import ModeloBase
 from dateutil.relativedelta import relativedelta
-from django.contrib.auth.models import User
 from django.db import models
 from django.forms import model_to_dict
 from django.utils.timezone import now
 
-
 #Convertir a mayusculas
 class UpperField(models.CharField):
-    def to_python(self, value):
-        return value.upper()
+	def to_python(self, value):
+		return value.upper()
 
 
 # Create your models here.
@@ -85,7 +83,7 @@ class MarcaVehiculo(ModeloBase):
 #VEHICULOS
 class Vehiculo(ModeloBase):
 	matricula = UpperField(max_length=8,unique=True)
-	marca = models.ForeignKey(MarcaVehiculo,on_delete=models.CASCADE)
+	marca = models.ForeignKey(MarcaVehiculo,on_delete=models.PROTECT)
 	
 	def toJSON(self):
 		item = model_to_dict(self)
@@ -106,9 +104,6 @@ class Vehiculo(ModeloBase):
 		db_table = 'bascula_vehiculo'
 		verbose_name = 'vehiculo'
 		verbose_name_plural = 'vehiculos'
-
-	
-
 
 #CHOFERES
 class Chofer(ModeloBase):	
@@ -162,8 +157,7 @@ class Cliente(ModeloBase):
 
 #CATEGORIAS
 class Categoria(ModeloBase):	
-	denominacion = models.CharField(max_length=100)
-	
+	denominacion = models.CharField(max_length=100)	
 
 	def toJSON(self):
 		item = model_to_dict(self)
@@ -179,7 +173,7 @@ class Categoria(ModeloBase):
 
 #PRODUCTOS
 class Producto(ModeloBase):	
-	categoria = models.ForeignKey(Categoria,on_delete=models.CASCADE)
+	categoria = models.ForeignKey(Categoria,on_delete=models.PROTECT)
 	codigo = models.CharField(max_length=20,unique=True)
 	denominacion = models.CharField(max_length=100)
 	
@@ -195,6 +189,27 @@ class Producto(ModeloBase):
 		verbose_name = 'producto'
 		verbose_name_plural = 'productos'
 
+#PRODUCTOSCLIENTE
+class ClienteProducto(ModeloBase):	
+	cliente = models.ForeignKey(Cliente,on_delete=models.PROTECT)
+	producto = models.ManyToManyField(Producto, verbose_name='Productos', blank=True)
+	
+	def toJSON(self):
+		item = model_to_dict(self)
+		item['cliente'] = self.cliente.get_full_name()
+		item['producto'] = [{'id': p.id, 'denominacion': p.denominacion} for p in self.producto.all()]
+		return item
+	
+	def __str__(self):
+		return f"{self.cliente} - {self.producto}"
+
+	class Meta:
+	# ordering = ['1',]
+		db_table = 'bascula_cliente_producto'
+		verbose_name = 'Cliente Producto'
+		verbose_name_plural = 'Clientes Productos'
+
+
 #MOVIMIENTO DE BASCULA PESAJES
 class Movimiento(ModeloBase):
 	nro_ticket = models.BigIntegerField(default=1)
@@ -202,10 +217,10 @@ class Movimiento(ModeloBase):
 	nro_mic = models.IntegerField(null=True,blank=True) #MIC o DTA
 	nro_remision = models.IntegerField(default=0) 
 	porc_humedad = models.DecimalField(max_digits=5,decimal_places=2,default=0.00)	
-	vehiculo = models.ForeignKey(Vehiculo,on_delete=models.CASCADE)
-	chofer = models.ForeignKey(Chofer,on_delete=models.CASCADE)
-	cliente = models.ForeignKey(Cliente,on_delete=models.CASCADE)
-	producto = models.ForeignKey(Producto,on_delete=models.CASCADE)
+	vehiculo = models.ForeignKey(Vehiculo,on_delete=models.PROTECT)
+	chofer = models.ForeignKey(Chofer,on_delete=models.PROTECT)
+	cliente = models.ForeignKey(Cliente,on_delete=models.PROTECT)
+	producto = models.ForeignKey(Producto,on_delete=models.PROTECT)
 	peso_embarque = models.IntegerField(default=0)
 	peso_entrada = models.IntegerField(default=0)
 	peso_salida = models.IntegerField(default=0)
@@ -216,15 +231,16 @@ class Movimiento(ModeloBase):
 	bascula_entrada = models.SmallIntegerField(null=True,default=1)
 	bascula_salida = models.SmallIntegerField(null=True,blank=True,default=1)
 
-	def toJSON(self):
+	def toJSON(self):		
 		fec_entrada = format(self.fec_insercion,"%Y-%m-%d %H:%M:%S")
 		fec_salida = format(self.fec_modificacion,"%Y-%m-%d %H:%M:%S")
-		inicial = datetime.datetime.strptime(fec_entrada, "%Y-%m-%d %H:%M:%S")
-		final = datetime.datetime.strptime(fec_salida, "%Y-%m-%d %H:%M:%S")
-		diff = relativedelta(final, inicial)
+		fec_inicial = datetime.datetime.strptime(fec_entrada, "%Y-%m-%d %H:%M:%S")
+		fec_final = datetime.datetime.strptime(fec_salida, "%Y-%m-%d %H:%M:%S")
+		dif = relativedelta(fec_final, fec_inicial)
 
 		item = model_to_dict(self)
 		item['fecha'] = self.fecha.strftime('%d/%m/%Y')
+		# item['fec_insercion'] = self.fec_insercion.strftime('%d/%m/%Y %H:%M:%S')		
 		item['fec_insercion'] = self.fec_insercion.strftime('%d/%m/%Y %H:%M:%S')		
 		item['vehiculo'] = str(self.vehiculo)
 		# item['chofer'] = self.chofer.toJSON()
@@ -234,10 +250,9 @@ class Movimiento(ModeloBase):
 		item['porc_humedad'] = format(self.porc_humedad,'.0f')
 		item['nro_remision'] = format(self.nro_remision,'.0f')
 		item['peso_entrada'] = format(self.peso_entrada,',.0f').replace(',','.')
-		item['peso_salida'] = self.peso_salida
-		item['peso_neto'] = self.peso_neto
-		item['tiempo_descarga'] = "%d:%d:%d" % (diff.hours, diff.minutes,diff.seconds)
-		
+		item['peso_salida'] = format(self.peso_salida,',.0f').replace(',','.')
+		item['peso_neto'] = format(self.peso_neto,',.0f').replace(',','.')
+		item['tiempo_descarga'] = "%d:%d:%d" % (dif.hours, dif.minutes,dif.seconds)
 		return item
 	
 	def __str__(self):

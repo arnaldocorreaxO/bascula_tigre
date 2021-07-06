@@ -18,10 +18,10 @@ $(function () {
     
     //VEHICULO
     $('.btnAddVehiculo').on('click', function () {
-        $('#myModalVehiculo').modal('show');
+        $('#modalVehiculo').modal('show');
     });
 
-    $('#myModalVehiculo').on('hidden.bs.modal', function (e) {
+    $('#modalVehiculo').on('hidden.bs.modal', function (e) {
         $('#frmVehiculo').trigger('reset');
     })
 
@@ -35,17 +35,17 @@ $(function () {
                 // console.log(response);
                 var newOption = new Option(response.full_name, response.id, false, true);
                 $('select[name="vehiculo"]').append(newOption).trigger('change');
-                $('#myModalVehiculo').modal('hide');
+                $('#modalVehiculo').modal('hide');
             });
     });
 
     //CHOFER
 
     $('.btnAddChofer').on('click', function () {
-        $('#myModalChofer').modal('show');
+        $('#modalChofer').modal('show');
     });
 
-    $('#myModalChofer').on('hidden.bs.modal', function (e) {
+    $('#modalChofer').on('hidden.bs.modal', function (e) {
         $('#frmChofer').trigger('reset');
     })
 
@@ -59,7 +59,7 @@ $(function () {
                 // console.log(response);
                 var newOption = new Option(response.full_name, response.id, false, true);
                 $('select[name="chofer"]').append(newOption).trigger('change');
-                $('#myModalChofer').modal('hide');
+                $('#modalChofer').modal('hide');
             });
     });
 

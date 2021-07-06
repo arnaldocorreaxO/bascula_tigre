@@ -1,10 +1,6 @@
 {% extends 'list_bascula.html' %}
 {% load static %}
 {% block head_list %}
-    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
-    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}">
-    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}">
     <link rel="stylesheet" href="{% static 'lib/bootstrap-daterangepicker-3.0.5/daterangepicker.css' %}" />
     <script src="{% static 'lib/bootstrap-daterangepicker-3.0.5/spanish.js' %}"></script>
     <script src="{% static 'lib/bootstrap-daterangepicker-3.0.5/daterangepicker.js' %}"></script>
@@ -86,6 +82,7 @@
     </div>
     <hr>
 {% endblock %}
+
 
 {% block javascript_list %}
 

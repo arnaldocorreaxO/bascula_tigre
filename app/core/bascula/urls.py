@@ -1,6 +1,8 @@
 from core.bascula.views.bascula.movimiento.views import *
 from core.bascula.views.bascula.cliente.views import *
+from core.bascula.views.bascula.categoria.views import *
 from core.bascula.views.bascula.producto.views import *
+from core.bascula.views.bascula.clienteproducto.views import *
 from core.bascula.views.bascula.marcavehiculo.views import *
 from core.bascula.views.bascula.vehiculo.views import *
 from core.bascula.views.bascula.chofer.views import *
@@ -23,11 +25,21 @@ urlpatterns = [
     path('cliente/add/', ClienteCreate.as_view(), name='cliente_create'),
     path('cliente/update/<int:pk>/', ClienteUpdate.as_view(), name='cliente_update'),
     path('cliente/delete/<int:pk>/', ClienteDelete.as_view(), name='cliente_delete'),
+    # CATEGORIA
+    path('categoria', CategoriaList.as_view(), name='categoria_list'),
+    path('categoria/add/', CategoriaCreate.as_view(), name='categoria_create'),
+    path('categoria/update/<int:pk>/', CategoriaUpdate.as_view(), name='categoria_update'),
+    path('categoria/delete/<int:pk>/', CategoriaDelete.as_view(), name='categoria_delete'),
     # PRODUCTO
     path('producto', ProductoList.as_view(), name='producto_list'),
     path('producto/add/', ProductoCreate.as_view(), name='producto_create'),
     path('producto/update/<int:pk>/', ProductoUpdate.as_view(), name='producto_update'),
     path('producto/delete/<int:pk>/', ProductoDelete.as_view(), name='producto_delete'),
+    # CLIENTE PRODUCTO
+    path('clienteproducto', ClienteProductoList.as_view(), name='clienteproducto_list'),
+    path('clienteproducto/add/', ClienteProductoCreate.as_view(), name='clienteproducto_create'),
+    path('clienteproducto/update/<int:pk>/', ClienteProductoUpdate.as_view(), name='clienteproducto_update'),
+    path('clienteproducto/delete/<int:pk>/', ClienteProductoDelete.as_view(), name='clienteproducto_delete'),
     # MARCA VEHICULO
     path('marcavehiculo', MarcaVehiculoList.as_view(), name='marcavehiculo_list'),
     path('marcavehiculo/add/', MarcaVehiculoCreate.as_view(), name='marcavehiculo_create'),
