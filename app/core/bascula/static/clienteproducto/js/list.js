@@ -53,7 +53,7 @@ function getData(all) {
             {
             
                 targets: [-2],
-                class: 'text-center',
+                class: 'text-left',
                 orderable: false,
                 render: function (data, type, row) {
                     var html = "";
