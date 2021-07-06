@@ -141,7 +141,7 @@ function getData(all) {
                 class: 'text-right',
                 orderable: false,
                 render: function (data, type, row) {
-                    return data + ' kg';
+                    return data;
                 }
             },
             {
