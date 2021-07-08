@@ -56,11 +56,11 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             elif action == 'get_graph_purchase_vs_sale':
                 data = []               
                 now = datetime.now() 
-                for i in Movimiento.objects.values('producto__denominacion') \
+                for i in Movimiento.objects.values('producto__denominacion','cliente__denominacion') \
                         .filter(fecha = now)\
                         .annotate(tot_recepcion=Sum('peso_neto',output_field=FloatField())) \
                         .order_by('-tot_recepcion'):
-                        data.append({'name':  i['producto__denominacion'],
+                        data.append({'name':  i['producto__denominacion']+ ' - ' +i['cliente__denominacion'],
                                      'data': [i['tot_recepcion']/1000]})              
             elif action == 'get_graph_purchase_vs_sale2':
                 data = []
