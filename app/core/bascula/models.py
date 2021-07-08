@@ -249,9 +249,12 @@ class Movimiento(ModeloBase):
 		item['producto'] = str(self.producto)
 		item['porc_humedad'] = format(self.porc_humedad,'.0f')
 		item['nro_remision'] = format(self.nro_remision,'.0f')
-		item['peso_entrada'] = format(self.peso_entrada,',.0f').replace(',','.')
-		item['peso_salida'] = format(self.peso_salida,',.0f').replace(',','.')
-		item['peso_neto'] = format(self.peso_neto,',.0f').replace(',','.')
+		item['peso_entrada'] = format(self.peso_entrada,',.0f')
+		# item['peso_entrada'] = format(self.peso_entrada,',.0f').replace(',','.')
+		item['peso_salida'] = format(self.peso_salida,',.0f')
+		# item['peso_salida'] = format(self.peso_salida,',.0f').replace(',','.')
+		item['peso_neto'] = format(self.peso_neto,',.0f')
+		# item['peso_neto'] = format(self.peso_neto,',.0f').replace(',','.')
 		item['tiempo_descarga'] = "%d:%d:%d" % (dif.hours, dif.minutes,dif.seconds)
 		return item
 	
