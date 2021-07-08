@@ -96,7 +96,7 @@ class MovimientoCreate(PermissionMixin,CreateView):
 	form_class=MovimientoEntradaForm
 	success_url = reverse_lazy('movimiento_list')
 	template_name = 'movimiento/create.html'
-	permission_required = 'add_movimiento'
+	permission_required = 'add_movimiento'	
 
 	@method_decorator(csrf_exempt)
 	def dispatch(self, request, *args, **kwargs):
@@ -106,7 +106,7 @@ class MovimientoCreate(PermissionMixin,CreateView):
 	def post(self, request, *args, **kwargs):
 		data = {}
 		try:
-			action = request.POST['action']
+			action = request.POST['action']			
 			if action == 'add':
 				with transaction.atomic():
 					form = self.get_form()
@@ -125,13 +125,13 @@ class MovimientoCreate(PermissionMixin,CreateView):
 					movimiento = Movimiento.objects.filter(fecha = datetime.datetime.now() ,
 														vehiculo_id=request.POST['id'])\
 												.order_by('-id')
-					if movimiento:				
+					if movimiento:
+						data = {'peso':movimiento.first().peso_tara}				
 						# Retornamos data como diccionario y recuperos directo data['peso']
 						# Si enviamos como lista de diccionarios debemos definir una lista 
 						# data[] y usar append
 						# data.append({'peso':movimiento.first().peso_tara}) y recuperar
-						# data[0]['peso'], pero en este caso solo enviamos una clave y valor 
-						data = {'peso':movimiento.first().peso_tara}					
+						# data[0]['peso'], pero en este caso solo enviamos una clave y valor 											
 					# print(data)
 
 			elif action == 'search_producto_id':
@@ -152,6 +152,7 @@ class MovimientoCreate(PermissionMixin,CreateView):
 		context['entity'] = 'Bascula'
 		context['list_url'] = self.success_url
 		context['action'] = 'add'
+		context['sucursal'] = self.request.user.sucursal.id
 		context['frmVehiculo'] = VehiculoForm()
 		context['frmChofer'] = ChoferForm()
 		context['puerto_bascula1'] = ConfigSerial.objects.get(id=1).puerto
@@ -221,6 +222,7 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 		context['entity'] = 'Bascula'
 		context['list_url'] = self.success_url
 		context['action'] = 'edit'
+		context['sucursal'] = self.request.user.sucursal.id
 		context['frmVehiculo'] = VehiculoForm()
 		context['frmChofer'] = ChoferForm()
 		context['puerto_bascula1'] = ConfigSerial.objects.get(cod='BSC1').puerto

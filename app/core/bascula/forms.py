@@ -249,7 +249,7 @@ class MovimientoEntradaForm(ModelForm):
         model = Movimiento
         fields =['fecha','nro_ticket','vehiculo','chofer',
                  'nro_mic','nro_remision','peso_embarque',
-                 'cliente','producto','peso_entrada']
+                 'cliente','producto','peso_entrada','sucursal']
         widgets = {
             'vehiculo': forms.Select(attrs={
                 'class': 'custom-select select2',
@@ -323,7 +323,7 @@ class MovimientoSalidaForm(ModelForm):
         model = Movimiento
         fields =['fecha','nro_ticket','vehiculo','chofer',
                  'nro_mic','nro_remision','peso_embarque',
-                 'cliente','producto','peso_salida']
+                 'cliente','producto','peso_salida','sucursal']
         widgets = {
             'vehiculo': forms.Select(attrs={
                 'class': 'custom-select',

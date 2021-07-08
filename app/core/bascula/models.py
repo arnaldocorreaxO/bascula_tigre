@@ -1,7 +1,6 @@
 import datetime
-import locale
 
-from core.base.models import ModeloBase
+from core.base.models import ModeloBase, Sucursal
 from dateutil.relativedelta import relativedelta
 from django.db import models
 from django.forms import model_to_dict
@@ -219,6 +218,7 @@ class Movimiento(ModeloBase):
 	porc_humedad = models.DecimalField(max_digits=5,decimal_places=2,default=0.00)	
 	vehiculo = models.ForeignKey(Vehiculo,on_delete=models.PROTECT)
 	chofer = models.ForeignKey(Chofer,on_delete=models.PROTECT)
+	sucursal = models.ForeignKey(Sucursal,on_delete=models.PROTECT)
 	cliente = models.ForeignKey(Cliente,on_delete=models.PROTECT)
 	producto = models.ForeignKey(Producto,on_delete=models.PROTECT)
 	peso_embarque = models.IntegerField(default=0)

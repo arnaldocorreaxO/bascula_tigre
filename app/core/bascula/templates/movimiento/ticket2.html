@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket</title>
+    <style>
+        @page {
+            width: 76mm;
+            height: 200mm;
+            /* height: {{ height }}mm; */
+            margin: 0;
+        }
+        body {
+            /* font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif; */
+            /* font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace; */
+            /* font-family: monospace; */
+            /* font-family: "Times New Roman", Times, serif; */
+            font-family: Consolas, monaco, monospace;
+            font-style: normal;
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+            color: black !important;
+        }
+
+        p {
+            font-size: 12px;
+        }
+
+        .content {
+            width: 76mm;
+            height: 200mm;
+            padding: 15px;
+        }
+
+        .salto {
+            padding: 20px;
+        }
+
+        .client {
+            font-size: 12px;
+            margin-top: 0;
+            padding-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .name-company {
+            margin-top: 10px;
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 0;
+            text-align: center;
+        }
+
+        .desc-company {
+            font-size: 5px;
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .border-dotted {
+            border-top-width: 1px;
+            border-top-style: dotted;
+            border-bottom-width: 1px;
+            border-bottom-style: dotted;
+        }
+
+        .ticket_titulo1 {
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .ticket_titulo2 {
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .izq {
+            font-size: 5px;
+            /* font-weight: bold;
+            text-transform: uppercase; */
+            text-align: justify;
+            /* margin-bottom: 5px; */
+        }
+        .linea {
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .producto {
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .table {
+            font-size: 12px;
+            color: black;
+        }
+
+        .table td, .table th {
+            padding: 0;
+            color: black;
+        }
+
+        .img-logo {
+            margin-top: 5px;
+            width: 20px;
+            height: 20px;
+            margin-bottom: 5px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="content">
+   <p class="salto"></p>
+    <p class="ticket_titulo1">
+        {{ movimiento.sucursal.empresa}} <br>
+    </p>
+    <p class="ticket_titulo2 border-dotted">
+        {{ movimiento.sucursal}} <br>
+        {{ movimiento.sucursal.direccion}} <br>
+        {{ movimiento.sucursal.telefono}} <br>
+    </p>
+    <p class="ticket_titulo1">
+        <b> TICKET DE BASCULA </b>
+    </p>   
+    <p class="ticket_titulo1 border-dotted">
+        <b>N°: </b>{{ movimiento.nro_ticket|stringformat:"i" }}
+    </p>   
+
+    <table class="table table-borderless table-sm" style="margin-top: 0">
+        <thead>
+        <tr>
+            <th style="width: 27%;"></th>
+            <th style="width: 3%;"></th>
+            <th style="width: 70%;"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="float-left"><b>ID</b></td>
+            <td class="float-center"><b>:</b></td>
+            <td class="text-left">{{ movimiento.id }}</td>
+        </tr>
+        <tr>
+            <td class="float-left"><b>REMISION</b></td>
+            <td class="float-center"><b>:</b></td>
+            <td class="text-left">{{ movimiento.nro_remision }}</td>
+        </tr>
+        <tr>
+            <td class="float-left"><b>CLIENTE</b></td>
+            <td class="float-center"><b>: </b></td>
+            <td class="text-left">{{ movimiento.cliente.get_full_name }}</td>
+        </tr>
+        <tr>
+            <td class="float-left"><b>CHAPA</b></td>
+            <td class="float-center"><b>: </b></td>
+            <td class="text-left">{{ movimiento.vehiculo.get_full_name }}</td>
+        </tr>
+        <tr>
+            <td class="float-left"><b>CHOFER</b></td>
+            <td class="float-center"><b>:</b></td>
+            <td class="text-left">{{ movimiento.chofer.get_full_name }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p class="producto" > {{ movimiento.producto.denominacion }}</p>
+    
+    <p class="linea border-dotted">ENTRADA</p>
+    <table class="table table-borderless table-sm" style="margin-top: 0">
+        <thead>
+        <tr>
+            <th style="width: 27%;"></th>
+            <th style="width: 3%;"></th>
+            <th style="width: 70%;"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="float-left"><b>OPERADOR</b></td>
+            <td class="float-center"><b>:</b></td>
+            <td class="text-left">{{ movimiento.usu_modificacion.get_full_name }}</td>
+        </tr>
+        <tr>
+            <td class="float-left"><b>FECHA HORA</b></td>
+            <td class="float-center"><b>: </b></td>
+            <td class="text-left">{{ movimiento.fec_insercion|date:"d/m/Y H:i:s" }}</td>
+        </tr>
+        <tr>
+            <td class="float-left"><b>PESO</b></td>
+            <td class="float-center"><b>: </b></td>
+            <td class="text-left">{{ movimiento.peso_entrada }} kg</td>
+        </tr>       
+        </tbody>
+    </table>
+
+    <p class="linea border-dotted">SALIDA</p>
+
+    <table class="table table-borderless table-sm" style="margin-top: 0">
+        <thead>
+        <tr>
+            <th style="width: 27%;"></th>
+            <th style="width: 3%;"></th>
+            <th style="width: 70%;"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="float-left"><b>OPERADOR</b></td>
+            <td class="float-center"><b>:</b></td>
+            <td class="text-left">{{ movimiento.usu_modificacion.get_full_name }}</td>
+        </tr>
+        <tr>
+            <td class="float-left"><b>FECHA HORA</b></td>
+            <td class="float-center"><b>: </b></td>
+            <td class="text-left">{{ movimiento.fec_modificacion|date:"d/m/Y H:i:s" }}</td>
+        </tr>
+        <tr>
+            <td class="float-left"><b>PESO TARA</b></td>
+            <td class="float-center"><b>: </b></td>
+            <td class="text-left">{{ movimiento.peso_tara }} kg</td>
+        </tr>
+        <tr>
+            <td class="float-left"><b>PESO BRUTO</b></td>
+            <td class="float-center"><b>:</b></td>
+            <td class="text-left">{{ movimiento.peso_bruto }} kg TP </td>
+        </tr>
+        <tr>
+            <td class="float-left"><b>PESO NETO</b></td>
+            <td class="float-center"><b>:</b></td>
+            <td class="text-left">{{ movimiento.peso_neto }} kg L </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p class="salto"></p>
+    <p class="salto"></p>
+    <table class="table table-borderless table-sm" style="margin-top: 0">
+        <thead>
+        <tr>
+            <th style="width: 45%;"></th>
+            <th style="width: 10%;"></th>
+            <th style="width: 45%;"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="text-center">...............</td>
+            <td class="text-center"></td>
+            <td class="text-center">...............</td>
+        </tr>
+        <tr>
+            <td class="text-center">CHOFER</td>
+            <td class="text-center"></td>
+            <td class="text-center">OPERADOR</td>
+        </tr>       
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

@@ -1,6 +1,8 @@
 import locale
 from datetime import datetime
 
+from django.db.models.fields import FloatField
+
 from core.bascula.models import Categoria, Cliente, Movimiento, Producto
 from core.base.models import Empresa
 from core.security.models import Dashboard
@@ -40,10 +42,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 hoy = datetime.now()  
                 for i in Movimiento.objects.values('producto__denominacion') \
                         .filter(fecha=hoy)\
-                        .annotate(tot_recepcion=Sum('peso_neto')/1000) \
+                        .annotate(tot_recepcion=Sum('peso_neto',output_field=FloatField())) \
                         .order_by('-tot_recepcion'):
                         info.append([i['producto__denominacion'],
-                                     i['tot_recepcion']])
+                                     i['tot_recepcion']/1000])
                         
                 data = {
                     'name': 'Stock de Productos',
@@ -56,20 +58,20 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 now = datetime.now() 
                 for i in Movimiento.objects.values('producto__denominacion') \
                         .filter(fecha = now)\
-                        .annotate(tot_recepcion=Sum('peso_neto')) \
+                        .annotate(tot_recepcion=Sum('peso_neto',output_field=FloatField())) \
                         .order_by('-tot_recepcion'):
                         data.append({'name':  i['producto__denominacion'],
-                                     'data': [i['tot_recepcion']]})              
+                                     'data': [i['tot_recepcion']/1000]})              
             elif action == 'get_graph_purchase_vs_sale2':
                 data = []
                 month = datetime.now().month 
                 year = datetime.now().year
                 for i in Movimiento.objects.values('fecha') \
                         .filter(cliente=2,producto=2,fecha__month=month, fecha__year=year)\
-                        .annotate(tot_recepcion=Sum('peso_neto')) \
+                        .annotate(tot_recepcion=Sum('peso_neto',output_field=FloatField())) \
                         .order_by('fecha'):
-                        data.append({'name':  i['fecha'],
-                                     'data': [i['tot_recepcion']]})     
+                        data.append({'name':  i['fecha'].strftime('%d'),
+                                     'data': [i['tot_recepcion']/1000]})     
                         # print(data)         
             else:
                 data['error'] = 'Ha ocurrido un error'
