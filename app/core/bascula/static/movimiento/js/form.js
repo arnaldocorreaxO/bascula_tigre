@@ -8,10 +8,10 @@ $(function () {
     select_cliente.change(function () {
         if (action == 'add') {
             if (select_cliente.val() == 1) {
-                peso_entrada.prop('readonly', false);
+                // peso_entrada.prop('readonly', false);
             } else {
                 peso_entrada.val(0);
-                peso_entrada.prop('readonly', true);
+                // peso_entrada.prop('readonly', true);
             }
         }
     });    

@@ -121,6 +121,9 @@ class Chofer(ModeloBase):
 	def get_full_name(self):
 		return f"{format(self.codigo,',.0f').replace(',','.')} - {self.nombre} {self.apellido}"
 	
+	def get_name(self):
+		return f"{self.nombre} {self.apellido}"
+	
 	class Meta:
 	# ordering = ['1',]
 		db_table = 'bascula_chofer'

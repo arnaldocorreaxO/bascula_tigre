@@ -6,8 +6,8 @@
     <title>Ticket</title>
     <style>
         @page {
-            width: 76mm;
-            height: 200mm;
+            width: 210mm;
+            height: 297mm;
             /* height: {{ height }}mm; */
             margin: 0;
         }
@@ -29,13 +29,13 @@
         }
 
         .content {
-            width: 76mm;
-            height: 200mm;
+            width: 100mm;
+            height: 297mm;
             padding: 15px;
         }
 
         .salto {
-            padding: 20px;
+            padding: 130px;
         }
 
         .client {
@@ -67,15 +67,7 @@
             border-bottom-style: dotted;
         }
 
-        .ticket_titulo1 {
-            font-size: 15px;
-            font-weight: bold;
-            text-transform: uppercase;
-            text-align: center;
-            margin-bottom: 5px;
-        }
-
-        .ticket_titulo2 {
+        .ticket {
             font-size: 12px;
             font-weight: bold;
             text-transform: uppercase;
@@ -127,27 +119,16 @@
 <body>
 <div class="content">
    <p class="salto"></p>
-    <p class="ticket_titulo1">
-        {{ movimiento.sucursal.empresa}} <br>
-    </p>
-    <p class="ticket_titulo2 border-dotted">
-        {{ movimiento.sucursal}} <br>
-        {{ movimiento.sucursal.direccion}} <br>
-        {{ movimiento.sucursal.telefono}} <br>
-    </p>
-    <p class="ticket_titulo1">
-        <b> TICKET DE BASCULA </b>
-    </p>   
-    <p class="ticket_titulo1 border-dotted">
-        <b>N°: </b>{{ movimiento.nro_ticket|stringformat:"i" }}
+    <p class="ticket border-dotted">
+        {{ movimiento.nro_ticket|stringformat:"i" }}
     </p>   
 
     <table class="table table-borderless table-sm" style="margin-top: 0">
         <thead>
         <tr>
-            <th style="width: 27%;"></th>
+            <th style="width: 20%;"></th>
             <th style="width: 3%;"></th>
-            <th style="width: 70%;"></th>
+            <th style="width: 72%;"></th>
         </tr>
         </thead>
         <tbody>
@@ -185,9 +166,9 @@
     <table class="table table-borderless table-sm" style="margin-top: 0">
         <thead>
         <tr>
-            <th style="width: 27%;"></th>
+            <th style="width: 20%;"></th>
             <th style="width: 3%;"></th>
-            <th style="width: 70%;"></th>
+            <th style="width: 72%;"></th>
         </tr>
         </thead>
         <tbody>
@@ -214,9 +195,9 @@
     <table class="table table-borderless table-sm" style="margin-top: 0">
         <thead>
         <tr>
-            <th style="width: 27%;"></th>
+            <th style="width: 20%;"></th>
             <th style="width: 3%;"></th>
-            <th style="width: 70%;"></th>
+            <th style="width: 72%;"></th>
         </tr>
         </thead>
         <tbody>
@@ -245,30 +226,6 @@
             <td class="float-center"><b>:</b></td>
             <td class="text-left">{{ movimiento.peso_neto }} kg L </td>
         </tr>
-        </tbody>
-    </table>
-
-    <p class="salto"></p>
-    <p class="salto"></p>
-    <table class="table table-borderless table-sm" style="margin-top: 0">
-        <thead>
-        <tr>
-            <th style="width: 45%;"></th>
-            <th style="width: 10%;"></th>
-            <th style="width: 45%;"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td class="text-center">...............</td>
-            <td class="text-center"></td>
-            <td class="text-center">...............</td>
-        </tr>
-        <tr>
-            <td class="text-center">CHOFER</td>
-            <td class="text-center"></td>
-            <td class="text-center">OPERADOR</td>
-        </tr>       
         </tbody>
     </table>
 
