@@ -5,10 +5,10 @@ import datetime
 
 from config import settings
 from core.bascula.forms import (ChoferForm, MovimientoEntradaForm,
-                                MovimientoSalidaForm, SearchForm, VehiculoForm)
+								MovimientoSalidaForm, SearchForm, VehiculoForm)
 #LOCALS
 from core.views import printSeparador
-from core.bascula.models import ClienteProducto, ConfigSerial, Movimiento
+from core.bascula.models import Chofer, Cliente, ClienteProducto, ConfigSerial, Movimiento, Producto, Vehiculo
 from core.base.comserial import *
 from core.base.models import Empresa
 from core.security.mixins import PermissionMixin
@@ -101,7 +101,35 @@ class MovimientoCreate(PermissionMixin,CreateView):
 	@method_decorator(csrf_exempt)
 	def dispatch(self, request, *args, **kwargs):
 		return super().dispatch(request, *args, **kwargs)
+
 	
+	def validate_data(self):
+		data = {'valid': True}
+		try:
+			type = self.request.POST['type']
+			obj = self.request.POST['obj'].strip()
+			if type == 'nro_ticket':
+				if not obj=='0': #Ticket Cero puede repetirse
+					if Movimiento.objects.filter(nro_ticket=obj):
+						data['valid'] = False
+			elif type == 'peso_entrada':
+				if float(obj) <= 0.00:
+					data['valid'] = False
+			elif type == 'vehiculo':
+				if not Vehiculo.objects.filter(id=obj):
+					data['valid'] = False
+			elif type == 'chofer':
+				if not Chofer.objects.filter(id=obj):
+					data['valid'] = False
+			elif type == 'cliente':
+				if not Cliente.objects.filter(id=obj):
+					data['valid'] = False
+			elif type == 'producto':
+				if not Producto.objects.filter(id=obj):
+					data['valid'] = False
+		except:
+			pass
+		return JsonResponse(data)
 
 	def post(self, request, *args, **kwargs):
 		data = {}
@@ -111,6 +139,8 @@ class MovimientoCreate(PermissionMixin,CreateView):
 				with transaction.atomic():
 					form = self.get_form()
 					data = form.save()
+			elif action == 'validate_data':
+				return self.validate_data()				
 			elif action == 'create-vehiculo':
 				with transaction.atomic():
 					frmVehiculo = VehiculoForm(request.POST)
@@ -172,6 +202,34 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 	def dispatch(self, request, *args, **kwargs):
 		self.object = self.get_object()
 		return super().dispatch(request, *args, **kwargs)
+
+	def validate_data(self):
+		data = {'valid': True}
+		try:
+			type = self.request.POST['type']
+			obj = self.request.POST['obj'].strip()
+			if type == 'nro_ticket':
+				if not obj=='0': #Ticket Cero puede repetirse
+					if Movimiento.objects.filter(nro_ticket=obj):
+						data['valid'] = False
+			elif type == 'peso_salida':
+				if float(obj) <= 0.00:
+					data['valid'] = False
+			elif type == 'vehiculo':
+				if not Vehiculo.objects.filter(id=obj):
+					data['valid'] = False
+			elif type == 'chofer':
+				if not Chofer.objects.filter(id=obj):
+					data['valid'] = False
+			elif type == 'cliente':
+				if not Cliente.objects.filter(id=obj):
+					data['valid'] = False
+			elif type == 'producto':
+				if not Producto.objects.filter(id=obj):
+					data['valid'] = False
+		except:
+			pass
+		return JsonResponse(data)
 	
 	# def get_form(self, form_class=None):
 	# 	instance = self.get_object()
@@ -204,12 +262,10 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 								movimiento.peso_neto = movimiento.peso_salida - movimiento.peso_entrada
 								movimiento.peso_bruto = movimiento.peso_salida
 								movimiento.peso_tara = movimiento.peso_entrada
-						movimiento.save()					
-							
-			elif action == 'create-vehiculo':
-				with transaction.atomic():
-					frmVehiculo = VehiculoForm(request.POST)
-					data = frmVehiculo.save()
+						movimiento.fec_salida = movimiento.fec_modificacion
+						movimiento.save()				
+			elif action == 'validate_data':
+				return self.validate_data()	
 			else:
 				data['error'] = 'No ha ingresado a ninguna opción'
 		except Exception as e:
@@ -319,6 +375,7 @@ class MovimientoPrint(View):
 	def dispatch(self, request, *args, **kwargs):
 		return super().dispatch(request, *args, **kwargs)
 
+	@method_decorator(csrf_exempt)
 	def get_height_ticket(self):
 		movimiento = Movimiento.objects.get(pk=self.kwargs['pk'])
 		height = 180		
@@ -327,20 +384,35 @@ class MovimientoPrint(View):
 		height += increment
 		print(round(height))
 		return round(height)
-
+		
+	
+	@method_decorator(csrf_exempt)
 	def get(self, request, *args, **kwargs):
+		data = {}
 		try:
-			movimiento = Movimiento.objects.get(pk=self.kwargs['pk'])
-			context = {'movimiento': movimiento, 'company': Empresa.objects.first()}
-			context['height'] = self.get_height_ticket()
-			template = get_template('movimiento/ticket.html')
-			html_template = template.render(context).encode(encoding="UTF-8")
-			url_css = os.path.join(settings.BASE_DIR, 'static/lib/bootstrap-4.3.1/css/bootstrap.min.css')
-			pdf_file = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf(
-				stylesheets=[CSS(url_css)], presentational_hints=True)
-			response = HttpResponse(pdf_file, content_type='application/pdf')
-			# response['Content-Disposition'] = 'filename="generate_html.pdf"'
-			return response
+			movimiento = Movimiento.objects.filter(pk=self.kwargs['pk'],fec_impresion__isnull=True).first()
+			if movimiento:
+				if 'print_ticket' in request.GET:
+					#Permitir imprimir una vez en la llamada de ajax
+					pass					
+				else:
+					movimiento.fec_impresion = datetime.datetime.now()
+					if movimiento.peso_neto > 0: 
+						movimiento.save()
+					context = {'movimiento': movimiento, 'company': Empresa.objects.first()}
+					context['height'] = self.get_height_ticket()
+					template = get_template('movimiento/ticket.html')
+					html_template = template.render(context).encode(encoding="UTF-8")
+					url_css = os.path.join(settings.BASE_DIR, 'static/lib/bootstrap-4.3.1/css/bootstrap.min.css')
+					pdf_file = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf(
+						stylesheets=[CSS(url_css)], presentational_hints=True)
+					response = HttpResponse(pdf_file, content_type='application/pdf')
+					# response['Content-Disposition'] = 'filename="generate_html.pdf"'
+					return response
+			else:
+				data['info'] ='La impresión ya fue realizada'
+				return HttpResponse(json.dumps(data), content_type='application/json')
+			
 		except Exception as e:
 			print(str(e))
 		return HttpResponseRedirect(self.success_url)

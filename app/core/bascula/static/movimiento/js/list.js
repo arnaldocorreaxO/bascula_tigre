@@ -125,7 +125,7 @@ function getData(all) {
         columns: [
             {data: "id"},
             {data: "nro_ticket"},
-            {data: "fec_insercion"},
+            {data: "fec_entrada"},
             {data: "vehiculo"},
             {data: "chofer"},
             {data: "producto"},
@@ -152,9 +152,14 @@ function getData(all) {
                 render: function (data, type, row) {
                     var buttons =''
                     if (row.peso_salida==0){
-                        buttons += '<a href="/bascula/movimiento/update/' + row.id + '/" class="btn btn-warning btn-flat" data-toggle="tooltip" title="Salida Báscula">SALIDA<i class="fas fa-truck"></i></a> ';
+                        buttons += '<a href="/bascula/movimiento/update/' + row.id + '/" class="btn btn-warning btn-flat" data-toggle="tooltip" title="Salida Báscula">SALIDA <i class="fas fa-truck"></i></a> ';
                     }
-                    buttons += '<a href="/bascula/movimiento/print/' + row.id + '/" target="_blank" class="btn btn-dark btn-flat" data-toggle="tooltip" title="Imprimir Ticket Báscula"><i class="fas fa-print"></i></a> ';
+                    btnClass = "btn btn-secondary btn-flat disabled_print"
+                    if (!row.fec_impresion) {
+                        btnClass = "btn btn-dark btn-flat"           
+                    }
+                    // alert(btnClass)
+                    buttons += '<a href="/bascula/movimiento/print/' + row.id + '/" id="btnPrint" target="_blank"  class="' + btnClass + '" data-toggle="tooltip" title="Imprimir Ticket Báscula"><i class="fas fa-print"></i></a>';
                     return buttons;
                 }
             },
@@ -204,6 +209,39 @@ $(function () {
             theme: "bootstrap4",
             language: 'es'
         });
-    
+
+
+    /////////////////////////////
+    //   EVENTO PRINT TICKET   // 
+    /////////////////////////////
+
+    tblData.on( 'click', '#btnPrint', function (e) {
+        e.preventDefault();
+        var parameters = {
+            // Indicamos con esta variable que estamos imprimiendo por primera vez el ticket 
+            'print_ticket':true,
+        };
+        var url = $(this).attr('href');
+        $.ajax({
+            url: url,
+            data: parameters,
+            method: 'GET',
+            // dataType: 'json',
+            // processData: false,
+            // contentType: false,
+            success: function (request) {
+                console.log(request);
+                if (!request.hasOwnProperty('info')) { 
+                    //En esta llamada sin parametros se va a actualizar el estado de la impresion
+                    window.open(url, '_blank').focus();
+                    return false;
+                }
+                message_warning(request.info);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                message_error(errorThrown + ' ' + textStatus);
+            }
+        });
+   } );    
 
 });

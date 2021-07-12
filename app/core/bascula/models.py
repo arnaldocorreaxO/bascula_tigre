@@ -229,22 +229,29 @@ class Movimiento(ModeloBase):
 	peso_salida = models.IntegerField(default=0)
 	peso_bruto = models.IntegerField(default=0)
 	peso_tara = models.IntegerField(default=0)		
-	peso_neto = models.IntegerField(default=0)	
+	peso_neto = models.IntegerField(default=0)
+	fec_entrada = models.DateTimeField(verbose_name='Fecha Entrada',auto_now_add=True)
+	fec_salida = models.DateTimeField(verbose_name='Fecha Salida',null=True,blank=True)
+	fec_impresion = models.DateTimeField(verbose_name='Fecha Impresión',null=True,blank=True)	
 	
 	bascula_entrada = models.SmallIntegerField(null=True,default=1)
 	bascula_salida = models.SmallIntegerField(null=True,blank=True,default=1)
 
-	def toJSON(self):		
-		fec_entrada = format(self.fec_insercion,"%Y-%m-%d %H:%M:%S")
-		fec_salida = format(self.fec_modificacion,"%Y-%m-%d %H:%M:%S")
+	def toJSON(self):
+		
+		fec_entrada = format(self.fec_entrada,"%Y-%m-%d %H:%M:%S")
+		fec_salida = format(self.fec_salida,"%Y-%m-%d %H:%M:%S") if self.fec_salida else None
+
 		fec_inicial = datetime.datetime.strptime(fec_entrada, "%Y-%m-%d %H:%M:%S")
-		fec_final = datetime.datetime.strptime(fec_salida, "%Y-%m-%d %H:%M:%S")
-		dif = relativedelta(fec_final, fec_inicial)
+		dif = relativedelta(fec_inicial, fec_inicial)
+		
+		if fec_salida:
+			fec_final = datetime.datetime.strptime(fec_salida, "%Y-%m-%d %H:%M:%S")
+			dif = relativedelta(fec_final, fec_inicial)
 
 		item = model_to_dict(self)
 		item['fecha'] = self.fecha.strftime('%d/%m/%Y')
-		# item['fec_insercion'] = self.fec_insercion.strftime('%d/%m/%Y %H:%M:%S')		
-		item['fec_insercion'] = self.fec_insercion.strftime('%d/%m/%Y %H:%M:%S')		
+		
 		item['vehiculo'] = str(self.vehiculo)
 		# item['chofer'] = self.chofer.toJSON()
 		item['chofer'] = str(self.chofer)
@@ -259,6 +266,9 @@ class Movimiento(ModeloBase):
 		item['peso_neto'] = format(self.peso_neto,',.0f')
 		# item['peso_neto'] = format(self.peso_neto,',.0f').replace(',','.')
 		item['tiempo_descarga'] = "%d:%d:%d" % (dif.hours, dif.minutes,dif.seconds)
+		item['fec_entrada'] = self.fec_entrada.strftime('%d/%m/%Y %H:%M:%S')		
+		item['fec_salida'] = self.fec_salida.strftime('%d/%m/%Y %H:%M:%S')	if self.fec_salida else None		
+		item['fec_impresion'] = self.fec_impresion.strftime('%d/%m/%Y %H:%M:%S') if self.fec_impresion else None	
 		return item
 	
 	def __str__(self):

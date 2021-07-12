@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ticket</title>
+    <title>Ticket {{movimiento.nro_ticket|stringformat:"i"}}</title>
     <style>
         @page {
             width: 80mm;
@@ -93,9 +93,9 @@
         }
 
         .xo {
-            font-size: 10px;
+            font-size: 6px;
             /* font-weight: bold; */
-            text-transform: uppercase;
+            /* text-transform: uppercase; */
             text-align: center;
             margin-bottom: 5px;
         }
@@ -146,6 +146,11 @@
         </tr>
         </thead>
         <tbody>
+        <tr>
+            <td class="float-left">IMPRESION</td>
+            <td class="float-center">: </td>
+            <td class="text-left">{{ movimiento.fec_impresion|date:"d/m/Y H:i:s" }}</td>
+        </tr>
         <tr>
             <td class="float-left">ID</td>
             <td class="float-center">:</td>
@@ -228,7 +233,7 @@
         <tr>
             <td class="float-left">FECHA HORA</td>
             <td class="float-center">: </td>
-            <td class="text-left">{{ movimiento.fec_modificacion|date:"d/m/Y H:i:s" }}</td>
+            <td class="text-left">{{ movimiento.fec_salida|date:"d/m/Y H:i:s" }}</td>
         </tr>
         <tr>
             <td class="float-left ticket_peso"><b>TARA</b></td>

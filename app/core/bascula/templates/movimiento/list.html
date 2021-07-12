@@ -5,6 +5,14 @@
     <script src="{% static 'lib/bootstrap-daterangepicker-3.0.5/spanish.js' %}"></script>
     <script src="{% static 'lib/bootstrap-daterangepicker-3.0.5/daterangepicker.js' %}"></script>
     <script src="{% static 'movimiento/js/list.js' %}"></script>
+    <!-- DESHABILITAR BOTON DE IMPRESION| -->
+    <style>
+        .disabled_print {
+            pointer-events: none;
+            cursor: default;
+        }
+    </style>
+
 {% endblock %}
 
 {% block columns %}    
