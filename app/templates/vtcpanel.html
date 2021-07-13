@@ -146,14 +146,14 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header border-transparent">
-                            <h3 class="card-title"><i class="fas fa-truck"></i> Las últimas 10 Recepciones</h3>
+                            <h3 class="card-title"><i class="fas fa-truck"></i> Los últimos 10 Movimientos</h3>
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
                                 <table class="table table-sm m-0">
                                     <thead>
                                     <tr>
-                                        <th>Fecha</th>
+                                        <th class="text-center">Fecha</th>
                                         <th>Vehiculo</th>
                                         <th>Chofer</th>
                                         <th>Producto</th>
@@ -163,7 +163,7 @@
                                     <tbody>
                                     {% for m in movimiento %}
                                         <tr>              
-                                            <td>{{ m.fecha|date:"d/m/Y" }}</td>
+                                            <td class="text-center">{{ m.fec_insercion|date:"d/m/Y H:i:s" }}</td>
                                             <td>{{ m.vehiculo.get_full_name }}</td>
                                             <td>{{ m.chofer.get_full_name }}</td>
                                             <td>{{ m.producto }}</td> 
