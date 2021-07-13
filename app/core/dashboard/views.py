@@ -1,5 +1,5 @@
 import locale
-from datetime import datetime
+import datetime
 
 from django.db.models.fields import FloatField
 
@@ -37,9 +37,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         data = {}
         try:
             action = request.POST['action']
-            if action == 'get_graph_stock_products':
+            if action == 'get_graph_1':
                 info = []          
-                hoy = datetime.now()  
+                hoy = datetime.datetime.now()  
                 for i in Movimiento.objects.values('producto__denominacion') \
                         .filter(fecha=hoy,peso_neto__gt=0)\
                         .annotate(tot_recepcion=Sum('peso_neto',output_field=FloatField())) \
@@ -53,24 +53,36 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                     'colorByPoint': True,
                     'data': info,
                 }
-            elif action == 'get_graph_purchase_vs_sale':
+            elif action == 'get_graph_2':
                 data = []               
-                now = datetime.now() 
+                now = datetime.datetime.now() 
                 for i in Movimiento.objects.values('producto__denominacion','cliente__denominacion') \
                         .filter(fecha = now,peso_neto__gt=0)\
                         .annotate(tot_recepcion=Sum('peso_neto',output_field=FloatField())) \
                         .order_by('-tot_recepcion'):
                         data.append({'name':  i['producto__denominacion']+ ' - ' +i['cliente__denominacion'],
                                      'data': [i['tot_recepcion']/1000]})              
-            elif action == 'get_graph_purchase_vs_sale2':
+            elif action == 'get_graph_3':
                 data = []
-                month = datetime.now().month 
-                year = datetime.now().year
+                month = datetime.datetime.now().month 
+                year = datetime.datetime.now().year
                 for i in Movimiento.objects.values('fecha') \
                         .filter(cliente=2,producto=2,fecha__month=month, fecha__year=year)\
                         .annotate(tot_recepcion=Sum('peso_neto',output_field=FloatField())) \
                         .order_by('fecha'):
                         data.append({'name':  i['fecha'].strftime('%d'),
+                                     'data': [i['tot_recepcion']/1000]})     
+                        # print(data)         
+            elif action == 'get_graph_4':
+                data = []                
+                year = datetime.datetime.now().year
+                for i in Movimiento.objects.values('fecha__month') \
+                        .filter(cliente=2,producto=2, fecha__year=year)\
+                        .annotate(tot_recepcion=Sum('peso_neto',output_field=FloatField())) \
+                        .order_by('fecha__month'):
+                        #Utilizamos una fecha cualquiera para retornar solo el mes ;)
+                        mes = datetime.date(1900, i['fecha__month'], 1).strftime('%B').capitalize()
+                        data.append({'name':  mes,
                                      'data': [i['tot_recepcion']/1000]})     
                         # print(data)         
             else:
@@ -82,8 +94,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Panel de administración'
-        context['current_day'] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        context['current_month'] = datetime.now().strftime("%B de %Y")
+        context['current_day'] = datetime.datetime.today().strftime("%d/%m/%Y %H:%M:%S")
+        context['current_month'] = datetime.datetime.today().strftime("%B de %Y")
+        context['current_year'] = datetime.datetime.today().strftime("%Y")
         context['company'] = Empresa.objects.first()
         context['clientes'] = Cliente.objects.all().count()
         context['categorias'] = Categoria.objects.filter().count()

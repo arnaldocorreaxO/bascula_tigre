@@ -183,7 +183,7 @@
                             <h3 class="card-title"><i class="fas fa-industry"></i> Movimientos del Día {{ current_date }}</h3>
                         </div>
                         <div class="card-body p-0">
-                            <div id="graphstockproducts" style="height: 64vh;"></div>
+                            <div id="graph_1" style="height: 64vh;"></div>
                         </div>
                     </div>
                 </div>
@@ -195,7 +195,7 @@
                             <h3 class="card-title"><i class="fas fa-calendar-check"></i> Movimientos del Día {{ current_day }}</h3>
                         </div>
                         <div class="card-body p-0">
-                            <div class="container-fluid p-3" id="graphpurchasevssale">
+                            <div class="container-fluid p-3" id="graph_2">
                             </div>
                         </div>
                     </div>
@@ -208,14 +208,27 @@
                             <h3 class="card-title"><i class="fas fa-calendar-check"></i> Recepciones Clinker Mes de {{ current_month }}</h3>
                         </div>
                         <div class="card-body p-0">
-                            <div class="container-fluid p-3" id="graphpurchasevssale2">
+                            <div class="container-fluid p-3" id="graph_3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-calendar-check"></i> Recepciones Clinker Año {{ current_year }}</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="container-fluid p-3" id="graph_4">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <script>
-                var graphstockproducts = Highcharts.chart('graphstockproducts', {
+                var graph_1 = Highcharts.chart('graph_1', {
                     chart: {
                         type: 'pie',
                         options3d: {
@@ -251,17 +264,17 @@
                     },
                 });
 
-                function get_graph_stock_products() {
+                function get_graph_1() {
                     $.ajax({
                         url: window.location.pathname,
                         type: 'POST',
                         data: {
-                            'action': 'get_graph_stock_products'
+                            'action': 'get_graph_1'
                         },
                         dataType: 'json',
                     }).done(function (request) {
                         if (!request.hasOwnProperty('error')) {
-                            graphstockproducts.addSeries(request);
+                            graph_1.addSeries(request);
                             return false;
                         }
                         message_error(request.error);
@@ -272,17 +285,17 @@
                     });
                 }
 
-                function get_graph_purchase_vs_sale() {
+                function get_graph_2() {
                     $.ajax({
                         url: window.location.pathname,
                         type: 'POST',
                         data: {
-                            'action': 'get_graph_purchase_vs_sale'
+                            'action': 'get_graph_2'
                         },
                         dataType: 'json',
                     }).done(function (request) {
                         if (!request.hasOwnProperty('error')) {
-                            Highcharts.chart('graphpurchasevssale', {
+                            Highcharts.chart('graph_2', {
                                 chart: {
                                     type: 'column'
                                 },
@@ -342,17 +355,17 @@
                     });
                 }
 
-                function get_graph_purchase_vs_sale2() {
+                function get_graph_3() {
                     $.ajax({
                         url: window.location.pathname,
                         type: 'POST',
                         data: {
-                            'action': 'get_graph_purchase_vs_sale2'
+                            'action': 'get_graph_3'
                         },
                         dataType: 'json',
                     }).done(function (request) {
                         if (!request.hasOwnProperty('error')) {
-                            Highcharts.chart('graphpurchasevssale2', {
+                            Highcharts.chart('graph_3', {
                                 chart: {
                                     type: 'column'
                                 },
@@ -411,11 +424,81 @@
 
                     });
                 }
+                function get_graph_4() {
+                    $.ajax({
+                        url: window.location.pathname,
+                        type: 'POST',
+                        data: {
+                            'action': 'get_graph_4'
+                        },
+                        dataType: 'json',
+                    }).done(function (request) {
+                        if (!request.hasOwnProperty('error')) {
+                            Highcharts.chart('graph_4', {
+                                chart: {
+                                    type: 'column'
+                                },
+                                title: {
+                                    text: ''
+                                },
+                                subtitle: {
+                                    text: ''
+                                },
+                                exporting: {
+                                    enabled: false
+                                },
+                                xAxis: {
+                                    categories: [
+                                    'MES'                                 
+                                    ],
+                                    crosshair: true
+                                },
+                                yAxis: {
+                                    min: 0,
+                                    title: {
+                                        text: 'TONELADAS'
+                                    }
+                                },
+                                tooltip: {
+                                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                        '<td style="padding:0"><b>{point.y:.2f} TON</b></td></tr>',
+                                    footerFormat: '</table>',
+                                    shared: true,
+                                    useHTML: true
+                                },
+                                plotOptions: {
+                                    column: {
+                                        pointPadding: 0.2,
+                                        borderWidth: 0
+                                    },
+                                    series: {
+                                        dataLabels: {
+                                            enabled: true,
+                                            format: '<b>{point.y:.2f}',
+                                            style: {
+                                                fontSize: 20 + 'px'
+                                            }
+                                        }
+                                    }
+                                },
+                                series: request
+                            });
+                            return false;
+                        }
+                        message_error(request.error);
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        alert(textStatus + ': ' + errorThrown);
+                    }).always(function (data) {
+
+                    });
+                }
 
                 function init() {
-                    get_graph_stock_products();
-                    get_graph_purchase_vs_sale();
-                    get_graph_purchase_vs_sale2();
+                    get_graph_1();
+                    get_graph_2();
+                    get_graph_3();
+                    get_graph_4();
                 }
 
                 $(function () {
