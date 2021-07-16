@@ -185,8 +185,8 @@ class MovimientoCreate(PermissionMixin,CreateView):
 		context['sucursal'] = self.request.user.sucursal.id
 		context['frmVehiculo'] = VehiculoForm()
 		context['frmChofer'] = ChoferForm()
-		context['puerto_bascula1'] = ConfigSerial.objects.get(id=1).puerto
-		context['puerto_bascula2'] = ConfigSerial.objects.get(id=2).puerto
+		context['puerto_bascula1'] = ConfigSerial.objects.get(cod__exact='BSC1').puerto
+		context['puerto_bascula2'] = ConfigSerial.objects.get(cod__exact='BSC2').puerto
 		return context
 
 
@@ -242,30 +242,27 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 		try:
 			action = request.POST['action']
 			if action == 'edit':
-				with transaction.atomic():
-					with transaction.atomic():
-						movimiento = self.get_object()
-						# max_nro_ticket = Movimiento.objects.aggregate(Max('nro_ticket'))['nro_ticket__max']
-						# if max_nro_ticket is None:
-						# 	max_nro_ticket = 0 
-						# movimiento.nro_ticket = max_nro_ticket + 1
-						if movimiento.peso_entrada == movimiento.peso_salida:
-							data['error'] = 'Peso Entrada y Salida son iguales'
-						else:
-							if movimiento.peso_entrada > movimiento.peso_salida:
-								movimiento.peso_neto = movimiento.peso_entrada - movimiento.peso_salida
-								movimiento.peso_bruto = movimiento.peso_entrada
-								movimiento.peso_tara = movimiento.peso_salida
-							else:
-								movimiento.peso_neto = movimiento.peso_salida - movimiento.peso_entrada
-								movimiento.peso_bruto = movimiento.peso_salida
-								movimiento.peso_tara = movimiento.peso_entrada
-						form = self.get_form()
-						data = form.save()
-						movimiento.fec_salida = movimiento.fec_modificacion
-						movimiento.save()				
+				with transaction.atomic():					
+					# max_nro_ticket = Movimiento.objects.aggregate(Max('nro_ticket'))['nro_ticket__max']
+					# if max_nro_ticket is None:
+					# 	max_nro_ticket = 0
+					# movimiento.nro_ticket = max_nro_ticket + 1
+					form = self.get_form()
+					data = form.save()
+					movimiento = self.get_object()
+					if movimiento.peso_entrada > movimiento.peso_salida:
+						movimiento.peso_neto = movimiento.peso_entrada - movimiento.peso_salida
+						movimiento.peso_bruto = movimiento.peso_entrada
+						movimiento.peso_tara = movimiento.peso_salida
+					else:
+						movimiento.peso_neto = movimiento.peso_salida - movimiento.peso_entrada
+						movimiento.peso_bruto = movimiento.peso_salida
+						movimiento.peso_tara = movimiento.peso_entrada
+				
+				movimiento.fec_salida = movimiento.fec_modificacion
+				movimiento.save()
 			elif action == 'validate_data':
-				return self.validate_data()	
+				return self.validate_data()
 			else:
 				data['error'] = 'No ha ingresado a ninguna opción'
 		except Exception as e:

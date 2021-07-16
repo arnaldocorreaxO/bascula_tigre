@@ -314,7 +314,11 @@ $(function () {
             if (peso_salida.val() <= 0) {
                 message_error('Peso Salida es Cero');
                 return false;
-            }
+            };
+            if (peso_entrada.val() == peso_salida.val()) {
+                message_error('Peso Entrada y Salida son iguales');
+                return false;
+            };
 
         };
 

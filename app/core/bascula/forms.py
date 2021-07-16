@@ -323,7 +323,7 @@ class MovimientoSalidaForm(ModelForm):
         model = Movimiento
         fields =['fecha','nro_ticket','vehiculo','chofer',
                  'nro_mic','nro_remision','peso_embarque',
-                 'cliente','producto','peso_salida','sucursal']
+                 'cliente','producto','peso_entrada','peso_salida','sucursal']
         widgets = {
             'vehiculo': forms.Select(attrs={
                 'class': 'custom-select',
@@ -358,11 +358,12 @@ class MovimientoSalidaForm(ModelForm):
             ),
             'peso_entrada': forms.TextInput(attrs={
                 'readonly': True,
+                'type': 'hidden',
                 # 'style': 'width: 100%'
                 }
             ),
             'peso_salida': forms.TextInput(attrs={
-                'readonly': True,
+                'readonly': False,
                 # 'style': 'width: 100%'
                 }
             ),
