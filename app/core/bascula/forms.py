@@ -363,7 +363,7 @@ class MovimientoSalidaForm(ModelForm):
                 }
             ),
             'peso_salida': forms.TextInput(attrs={
-                'readonly': False,
+                'readonly': True,
                 # 'style': 'width: 100%'
                 }
             ),
