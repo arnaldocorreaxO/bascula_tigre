@@ -278,8 +278,8 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 		context['sucursal'] = self.request.user.sucursal.id
 		context['frmVehiculo'] = VehiculoForm()
 		context['frmChofer'] = ChoferForm()
-		context['puerto_bascula1'] = ConfigSerial.objects.get(cod='BSC1').puerto
-		context['puerto_bascula2'] = ConfigSerial.objects.get(cod='BSC2').puerto
+		context['puerto_bascula1'] = ConfigSerial.objects.get(cod__exact='BSC1').puerto
+		context['puerto_bascula2'] = ConfigSerial.objects.get(cod__exact='BSC2').puerto
 		return context
 
 '''ELIMINAR MOVIMIENTO DE BASCULA'''
