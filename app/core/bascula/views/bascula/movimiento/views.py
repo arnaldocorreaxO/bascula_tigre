@@ -244,8 +244,6 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 			if action == 'edit':
 				with transaction.atomic():
 					with transaction.atomic():
-						form = self.get_form()
-						data = form.save()
 						movimiento = self.get_object()
 						# max_nro_ticket = Movimiento.objects.aggregate(Max('nro_ticket'))['nro_ticket__max']
 						# if max_nro_ticket is None:
@@ -262,6 +260,8 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 								movimiento.peso_neto = movimiento.peso_salida - movimiento.peso_entrada
 								movimiento.peso_bruto = movimiento.peso_salida
 								movimiento.peso_tara = movimiento.peso_entrada
+						form = self.get_form()
+						data = form.save()
 						movimiento.fec_salida = movimiento.fec_modificacion
 						movimiento.save()				
 			elif action == 'validate_data':
