@@ -40,10 +40,10 @@ def leerPuertoSerial(config):
 
 	try:
 		#BORRAMOS EL ARCHIVO DE PESO 
-		# if os.path.exists("peso.txt"):
-		# 	os.remove("peso.txt")
-		# printSeparador()
-		# print('ESTADO PUERTO {}'.format(ser.isOpen()))
+		if os.path.exists("peso.txt"):
+			os.remove("peso.txt")
+		printSeparador()
+		print('ESTADO PUERTO {}'.format(ser.isOpen()))
 	
 		if not ser.isOpen():
 			ser.open()
@@ -84,9 +84,9 @@ def leerPuertoSerial(config):
 
 				if respuesta:
 					data = respuesta				
-					# with open("peso.txt", "w") as archivo:
-					# 	# archivo.writelines(dato.decode())
-					# 	archivo.writelines(str(data))
+					with open("peso.txt", "w") as archivo:
+						# archivo.writelines(dato.decode())
+						archivo.writelines(str(data))
 						# print(archivo.tell())
 						# print(type(archivo))
 					break
