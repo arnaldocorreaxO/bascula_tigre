@@ -32,7 +32,7 @@ class DatabaseBackupsListView(PermissionMixin, TemplateView):
                 data = []
                 search = DatabaseBackups.objects.filter()
                 start_date = request.POST['start_date']
-                end_date = request.POST['start_date']
+                end_date = request.POST['end_date']
                 if len(start_date) and len(end_date):
                     search = search.filter(date_joined__range=[start_date, end_date])
                 for a in search:
@@ -64,7 +64,7 @@ class DatabaseBackupsCreateView(PermissionMixin, TemplateView):
         data = {}
         try:
             db_name = connection.settings_dict['NAME']
-            data_now = '{0:%Y-%m-%d_%H:%M:%S}'.format(datetime.now())
+            data_now = '{0:%Y_%m_%d_%H_%M_%S}'.format(datetime.now())
             name_backup = "{}_{}.db".format('backup', data_now)
             script = ' {} {} ".backup {}"'.format('sqlite3', db_name, "'{}'".format(name_backup))
             subprocess.call(script, shell=True)
@@ -85,9 +85,9 @@ class DatabaseBackupsCreateView(PermissionMixin, TemplateView):
         data = {}
         try:
             db_name = connection.settings_dict['NAME']
-            data_now = '{0:%Y-%m-%d_%H:%M:%S}'.format(datetime.now())
+            data_now = '{0:%Y_%m_%d_%H_%M_%S}'.format(datetime.now())
             name_backup = "{}_{}.backup".format('backup', data_now)
-            script = 'export PGPASSWORD="ox82"; pg_dump -h localhost -p 5432 -U postgres -F c -b -v -f "{}" {}'.format(name_backup, db_name)
+            script = 'pg_dump -h localhost -p 5432 -U postgres -F c -b -v -f "{}" {}'.format(name_backup, db_name)
             subprocess.call(script, shell=True)
             file = os.path.join(settings.BASE_DIR, name_backup)
             db = DatabaseBackups()
