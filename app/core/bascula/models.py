@@ -238,7 +238,7 @@ class Movimiento(ModeloBase):
 	nro_ticket = models.BigIntegerField(default=1)
 	fecha = models.DateField(default=now)
 	nro_mic = models.IntegerField(null=True,blank=True) #MIC o DTA
-	nro_remision = models.IntegerField(default=0) 
+	nro_remision = models.BigIntegerField(default=0) 
 	porc_humedad = models.DecimalField(max_digits=5,decimal_places=2,default=0.00)	
 	vehiculo = models.ForeignKey(Vehiculo,on_delete=models.PROTECT)
 	chofer = models.ForeignKey(Chofer,on_delete=models.PROTECT)

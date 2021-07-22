@@ -335,14 +335,22 @@ class MovimientoSalidaForm(ModelForm):
         max_nro_ticket = Movimiento.objects.aggregate(Max('nro_ticket'))['nro_ticket__max']
         if max_nro_ticket is None:
             max_nro_ticket = 0  
+        year = datetime.datetime.now().year
+        print(self.instance.nro_remision)
+        if not self.instance.nro_remision:
+            max_nro_remision = Movimiento.objects.filter(fecha__year=year).aggregate(Max('nro_remision'))['nro_remision__max']
+            if max_nro_remision==0:
+                max_nro_remision = year * 100000000
 
         '''VALORES INICIALES'''
         # self.initial['fecha'] = datetime.date.today
         self.initial['nro_ticket'] = max_nro_ticket + 1
+        self.initial['nro_remision'] = max_nro_remision + 1
 
         for form in self.visible_fields():
+            pass
             # form.field.widget.attrs['readonly'] = 'readonly'
-            form.field.widget.attrs['class'] = 'form-control'
+            # form.field.widget.attrs['class'] = 'form-control'
             # form.field.widget.attrs['autocomplete'] = 'off'
       
     class Meta:
@@ -352,23 +360,23 @@ class MovimientoSalidaForm(ModelForm):
                  'cliente','producto','peso_entrada','peso_salida','sucursal']
         widgets = {
             'vehiculo': forms.Select(attrs={
-                'class': 'custom-select',
+                'class': 'custom-select select2',
                 'disabled': True,
                 }
             ),
             'chofer': forms.Select(attrs={
-                'class': 'custom-select',
+                'class': 'custom-select select2',
                 'disabled': True,
                 }
             ),
             'cliente': forms.Select(attrs={
-                'class': 'custom-select',
-                'disabled': False,
+                'class': 'custom-select select2',
+                # 'disabled': False,
                 }
             ),
             'producto': forms.Select(attrs={
-                'class': 'custom-select',
-               'disabled': True,
+                'class': 'custom-select select2',
+            #    'disabled': False,
                 }
             ),
             'fecha': forms.TextInput(attrs={
