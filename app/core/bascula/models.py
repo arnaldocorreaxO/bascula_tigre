@@ -134,12 +134,33 @@ class Chofer(ModeloBase):
 	def clean(self):
 		self.nombre = self.nombre.upper()
 		self.apellido = self.apellido.upper()
-		
+
+#ASOCIACIONES
+class Asociacion(ModeloBase):	
+	codigo = models.CharField(max_length=10,unique=True)
+	denominacion = models.CharField(max_length=100)
+	
+	def toJSON(self):
+		item = model_to_dict(self)
+		return item
+	
+	def __str__(self):
+		return f"{self.codigo} - {self.denominacion}"
+	
+	def get_full_name(self):
+		return f"{self.codigo}-{self.denominacion}"
+
+	class Meta:
+	# ordering = ['1',]
+		db_table = 'bascula_asociacion'
+		verbose_name = 'asociacion'
+		verbose_name_plural = 'asociaciones'
 
 #CLIENTES/PROVEEDORES
 class Cliente(ModeloBase):	
 	codigo = models.CharField(max_length=10,unique=True)
 	denominacion = models.CharField(max_length=100)
+	asociacion = models.ForeignKey(Asociacion,on_delete=models.PROTECT,null=True,blank=True)
 	
 	def toJSON(self):
 		item = model_to_dict(self)

@@ -5,9 +5,7 @@ from django.db.models import Max
 from django.forms import ModelForm
 from core.base.forms import readonly_fields
 
-from core.bascula.models import (Categoria, ClienteProducto, Movimiento, Chofer, Vehiculo, 
-                                 Cliente,Producto,MarcaVehiculo)
-
+from core.bascula.models import *
 
 
 ''' 
@@ -48,6 +46,34 @@ class ClienteForm(ModelForm):
         exclude = readonly_fields
         widgets = {
             'denominacion': forms.TextInput(attrs={'placeholder': 'Ingrese un Cliente'}),
+        }
+
+    def save(self, commit=True):
+        data = {}
+        try:
+            if self.is_valid():
+                super().save()
+            else:
+                data['error'] = self.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data
+
+''' 
+==========================
+===    ASOCIACIONES    ===
+========================== '''
+class AsociacionForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['codigo'].widget.attrs['autofocus'] = True
+
+    class Meta:
+        model = Asociacion
+        fields = '__all__'
+        exclude = readonly_fields
+        widgets = {
+            'denominacion': forms.TextInput(attrs={'placeholder': 'Ingrese una Asociacion'}),
         }
 
     def save(self, commit=True):
@@ -337,7 +363,7 @@ class MovimientoSalidaForm(ModelForm):
             ),
             'cliente': forms.Select(attrs={
                 'class': 'custom-select',
-                'disabled': True,
+                'disabled': False,
                 }
             ),
             'producto': forms.Select(attrs={
