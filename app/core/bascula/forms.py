@@ -181,7 +181,13 @@ class VehiculoForm(ModelForm):
         widgets = {
             'marca': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
         }
-   
+    
+    '''Eliminamos espacios de la matricula '''
+    def clean_matricula(self):
+        data = self.cleaned_data['matricula']
+        data = data.replace(" ","")
+        return data
+    
     def save(self, commit=True):
         data = {}
         form = super()
@@ -332,18 +338,18 @@ class MovimientoEntradaForm(ModelForm):
 class MovimientoSalidaForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        '''NUMERACION TICKET'''
         max_nro_ticket = Movimiento.objects.aggregate(Max('nro_ticket'))['nro_ticket__max']
         if max_nro_ticket is None:
             max_nro_ticket = 0  
+        '''NUMERACION REMISION'''
         year = datetime.datetime.now().year
-        print(self.instance.nro_remision)
         if not self.instance.nro_remision:
             max_nro_remision = Movimiento.objects.filter(fecha__year=year).aggregate(Max('nro_remision'))['nro_remision__max']
             if max_nro_remision==0:
                 max_nro_remision = year * 100000000
 
         '''VALORES INICIALES'''
-        # self.initial['fecha'] = datetime.date.today
         self.initial['nro_ticket'] = max_nro_ticket + 1
         self.initial['nro_remision'] = max_nro_remision + 1
 

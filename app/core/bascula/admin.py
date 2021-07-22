@@ -1,6 +1,8 @@
 from django.contrib import admin
 from core.base.admin import ModeloAdminBase
 from core.bascula.models import *
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
 
 # Register your models here.
 class ConfigSerialModelAdmin(ModeloAdminBase):
@@ -21,10 +23,61 @@ class MovimientoAdmin(ModeloAdminBase):
     list_filter =['cliente','producto','vehiculo','chofer','fecha']
     list_per_page = 10
 
+
+''' 
+=========================
+===   ASOCIACIONES    ===
+========================= '''
+class AsociacionResource(resources.ModelResource):
+    class Meta:
+        model = Asociacion        
+
+class AsociacionAdmin(ImportExportModelAdmin):
+    resource_class = AsociacionResource
+    fields = ('cod', 'denominacion',)
+''' 
+=====================
+===   CLIENTES    ===
+===================== '''
+class ClienteResource(resources.ModelResource):
+    class Meta:
+        model = Cliente        
+
+class ClienteAdmin(ImportExportModelAdmin):
+    resource_class = ClienteResource
+    fields = ('cod', 'denominacion',)
+
+''' 
+=====================
+===   VEHICULO    ===
+===================== '''
+class VehiculoResource(resources.ModelResource):
+    class Meta:
+        model = Vehiculo        
+
+class VehiculoAdmin(ImportExportModelAdmin):
+    resource_class = VehiculoResource
+    fields = ('matricula', 'marca',)
+''' 
+=====================
+===   CHOFER    ===
+===================== '''
+class ChoferResource(resources.ModelResource):
+    class Meta:
+        model = Chofer        
+
+class ChoferAdmin(ImportExportModelAdmin):
+    resource_class = ChoferResource
+    fields = ('codigo', 'nombre','apellido')
+
+
 # REGISTRO DE MODELOS
 admin.site.register(ConfigSerial,ConfigSerialModelAdmin)
 admin.site.register(MarcaVehiculo,ModeloAdminBase)
-admin.site.register(Cliente,ModeloAdminBase)
+admin.site.register(Vehiculo,VehiculoAdmin)
+admin.site.register(Chofer,ChoferAdmin)
+admin.site.register(Asociacion,AsociacionAdmin)
+admin.site.register(Cliente,ClienteAdmin)
 admin.site.register(Categoria,ModeloAdminBase)
 admin.site.register(Producto,ModeloAdminBase)
 admin.site.register(Movimiento,MovimientoAdmin)
