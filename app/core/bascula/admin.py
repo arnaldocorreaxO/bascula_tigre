@@ -42,7 +42,7 @@ class AsociacionAdmin(ImportExportModelAdmin):
 class ClienteResource(resources.ModelResource):
     class Meta:
         model = Cliente   
-        fields = ('codigo', 'denominacion','asociacion')     
+        fields = ('id','codigo', 'denominacion','asociacion')     
 
 class ClienteAdmin(ImportExportModelAdmin):
     resource_class = ClienteResource
