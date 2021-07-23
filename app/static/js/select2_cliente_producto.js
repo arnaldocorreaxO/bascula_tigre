@@ -59,7 +59,8 @@ $(function () {
         });
 
         // SOLO INTERNO 
-        if (id == 1 ){
+        // if (id == 1 ){
+        if (id == id ){
             var id = $('#id_vehiculo').val(); //ID CLIENTE
             $.ajax({
                 headers: { "X-CSRFToken": token.val() },
