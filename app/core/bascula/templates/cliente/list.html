@@ -2,8 +2,8 @@
 
 {% block columns %}
     <th>ID</th>
-     <th>Denominación</th>
-    <!-- <th>Inventariado</th> -->
+    <th>Codigo</th>
+    <th>Denominación</th>
     <th class="text-center">Opciones</th>
 {% endblock %}
 
@@ -11,14 +11,8 @@
     {% for i in object_list %}
         <tr>
             <td>{{ i.id }}</td>
+            <td>{{ i.codigo }}</td>
              <td>{{ i.denominacion }}</td>
-            <!-- <td class="text-center">
-                {% if i.inventoried %}
-                    <span class="badge badge-success">Si</span>
-                {% else %}
-                    <span class="badge badge-warning">No</span>
-                {% endif %}
-            </td> -->
             <td class="text-center">
                 <a href="{% url 'cliente_update' i.id %}" data-toggle="tooltip" title="Editar registro"
                    class="btn btn-warning btn-xs btn-flat">

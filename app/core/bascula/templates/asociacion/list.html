@@ -2,7 +2,7 @@
 
 {% block columns %}
     <th>ID</th>
-     <th>Cod.</th>
+     <th>Codigo</th>
      <th>Denominación</th>
     <!-- <th>Inventariado</th> -->
     <th class="text-center">Opciones</th>
@@ -12,7 +12,7 @@
     {% for i in object_list %}
         <tr>
             <td>{{ i.id }}</td>
-            <td>{{ i.cod }}</td>
+            <td>{{ i.codigo }}</td>
             <td>{{ i.denominacion }}</td>
             <td class="text-center">
                 <a href="{% url 'asociacion_update' i.id %}" data-toggle="tooltip" title="Editar registro"

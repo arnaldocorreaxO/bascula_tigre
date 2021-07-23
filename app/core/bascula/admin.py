@@ -45,7 +45,7 @@ class ClienteResource(resources.ModelResource):
 
 class ClienteAdmin(ImportExportModelAdmin):
     resource_class = ClienteResource
-    fields = ('cod', 'denominacion',)
+    fields = ('codigo', 'denominacion',)
 
 ''' 
 =====================
