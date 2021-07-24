@@ -28,35 +28,35 @@ $(function () {
     select_cliente.on('change', function () {
         var id = $(this).val(); //ID CLIENTE        
         var options = '<option value="">--------------</option>';
-        if (id === '') {
-            select_producto.html(options);
-            return false;
-        }
-        $.ajax({
-            headers: { "X-CSRFToken": token.val() },            
-            // url: window.location.pathname,
-            url: '/bascula/movimiento/add/',
-            type: 'POST',
-            data: {
-                'action': 'search_producto_id',
-                'id': id,
-            },
-            dataType: 'json',
-        }).done(function (data) {
-            if (!data.hasOwnProperty('error')) {
-                select_producto.html('').select2({
-                    theme: "bootstrap4",
-                    language: 'es',
-                    data: data                    
-                });
-                return false;
-            }
-            message_error(data.error);
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert(textStatus + ': ' + errorThrown);
-        }).always(function (data) {
-            //select_producto.html(options);
-        });
+        // if (id === '') {
+        //     select_producto.html(options);
+        //     return false;
+        // }
+        // $.ajax({
+        //     headers: { "X-CSRFToken": token.val() },            
+        //     // url: window.location.pathname,
+        //     url: '/bascula/movimiento/add/',
+        //     type: 'POST',
+        //     data: {
+        //         'action': 'search_producto_id',
+        //         'id': id,
+        //     },
+        //     dataType: 'json',
+        // }).done(function (data) {
+        //     if (!data.hasOwnProperty('error')) {
+        //         select_producto.html('').select2({
+        //             theme: "bootstrap4",
+        //             language: 'es',
+        //             data: data                    
+        //         });
+        //         return false;
+        //     }
+        //     message_error(data.error);
+        // }).fail(function (jqXHR, textStatus, errorThrown) {
+        //     alert(textStatus + ': ' + errorThrown);
+        // }).always(function (data) {
+        //     //select_producto.html(options);
+        // });
 
         // SOLO INTERNO 
         // if (id == 1 ){

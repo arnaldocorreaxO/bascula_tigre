@@ -1,3 +1,4 @@
+from core.bascula.admin import VehiculoAdmin
 import datetime
 
 from django import forms
@@ -260,6 +261,10 @@ class ClienteProductoForm(ModelForm):
 class MovimientoEntradaForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['producto'].queryset = Producto.objects.filter(activo__exact=True)
+        self.fields['cliente'].queryset = Cliente.objects.filter(activo__exact=True)
+        self.fields['chofer'].queryset = Chofer.objects.filter(activo__exact=True)
+        self.fields['vehiculo'].queryset = Vehiculo.objects.filter(activo__exact=True)
         # self.fields['vehiculo'].queryset = Vehiculo.objects.none()
         # '''MAX NRO. TICKET'''
         # max_nro_ticket = Movimiento.objects.aggregate(Max('nro_ticket'))['nro_ticket__max']
@@ -338,6 +343,10 @@ class MovimientoEntradaForm(ModelForm):
 class MovimientoSalidaForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['producto'].queryset = Producto.objects.filter(activo__exact=True)
+        self.fields['cliente'].queryset = Cliente.objects.filter(activo__exact=True)
+        self.fields['chofer'].queryset = Chofer.objects.filter(activo__exact=True)
+        self.fields['vehiculo'].queryset = Vehiculo.objects.filter(activo__exact=True)
         '''NUMERACION TICKET'''
         max_nro_ticket = Movimiento.objects.aggregate(Max('nro_ticket'))['nro_ticket__max']
         if max_nro_ticket is None:
