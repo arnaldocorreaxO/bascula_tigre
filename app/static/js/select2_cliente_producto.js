@@ -23,6 +23,7 @@ $(function () {
     var select_producto = $('select[name="producto"]');
     var select_vehiculo = $('select[name="vehiculo"]');
     var token = $('input[name="csrfmiddlewaretoken"]');
+    var action = $('input[name="action"]').val();
     // alert(token.val())
 
     select_cliente.on('change', function () {
@@ -73,9 +74,11 @@ $(function () {
                 },
                 dataType: 'json',
             }).done(function (data) {
-                if (!data.hasOwnProperty('error')) {                    
+                if (!data.hasOwnProperty('error')) {  
+                    if (action=='add'){
                     $('#id_peso_entrada').val(parseInt(data['peso'])) ;
                     // console.log(data);
+                    };
                     return false;
                 }
                 message_error(data.error);
