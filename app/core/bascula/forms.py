@@ -357,9 +357,9 @@ class MovimientoSalidaForm(ModelForm):
             max_nro_remision = Movimiento.objects.filter(fecha__year=year).aggregate(Max('nro_remision'))['nro_remision__max']
             if max_nro_remision==0:
                 max_nro_remision = year * 100000000
-            max_nro_remision + 1
+            max_nro_remision += 1
         else:
-            max_nro_remision = self.instance.nro_remision
+            max_nro_remision = self.instance.nro_remision 
 
         '''VALORES INICIALES'''
         self.initial['nro_ticket'] = max_nro_ticket + 1
