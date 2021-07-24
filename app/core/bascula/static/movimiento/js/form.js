@@ -319,6 +319,10 @@ $(function () {
                 message_error('Peso Entrada y Salida son iguales');
                 return false;
             };
+            if (peso_entrada.val() > peso_salida.val()) {
+                message_error('Peso Entrada es mayor a Salida');
+                return false;
+            };
 
         };
 
