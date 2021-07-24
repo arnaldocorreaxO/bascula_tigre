@@ -76,8 +76,7 @@ $(function () {
             }).done(function (data) {
                 if (!data.hasOwnProperty('error')) {  
                     if (action=='add'){
-                    $('#id_peso_entrada').val(parseInt(data['peso'])) ;
-                    // console.log(data);
+                        $('#id_peso_entrada').val(parseInt(data['peso'])) ;                        
                     };
                     return false;
                 }
