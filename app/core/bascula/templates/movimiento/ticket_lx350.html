@@ -7,7 +7,7 @@
     <style>
         @page {
             width: 80mm;
-            height: 270mm;
+            height: 290mm;
             /* height: {{ height }}mm; */
             margin: 0;
         }
@@ -30,18 +30,15 @@
 
         .content {
             width: 80mm;
-            height: 210mm;
-            padding-top:0px;
-            padding-right:25px;
-            padding-bottom:0px;
-            padding-left:25px;
+            height: 290mm;
+            padding: 25px;
         }
 
         .salto {
             padding: 20px;
         }
         .saltopie {
-            padding: 10px;
+            padding: 60px;
         }
 
         .border-dotted {
@@ -175,7 +172,7 @@
         <tr>
             <td class="float-left">ASOCIACION</td>
             <td class="float-center">: </td>
-            <td class="text-left">{{ movimiento.cliente.asociacion.denominacion_corta }}</td>
+            <td class="text-left">{{ movimiento.cliente.asociacion.denominacion }}</td>
         </tr>
         <tr>
             <td class="float-left">PROVEEDOR</td>
@@ -269,7 +266,7 @@
         </tbody>
     </table>
 
-    <!-- <p class="salto"></p> -->
+    <p class="salto"></p>
     <p class="salto"></p>
     <table class="table table-borderless table-sm" style="margin-top: 0">
         <thead>
@@ -294,6 +291,10 @@
     </table>
     <p class="saltopie"></p>
     <p class="xo">xO</p>
+    <p class="xo">.</p>
+    <p class="xo">.</p>
+ 
+
 </div>
 </body>
 </html>

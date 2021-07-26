@@ -67,7 +67,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 month = datetime.datetime.now().month 
                 year = datetime.datetime.now().year
                 for i in Movimiento.objects.values('fecha') \
-                        .filter(cliente=2,producto=2,fecha__month=month, fecha__year=year)\
+                        .filter(producto=1,fecha__month=month, fecha__year=year)\
                         .annotate(tot_recepcion=Sum('peso_neto',output_field=FloatField())) \
                         .order_by('fecha'):
                         data.append({'name':  i['fecha'].strftime('%d'),
@@ -77,7 +77,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 data = []                
                 year = datetime.datetime.now().year
                 for i in Movimiento.objects.values('fecha__month') \
-                        .filter(cliente=2,producto=2, fecha__year=year)\
+                        .filter(producto=1, fecha__year=year)\
                         .annotate(tot_recepcion=Sum('peso_neto',output_field=FloatField())) \
                         .order_by('fecha__month'):
                         #Utilizamos una fecha cualquiera para retornar solo el mes ;)

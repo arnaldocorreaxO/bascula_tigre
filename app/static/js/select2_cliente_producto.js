@@ -79,7 +79,8 @@ $(function () {
                         $('#id_peso_entrada').val(parseInt(data['peso'])) ;                        
                     };
                     return false;
-                }
+                }             
+                $('#id_vehiculo').val('').change();
                 message_error(data.error);
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 alert(textStatus + ': ' + errorThrown);

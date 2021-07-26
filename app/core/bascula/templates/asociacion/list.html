@@ -4,6 +4,7 @@
     <th>ID</th>
      <th>Codigo</th>
      <th>Denominación</th>
+     <th>Abreviatura</th>
     <!-- <th>Inventariado</th> -->
     <th class="text-center">Opciones</th>
 {% endblock %}
@@ -14,6 +15,7 @@
             <td>{{ i.id }}</td>
             <td>{{ i.codigo }}</td>
             <td>{{ i.denominacion }}</td>
+            <td>{{ i.denominacion_corta }}</td>
             <td class="text-center">
                 <a href="{% url 'asociacion_update' i.id %}" data-toggle="tooltip" title="Editar registro"
                    class="btn btn-warning btn-xs btn-flat">

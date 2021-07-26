@@ -138,7 +138,8 @@ class Chofer(ModeloBase):
 #ASOCIACIONES
 class Asociacion(ModeloBase):	
 	codigo = models.CharField(max_length=10,unique=True)
-	denominacion = models.CharField(max_length=100)
+	denominacion = models.CharField(max_length=100,unique=True)
+	denominacion_corta = models.CharField(max_length=30,unique=True,null=True,blank=True)
 	
 	def toJSON(self):
 		item = model_to_dict(self)
@@ -278,6 +279,7 @@ class Movimiento(ModeloBase):
 		item['chofer'] = str(self.chofer)
 		# item['producto'] = self.producto.toJSON()
 		item['producto'] = str(self.producto)
+		item['asociacion_cliente'] = "%s %s" % (str(self.cliente.asociacion.denominacion_corta),str(self.cliente))
 		item['porc_humedad'] = format(self.porc_humedad,'.0f')
 		item['nro_remision'] = format(self.nro_remision,'.0f')
 		item['peso_entrada'] = format(self.peso_entrada,',.0f')
