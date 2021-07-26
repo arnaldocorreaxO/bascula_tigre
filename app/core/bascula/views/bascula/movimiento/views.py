@@ -360,6 +360,13 @@ def getPeso(config,buffer):
 		pos_fin = config.pos_fin
 		print('Posicion Final\t:', pos_fin)
 		return buffer[pos_ini:pos_fin]
+	# """OBTENER VALORES DEL BUFFER DE LA BASCULA 1"""
+	# if config.cod == 'BSC1': 
+	# 	pos_ini = buffer.find('+') + 1
+	# 	print('Posicion Inicial:', pos_ini)
+	# 	pos_fin = pos_ini + (config.pos_fin - config.pos_ini)
+	# 	print('Posicion Final\t:', pos_fin)
+	# 	return buffer[pos_ini:pos_fin]
 	
 	"""OBTENER VALORES DEL BUFFER DE LA BASCULA 2"""
 	if config.cod == 'BSC2': 
