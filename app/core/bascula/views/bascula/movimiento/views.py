@@ -66,7 +66,7 @@ class MovimientoList(PermissionMixin,FormView):
 				# 					.extra(where=[_where])\
 				# 					.order_by('id')
 				
-				search = Movimiento.objects.filter()
+				search = Movimiento.objects.exclude(anulado=True)
 				if len(start_date) and len(end_date):
 					search = search.filter(fecha__range=[start_date, end_date])\
 									.extra(where=[_where])\
