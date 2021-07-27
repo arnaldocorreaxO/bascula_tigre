@@ -182,17 +182,17 @@ $(function () {
     var peso_salida = $('input[name="peso_salida"]');
 
     /*HABILITA EDICION DE PESO PARA VILLETA INTERNO */
-    var select_cliente = $('select[name="cliente"]');
-    select_cliente.change(function () {
-        if (action == 'add') {
-            if (select_cliente.val() == 1) {
-                // peso_entrada.prop('readonly', false);
-            } else {
-                peso_entrada.val(0);
-                // peso_entrada.prop('readonly', true);
-            }
-        }
-    });
+    // var select_cliente = $('select[name="cliente"]');
+    // select_cliente.change(function () {
+    //     if (action == 'add') {
+    //         if (select_cliente.val() == 1) {
+    //             // peso_entrada.prop('readonly', false);
+    //         } else {
+    //             peso_entrada.val(0);
+    //             // peso_entrada.prop('readonly', true);
+    //         }
+    //     }
+    // });
 
     //VEHICULO
     $('.btnAddVehiculo').on('click', function () {

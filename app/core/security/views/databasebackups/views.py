@@ -89,7 +89,7 @@ class DatabaseBackupsCreateView(PermissionMixin, TemplateView):
             name_backup = "{}_{}.backup".format('backup', data_now)
             script = 'pg_dump -h localhost -p 5432 -U postgres -F c -b -v -f "{}" {}'.format(name_backup, db_name)
             subprocess.call(script, shell=True)
-            file = os.path.join(settings.BASE_DIR, name_backup)
+            file = os.path.join(settings.BASE_DIR,name_backup)
             db = DatabaseBackups()
             db.user = self.request.user
             db.archive.save(name_backup, File(open(file, 'rb')), save=False)

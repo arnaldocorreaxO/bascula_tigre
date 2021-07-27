@@ -26,8 +26,8 @@ $(function () {
     var action = $('input[name="action"]').val();
     // alert(token.val())
 
-    select_cliente.on('change', function () {
-        var id = $(this).val(); //ID CLIENTE        
+    select_vehiculo.on('change', function () {
+        var id = $(this).val(); //ID VEHICULO       
         var options = '<option value="">--------------</option>';
         // if (id === '') {
         //     select_producto.html(options);
@@ -61,8 +61,8 @@ $(function () {
 
         // SOLO INTERNO 
         // if (id == 1 ){
-        if (id == id ){
-            var id = $('#id_vehiculo').val(); //ID CLIENTE
+        // if (id == id ){
+        //     var id = $('#id_vehiculo').val(); //ID CLIENTE
             $.ajax({
                 headers: { "X-CSRFToken": token.val() },
                 // url: window.location.pathname,
@@ -87,11 +87,11 @@ $(function () {
             }).always(function (data) {
                 //select_producto.html(options);
             });
-        };
+        // };
     });
 
-    select_vehiculo.on('change', function () {
-        select_cliente.change();
-    });
+    // select_vehiculo.on('change', function () {
+    //     select_cliente.change();
+    // });
    
 });
