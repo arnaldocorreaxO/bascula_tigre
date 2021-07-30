@@ -329,12 +329,12 @@ $(function () {
             };
 
             if (tipo_salida.val()=='lleno' && (Number(peso_entrada.val()) > Number(peso_salida.val()))) {
-                message_warning('Peso Salida (vacío) es mayor a Peso Entrada (lleno) ');
+                message_warning('Peso Salida (lleno) es menor a Peso Entrada (vacio) ');
                 return false;
             };
 
             if (tipo_salida.val()=='vacio' && (Number(peso_entrada.val()) < Number(peso_salida.val()))) {
-                message_warning('Peso Salida (lleno) es menor a Peso Entrada (vacío)');
+                message_warning('Peso Salida (vacío) es mayor a Peso Entrada (lleno)');
                 return false;
             };
 
