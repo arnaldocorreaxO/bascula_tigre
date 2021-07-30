@@ -290,38 +290,35 @@ class MovimientoEntradaForm(ModelForm):
         widgets = {
             'vehiculo': forms.Select(attrs={
                 'class': 'custom-select select2',
-                # 'style': 'width: 100%'
+                'style': 'width: 90%'
                 }
             ),
             'chofer': forms.Select(attrs={
                 'class': 'custom-select select2',
-                #  'style': 'width: 100%'
+                 'style': 'width: 90%'
                 }
             ),
             'cliente': forms.Select(attrs={
                 'class': 'custom-select select2',
-                # 'style': 'width: 100%'
+                'style': 'width: 100%'
                 }
             ),
             'producto': forms.Select(attrs={
                 'class': 'custom-select select2',
-                # 'style': 'width: 100%'
-                }
+                'style': 'width: 100%'
+            }
             ),
             'fecha': forms.TextInput(attrs={
                 'readonly': True,
-                # 'style': 'width: 100%'
-                }
+            }
             ),
             'nro_ticket': forms.TextInput(attrs={
                 'readonly': True,
-                # 'style': 'width: 100%'
-                }
+            }
             ),
             'peso_entrada': forms.TextInput(attrs={
                 'readonly': True,
-                # 'style': 'width: 100%'
-                }
+            }
             ),
         }
 
@@ -379,60 +376,57 @@ class MovimientoSalidaForm(ModelForm):
         widgets = {
             'vehiculo': forms.Select(attrs={
                 'class': 'custom-select select2',
+                'style': 'width: 100%',
                 'disabled': True,
-                }
+            }
             ),
             'chofer': forms.Select(attrs={
                 'class': 'custom-select select2',
+                'style': 'width: 100%',
                 'disabled': True,
-                }
+            }
             ),
             'cliente': forms.Select(attrs={
                 'class': 'custom-select select2',
-                # 'disabled': False,
-                }
+                'style': 'width: 100%',
+            }
             ),
             'producto': forms.Select(attrs={
                 'class': 'custom-select select2',
-            #    'disabled': False,
-                }
+                'style': 'width: 100%',
+            }
             ),
             'fecha': forms.TextInput(attrs={
                 'readonly': True,
-                # 'style': 'width: 100%'
-                }
+                'style': 'width: 100%',
+            }
             ),
             'nro_ticket': forms.TextInput(attrs={
                 'readonly': True,
-                # 'style': 'width: 100%'
-                # '-'
-                }
+                'style': 'width: 100%',
+
+            }
             ),
             'peso_entrada': forms.TextInput(attrs={
                 'readonly': True,
                 'type': 'hidden',
-                # 'style': 'width: 100%'
-                }
+            }
             ),
             'peso_salida': forms.TextInput(attrs={
                 'readonly': True,
-                # 'style': 'width: 100%'
-                }
+            }
             ),
             'nro_mic': forms.TextInput(attrs={
                 'readonly': True,
-                # 'style': 'width: 100%'
-                }
+            }
             ),
             'nro_remision': forms.TextInput(attrs={
                 'readonly': True,
-                # 'style': 'width: 100%'
-                }
+            }
             ),
             'peso_embarque': forms.TextInput(attrs={
                 'readonly': True,
-                # 'style': 'width: 100%'
-                }
+            }
             ),
         }
    

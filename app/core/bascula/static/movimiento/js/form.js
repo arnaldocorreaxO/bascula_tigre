@@ -180,6 +180,7 @@ $(function () {
     var action = $('input[name="action"]').val();
     var peso_entrada = $('input[name="peso_entrada"]');
     var peso_salida = $('input[name="peso_salida"]');
+    
 
     /*HABILITA EDICION DE PESO PARA VILLETA INTERNO */
     // var select_cliente = $('select[name="cliente"]');
@@ -313,17 +314,27 @@ $(function () {
             }
         }
         else {
+            // Tipo Salida Vehiculo
+            // Lleno = true
+            // Vacio = false
+            var tipo_salida = $('input[name="tipo_salida"]');
+            alert(tipo_salida.val());
             if (peso_salida.val() <= 0) {
-                message_error('Peso Salida es Cero');
+                message_warning('Peso Salida es Cero');
                 return false;
             };
             if (peso_entrada.val() == peso_salida.val()) {
-                message_error('Peso Entrada y Salida son iguales');
+                message_warning('Peso Entrada y Salida son iguales');
                 return false;
             };
-            
-            if ( Number(peso_entrada.val()) > Number(peso_salida.val())) {                
-                message_error('Peso Entrada es mayor a Salida');
+
+            if (tipo_salida.val()=='lleno' && (Number(peso_entrada.val()) > Number(peso_salida.val()))) {
+                message_warning('Peso Salida (vacío) es mayor a Peso Entrada (lleno) ');
+                return false;
+            };
+
+            if (tipo_salida.val()=='vacio' && (Number(peso_entrada.val()) < Number(peso_salida.val()))) {
+                message_warning('Peso Salida (lleno) es menor a Peso Entrada (vacío)');
                 return false;
             };
 
