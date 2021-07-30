@@ -318,7 +318,7 @@ $(function () {
             // Lleno = true
             // Vacio = false
             var tipo_salida = $('input[name="tipo_salida"]');
-            alert(tipo_salida.val());
+            // alert(tipo_salida.val());
             if (peso_salida.val() <= 0) {
                 message_warning('Peso Salida es Cero');
                 return false;
