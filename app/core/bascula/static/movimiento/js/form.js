@@ -314,9 +314,7 @@ $(function () {
             }
         }
         else {
-            // Tipo Salida Vehiculo
-            // Lleno = true
-            // Vacio = false
+            // Tipo Salida Vehiculo (lleno / vacio)
             var tipo_salida = $('input[name="tipo_salida"]');
             // alert(tipo_salida.val());
             if (peso_salida.val() <= 0) {

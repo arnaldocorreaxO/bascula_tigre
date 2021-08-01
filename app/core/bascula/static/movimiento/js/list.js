@@ -245,6 +245,9 @@ $(function () {
         });
    } );    
 
+    /////////////////////////////
+    //   EVENTO TIPO SALIDA   // 
+    /////////////////////////////
 
     tblData.on( 'click', '#btnSalida', function (e) {
         e.preventDefault();

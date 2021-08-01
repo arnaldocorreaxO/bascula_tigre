@@ -52,11 +52,13 @@
         }
 
         .ticket_titulo1 {
-            font-size: 14px;
-            font-weight: bold;
+            font-family: "Arial Narrow", Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 700;
             text-transform: uppercase;
             text-align: center;
             margin-bottom: 5px;
+            /* letter-spacing: 0.5px; */
         }
 
         .ticket_titulo2 {
@@ -88,17 +90,6 @@
             text-transform: uppercase;
             text-align: center;
             margin-bottom: 5px;
-        }
-        .company {
-            
-            font-family: "Arial Narrow", Arial, sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            text-transform: uppercase;
-            text-align: center;
-            margin-bottom: 5px;
-            /* letter-spacing: 0.5px; */
-
         }
 
         .producto {
@@ -139,7 +130,7 @@
 <body>
 <div class="content">
    <!-- <p class="salto"></p> -->
-    <p class="company">
+    <p class="ticket_titulo1">
         {{ movimiento.sucursal.empresa}}
          <br>
     </p>
