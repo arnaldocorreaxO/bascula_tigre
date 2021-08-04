@@ -203,7 +203,6 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 	success_url = reverse_lazy('movimiento_list')
 	template_name = 'movimiento/create.html'
 	permission_required = 'change_movimiento'
-
 	
 	def dispatch(self, request, *args, **kwargs):
 		self.object = self.get_object()
@@ -216,7 +215,7 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 			obj = self.model.objects.get(pk=self.kwargs['pk'],peso_neto__exact=0)
 			return obj
 		except self.model.DoesNotExist:
-			raise Http404("INFORMACION: Movimiento de Salida no existe o ya fue realizada ")
+			raise Http404("INFORMACION: Movimiento de Bascula NO existe o ya fue realizada la SALIDA")
 
 	def validate_data(self):
 		data = {'valid': True}
@@ -245,12 +244,6 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 		except:
 			pass
 		return JsonResponse(data)
-	
-	# def get_form(self, form_class=None):
-	# 	instance = self.get_object()
-	# 	form = MovimientoSalidaForm(instance=instance)
-	# 	# form.fields['cli'].queryset = Client.objects.filter(id=instance.cli.id)
-	# 	return form
 
 	def post(self, request, *args, **kwargs):
 		data = {}
@@ -403,8 +396,7 @@ class MovimientoPrint(View):
 		increment = 1 * 5.45
 		height += increment
 		print(round(height))
-		return round(height)
-		
+		return round(height)		
 	
 	@method_decorator(csrf_exempt)
 	def get(self, request, *args, **kwargs):
