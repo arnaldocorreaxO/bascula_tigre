@@ -302,8 +302,7 @@ $(function () {
     ////////////////////////
 
     $('#frmMovimiento').on('submit', function (e) {
-        e.preventDefault();
-        $('select').prop('disabled', false);
+        e.preventDefault();       
 
         var parameters = new FormData(this);
 
@@ -314,8 +313,15 @@ $(function () {
             }
         }
         else {
+            
             // Tipo Salida Vehiculo (lleno / vacio)
             var tipo_salida = $('input[name="tipo_salida"]');
+            var cliente_id = $('select[name="cliente"]');
+            //CLIENTE INICIAL 
+            if (cliente_id.val() == 125) {
+                message_warning('Cliente Inicial no válido para salida');
+                return false;
+            };
             // alert(tipo_salida.val());
             if (peso_salida.val() <= 0) {
                 message_warning('Peso Salida es Cero');
@@ -337,7 +343,7 @@ $(function () {
             };
 
         };
-
+        $('select').prop('disabled', false);
         parameters.append('action', action);
         submit_formdata_with_ajax('Notificación',
             '¿Estas seguro de realizar la siguiente acción?',

@@ -210,6 +210,14 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 		self.tipo_salida = kwargs['tipo_salida']
 		return super().dispatch(request, *args, **kwargs)
 
+	def get_object(self, queryset=None):
+		# Una vez tenga PESO NETO ya no se puede modificar la salida
+		try:		
+			obj = self.model.objects.get(pk=self.kwargs['pk'],peso_neto__exact=0)
+			return obj
+		except self.model.DoesNotExist:
+			raise Http404("INFORMACION: Movimiento de Salida no existe o ya fue realizada ")
+
 	def validate_data(self):
 		data = {'valid': True}
 		try:
