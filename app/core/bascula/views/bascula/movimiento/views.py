@@ -213,6 +213,7 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 		# Una vez tenga PESO NETO ya no se puede modificar la salida
 		try:		
 			obj = self.model.objects.get(pk=self.kwargs['pk'],peso_neto__exact=0)
+			#obj = self.model.objects.get(pk=self.kwargs['pk'])
 			return obj
 		except self.model.DoesNotExist:
 			raise Http404("INFORMACION: Movimiento de Bascula NO existe o ya fue realizada la SALIDA")

@@ -302,9 +302,7 @@ $(function () {
     ////////////////////////
 
     $('#frmMovimiento').on('submit', function (e) {
-        e.preventDefault();       
-
-        var parameters = new FormData(this);
+        e.preventDefault();            
 
         if (action == 'add') {
             if (peso_entrada.val() <= 0) {
@@ -343,8 +341,11 @@ $(function () {
             };
 
         };
+
         $('select').prop('disabled', false);
+        var parameters = new FormData(this);
         parameters.append('action', action);
+
         submit_formdata_with_ajax('Notificación',
             '¿Estas seguro de realizar la siguiente acción?',
             window.location.pathname,
