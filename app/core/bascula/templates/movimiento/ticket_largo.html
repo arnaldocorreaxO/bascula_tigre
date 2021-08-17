@@ -205,7 +205,7 @@
 
     <p class="producto" > {{ movimiento.producto.denominacion }}</p>
     
-    <!-- <p class="linea border-dotted">ENTRADA</p>
+    <p class="linea border-dotted">ENTRADA</p>
     <table class="table table-borderless table-sm" style="margin-top: 0">
         <thead>
         <tr>
@@ -216,7 +216,7 @@
         </thead>
         <tbody>
         <tr>
-            <td class="float-left">OPE. ENT.</td>
+            <td class="float-left">OPERADOR</td>
             <td class="float-center">:</td>
             <td class="text-left">{{ movimiento.usu_insercion.get_full_name }}</td>
         </tr>
@@ -231,9 +231,9 @@
             <td class="text-left ticket_peso">{{ movimiento.peso_entrada }} kg</td>
         </tr>       
         </tbody>
-    </table> -->
+    </table>
 
-    <p class="linea border-dotted">PESAJE</p>
+    <p class="linea border-dotted">SALIDA</p>
 
     <table class="table table-borderless table-sm" style="margin-top: 0">
         <thead>
@@ -244,42 +244,31 @@
         </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="float-left">OP.ENTRADA</td>
-                <td class="float-center">:</td>
-                <td class="text-left">{{ movimiento.usu_insercion.get_full_name }}</td>
-            </tr>
-            <tr>
-                <td class="float-left">FECHA HORA</td>
-                <td class="float-center">: </td>
-                <td class="text-left">{{ movimiento.fec_insercion|date:"d/m/Y H:i:s" }}</td>
-            </tr>
-            
-            <tr>
-                <td class="float-left">OP. SALIDA</td>
-                <td class="float-center">:</td>
-                <td class="text-left">{{ movimiento.usu_modificacion.get_full_name }}</td>
-            </tr>
-            <tr>
-                <td class="float-left">FECHA HORA</td>
-                <td class="float-center">: </td>
-                <td class="text-left">{{ movimiento.fec_salida|date:"d/m/Y H:i:s" }}</td>
-            </tr>
-            <tr>
-                <td class="float-left ticket_peso"><b>TARA</b></td>
-                <td class="float-center ticket_peso"><b>: </b></td>
-                <td class="text-left ticket_peso">{{ movimiento.peso_tara }} kg</td>
-            </tr>
-            <tr>
-                <td class="float-left ticket_peso"><b>BRUTO</b></td>
-                <td class="float-center ticket_peso"><b>:</b></td>
-                <td class="text-left ticket_peso">{{ movimiento.peso_bruto }} kg TP </td>
-            </tr>
-            <tr>
-                <td class="float-left ticket_peso"><b>NETO</b></td>
-                <td class="float-center ticket_peso"><b>:</b></td>
-                <td class="text-left ticket_peso">{{ movimiento.peso_neto }} kg L </td>
-            </tr>
+        <tr>
+            <td class="float-left">OPERADOR</td>
+            <td class="float-center">:</td>
+            <td class="text-left">{{ movimiento.usu_modificacion.get_full_name }}</td>
+        </tr>
+        <tr>
+            <td class="float-left">FECHA HORA</td>
+            <td class="float-center">: </td>
+            <td class="text-left">{{ movimiento.fec_salida|date:"d/m/Y H:i:s" }}</td>
+        </tr>
+        <tr>
+            <td class="float-left ticket_peso"><b>TARA</b></td>
+            <td class="float-center ticket_peso"><b>: </b></td>
+            <td class="text-left ticket_peso">{{ movimiento.peso_tara }} kg</td>
+        </tr>
+        <tr>
+            <td class="float-left ticket_peso"><b>BRUTO</b></td>
+            <td class="float-center ticket_peso"><b>:</b></td>
+            <td class="text-left ticket_peso">{{ movimiento.peso_bruto }} kg TP </td>
+        </tr>
+        <tr>
+            <td class="float-left ticket_peso"><b>NETO</b></td>
+            <td class="float-center ticket_peso"><b>:</b></td>
+            <td class="text-left ticket_peso">{{ movimiento.peso_neto }} kg L </td>
+        </tr>
         </tbody>
     </table>
 
