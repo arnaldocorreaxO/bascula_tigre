@@ -219,4 +219,12 @@ aria-hidden="true">
    </div>
 </form>
 </div>
+
+        {% if perms.user.change_peso %}
+        <script>
+            input_peso = document.getElementById("id_peso_entrada")
+            input_peso.removeAttribute('readonly')
+        </script>
+        {% endif %}
+    
 {% endblock %}

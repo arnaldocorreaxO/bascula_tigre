@@ -101,3 +101,10 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.get_full_name()
+    
+    class Meta:
+        # default_permissions = ()
+        permissions = (
+            ('change_peso', 'Can change Peso Manual'),
+        
+        )
