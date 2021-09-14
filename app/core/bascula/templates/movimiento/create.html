@@ -219,12 +219,19 @@ aria-hidden="true">
    </div>
 </form>
 </div>
-
+        <!-- Habilita Peso Manual -->
         {% if perms.user.habilita_peso_manual %}
-        <script>
-            input_peso = document.getElementById("id_peso_entrada")
-            input_peso.removeAttribute('readonly')
-        </script>
+            {% if action == 'add' %}
+                <script>
+                    input_peso_entrada = document.getElementById("id_peso_entrada")
+                    input_peso_entrada.removeAttribute('readonly')
+                </script>
+            {% else %}
+                <script>
+                    input_peso_salida = document.getElementById("id_peso_salida")
+                    input_peso_salida.removeAttribute('readonly')
+                </script>
+            {% endif %}
         {% endif %}
     
 {% endblock %}
