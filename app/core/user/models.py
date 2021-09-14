@@ -105,6 +105,6 @@ class User(AbstractUser):
     class Meta:
         # default_permissions = ()
         permissions = (
-            ('change_peso', 'Can change Peso Manual'),
+            ('habilita_peso_manual', 'Puede cargar Peso en forma Manual'),
         
         )
