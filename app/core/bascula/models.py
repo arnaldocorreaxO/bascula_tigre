@@ -200,13 +200,19 @@ class Producto(ModeloBase):
 	categoria = models.ForeignKey(Categoria,on_delete=models.PROTECT)
 	codigo = models.CharField(max_length=20,unique=True)
 	denominacion = models.CharField(max_length=100)
+	precio_venta = models.DecimalField(max_digits=12, decimal_places=2, default=5000.00, verbose_name='Precio de Venta')
 	
 	def toJSON(self):
 		item = model_to_dict(self)
+		item['precio_venta'] = format(self.precio_venta, '.2f')
 		return item
 	
 	def __str__(self):
 		return f"{self.codigo} - {self.denominacion}"
+	
+	def get_precio_venta(self):
+		return self.precio_venta
+
 	class Meta:
 	# ordering = ['1',]
 		db_table = 'bascula_producto'
@@ -258,9 +264,9 @@ class Movimiento(ModeloBase):
 	anulado = models.BooleanField(default=False)
 	bascula_entrada = models.SmallIntegerField(null=True,default=1)
 	bascula_salida = models.SmallIntegerField(null=True,blank=True,default=1)
+	precio_venta = models.DecimalField(max_digits=12, decimal_places=2, default=5000.00, verbose_name='Precio de Venta')
 
-	def toJSON(self):
-		
+	def toJSON(self):		
 		fec_entrada = format(self.fec_entrada,"%Y-%m-%d %H:%M:%S")
 		fec_salida = format(self.fec_salida,"%Y-%m-%d %H:%M:%S") if self.fec_salida else None
 
@@ -292,6 +298,7 @@ class Movimiento(ModeloBase):
 		item['fec_entrada'] = self.fec_entrada.strftime('%d/%m/%Y %H:%M:%S')		
 		item['fec_salida'] = self.fec_salida.strftime('%d/%m/%Y %H:%M:%S')	if self.fec_salida else None		
 		item['fec_impresion'] = self.fec_impresion.strftime('%d/%m/%Y %H:%M:%S') if self.fec_impresion else None	
+		item['precio_venta'] = format(self.precio_venta, '.2f')
 		return item
 	
 	def __str__(self):

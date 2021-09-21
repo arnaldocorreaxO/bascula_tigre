@@ -138,7 +138,10 @@ class MovimientoCreate(PermissionMixin,CreateView):
 			if action == 'add':
 				with transaction.atomic():
 					form = self.get_form()
-					data = form.save()
+					data = form.save()					
+					movimiento = Movimiento.objects.get(id=data['id'])
+					movimiento.precio_venta = Producto.get_precio_venta(movimiento.producto)	
+					movimiento.save()
 			elif action == 'validate_data':
 				return self.validate_data()				
 			elif action == 'create-vehiculo':
@@ -267,7 +270,7 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 						movimiento.peso_neto = movimiento.peso_salida - movimiento.peso_entrada
 						movimiento.peso_bruto = movimiento.peso_salida
 						movimiento.peso_tara = movimiento.peso_entrada
-				
+				# movimiento.precio_venta = Producto.get_precio_venta(movimiento.producto)
 				movimiento.fec_salida = movimiento.fec_modificacion
 				movimiento.save()
 			elif action == 'validate_data':
