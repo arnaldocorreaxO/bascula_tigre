@@ -28,7 +28,8 @@
 		VEH.MATRICULA || '  -  ' ||	MAR.DENOMINACION AS VEHICULO,
 		MOV.PESO_BRUTO AS PESO_BRUTO,
 		MOV.PESO_TARA AS PESO_TARA,
-		MOV.PESO_NETO AS PESO_NETO
+		MOV.PESO_NETO/1000.00 AS PESO_NETO,
+		MOV.PRECIO_VENTA AS PRECIO_VENTA
 FROM 
 BASCULA_MOVIMIENTO MOV
 INNER JOIN BASCULA_PRODUCTO PRO ON MOV.PRODUCTO_ID = PRO.ID 
@@ -87,15 +88,20 @@ ORDER BY 3,4,5,1,2]]>
 		<property name="com.jaspersoft.studio.field.label" value="peso_tara"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="bascula_movimiento"/>
 	</field>
-	<field name="peso_neto" class="java.lang.Integer">
+	<field name="peso_neto" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="peso_neto"/>
 		<property name="com.jaspersoft.studio.field.label" value="peso_neto"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="bascula_movimiento"/>
+	</field>
+	<field name="precio_venta" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="precio_venta"/>
+		<property name="com.jaspersoft.studio.field.label" value="precio_venta"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="bascula_movimiento"/>
 	</field>
 	<variable name="V_HOY" class="java.util.Date" resetType="None">
 		<variableExpression><![CDATA[NOW( )]]></variableExpression>
 	</variable>
-	<variable name="V_SUM_NETO" class="java.lang.Long" resetType="Group" resetGroup="Group3" calculation="Sum">
+	<variable name="V_SUM_NETO" class="java.math.BigDecimal" resetType="Group" resetGroup="Group3" calculation="Sum">
 		<variableExpression><![CDATA[$F{peso_neto}]]></variableExpression>
 	</variable>
 	<variable name="V_FECHA_DESDE" class="java.lang.String" resetType="None">
@@ -106,6 +112,12 @@ ORDER BY 3,4,5,1,2]]>
 	</variable>
 	<variable name="V_REPORT_COUNT" class="java.lang.Integer" resetType="Group" resetGroup="Group3" calculation="Count">
 		<variableExpression><![CDATA[$V{REPORT_COUNT}]]></variableExpression>
+	</variable>
+	<variable name="V_DET_NETO_X_PRECIO" class="java.math.BigDecimal" resetType="None">
+		<variableExpression><![CDATA[$F{peso_neto}.multiply($F{precio_venta})]]></variableExpression>
+	</variable>
+	<variable name="V_SUM_NETO_X_PRECIO" class="java.math.BigDecimal" resetType="Group" resetGroup="Group3" calculation="Sum">
+		<variableExpression><![CDATA[$V{V_DET_NETO_X_PRECIO}]]></variableExpression>
 	</variable>
 	<group name="Group1">
 		<groupExpression><![CDATA[$F{asociacion}]]></groupExpression>
@@ -194,7 +206,7 @@ ORDER BY 3,4,5,1,2]]>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="7" isBold="true"/>
 					</textElement>
-					<text><![CDATA[BRUTO (kg)]]></text>
+					<text><![CDATA[PRECIO (Gs)]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="412" y="49" width="54" height="20" uuid="3b218086-a646-49ab-a71f-f551e24cc26d"/>
@@ -207,7 +219,7 @@ ORDER BY 3,4,5,1,2]]>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="7" isBold="true"/>
 					</textElement>
-					<text><![CDATA[TARA (kg)]]></text>
+					<text><![CDATA[NETO (Ton.)]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="520" y="49" width="54" height="20" uuid="9089a961-f4ae-4c22-ba95-fbbedbbabf8b"/>
@@ -220,7 +232,7 @@ ORDER BY 3,4,5,1,2]]>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="7" isBold="true"/>
 					</textElement>
-					<text><![CDATA[NETO (kg)]]></text>
+					<text><![CDATA[TOTAL (Gs)]]></text>
 				</staticText>
 				<textField>
 					<reportElement x="61" y="23" width="410" height="10" uuid="04970368-4430-4cae-bd83-d7980a3836b8"/>
@@ -266,21 +278,28 @@ ORDER BY 3,4,5,1,2]]>
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="22">
+			<band height="25">
 				<textField pattern="#,##0">
 					<reportElement x="520" y="2" width="54" height="18" uuid="a8ee3226-7fb2-42b7-83f9-e1f57dcee50e"/>
-					<textElement textAlignment="Right">
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{V_SUM_NETO_X_PRECIO}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="332" y="3" width="80" height="18" uuid="99ae9a07-bf80-4f2f-9018-c03b5438731b"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTALES:]]></text>
+				</staticText>
+				<textField pattern="#,##0.00">
+					<reportElement x="412" y="3" width="54" height="18" uuid="e1d293fd-4cc7-4fb5-a9db-4dd49a2e9b6b"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{V_SUM_NETO}]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement x="440" y="2" width="80" height="18" uuid="99ae9a07-bf80-4f2f-9018-c03b5438731b"/>
-					<textElement textAlignment="Right">
-						<font size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[TOTAL NETO (kg):]]></text>
-				</staticText>
 			</band>
 		</groupFooter>
 	</group>
@@ -391,9 +410,9 @@ ORDER BY 3,4,5,1,2]]>
 				<textElement textAlignment="Right">
 					<font size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{peso_bruto}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{precio_venta}]]></textFieldExpression>
 			</textField>
-			<textField textAdjust="StretchHeight" pattern="#,##0">
+			<textField textAdjust="StretchHeight" pattern="#,##0.00">
 				<reportElement stretchType="ElementGroupHeight" x="412" y="2" width="54" height="13" uuid="6750c0ca-701f-4833-8e9a-35694dcf0b37">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -401,7 +420,7 @@ ORDER BY 3,4,5,1,2]]>
 				<textElement textAlignment="Right">
 					<font size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{peso_tara}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{peso_neto}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" pattern="#,##0">
 				<reportElement stretchType="ElementGroupHeight" x="520" y="2" width="54" height="13" uuid="9092f786-cf97-4e77-83d3-f747bad5453f">
@@ -411,7 +430,7 @@ ORDER BY 3,4,5,1,2]]>
 				<textElement textAlignment="Right">
 					<font size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{peso_neto}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{V_DET_NETO_X_PRECIO}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="2" width="30" height="13" uuid="88a07e0f-af69-4df4-8165-8d2f399d9b26"/>

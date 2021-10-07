@@ -88,9 +88,9 @@ ORDER BY 1,2,3]]>
 	<group name="Group1" isReprintHeaderOnEachPage="true" keepTogether="true">
 		<groupExpression><![CDATA[$F{asociacion}]]></groupExpression>
 		<groupHeader>
-			<band height="73">
+			<band height="59">
 				<staticText>
-					<reportElement x="79" y="40" width="257" height="28" uuid="3229a025-cbd4-4afe-af61-b014ffa312a9"/>
+					<reportElement x="79" y="31" width="257" height="28" uuid="3229a025-cbd4-4afe-af61-b014ffa312a9"/>
 					<box padding="2">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -103,7 +103,7 @@ ORDER BY 1,2,3]]>
 					<text><![CDATA[CLIENTE]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="390" y="40" width="54" height="28" uuid="7bdaebe3-9264-4e69-b36a-6b8324ee8f69"/>
+					<reportElement x="390" y="31" width="54" height="28" uuid="7bdaebe3-9264-4e69-b36a-6b8324ee8f69"/>
 					<box padding="2">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -116,7 +116,7 @@ ORDER BY 1,2,3]]>
 					<text><![CDATA[CALIZA]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="336" y="40" width="54" height="28" uuid="3b218086-a646-49ab-a71f-f551e24cc26d"/>
+					<reportElement x="336" y="31" width="54" height="28" uuid="3b218086-a646-49ab-a71f-f551e24cc26d"/>
 					<box padding="2">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -129,7 +129,7 @@ ORDER BY 1,2,3]]>
 					<text><![CDATA[CALIZA CAL VIVA]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="444" y="40" width="54" height="28" uuid="9089a961-f4ae-4c22-ba95-fbbedbbabf8b"/>
+					<reportElement x="444" y="31" width="54" height="28" uuid="9089a961-f4ae-4c22-ba95-fbbedbbabf8b"/>
 					<box padding="2">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -142,21 +142,21 @@ ORDER BY 1,2,3]]>
 					<text><![CDATA[DOLOMITA]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="10" y="10" width="70" height="20" uuid="62daaaa3-a885-4620-bd83-a1bb880b3e97"/>
+					<reportElement x="10" y="1" width="70" height="20" uuid="62daaaa3-a885-4620-bd83-a1bb880b3e97"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[ASOCIACION:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="80" y="10" width="492" height="20" uuid="8fcc0c9c-5371-4a94-8709-36ee91d2a6c0"/>
+					<reportElement x="80" y="1" width="492" height="20" uuid="8fcc0c9c-5371-4a94-8709-36ee91d2a6c0"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{asociacion}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="498" y="40" width="74" height="28" uuid="f475a542-7a57-48d1-b7f6-375b68c447d0"/>
+					<reportElement x="498" y="31" width="74" height="28" uuid="f475a542-7a57-48d1-b7f6-375b68c447d0"/>
 					<box padding="2">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -169,7 +169,7 @@ ORDER BY 1,2,3]]>
 					<text><![CDATA[TOTAL (kg)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="9" y="40" width="70" height="28" uuid="e09aeb6f-66c5-44dc-b31b-9cc8488022fa"/>
+					<reportElement x="9" y="31" width="70" height="28" uuid="e09aeb6f-66c5-44dc-b31b-9cc8488022fa"/>
 					<box padding="2">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>

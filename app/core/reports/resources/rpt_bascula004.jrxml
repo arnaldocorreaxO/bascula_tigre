@@ -22,7 +22,13 @@
 	<queryString>
 		<![CDATA[SELECT  
 ASO.DENOMINACION ||' - '|| ASO.CODIGO AS ASOCIACION,
-PRO.ID, PRO.CODIGO, PRO.DENOMINACION, SUM(MOV.PESO_NETO) AS TOTAL 	
+PRO.ID, 
+PRO.CODIGO, 
+PRO.DENOMINACION, 
+MOV.PRECIO_VENTA AS PRECIO_VENTA ,
+SUM(MOV.PESO_NETO)/1000.00 AS CANT_TOTAL
+
+
 FROM 
 BASCULA_MOVIMIENTO MOV
 INNER JOIN BASCULA_PRODUCTO PRO ON MOV.PRODUCTO_ID = PRO.ID 
@@ -37,8 +43,8 @@ AND  (MOV.FECHA >= TO_DATE($P{P_FECHA_DESDE},'YYYY-MM-DD') OR $P{P_FECHA_DESDE} 
 AND  (MOV.FECHA <= TO_DATE($P{P_FECHA_HASTA},'YYYY-MM-DD') OR $P{P_FECHA_HASTA} IS NULL)
 AND MOV.PESO_NETO > 0 
 AND MOV.ANULADO = FALSE
-GROUP BY 1,2,3,4
-ORDER BY 1,2,3,4]]>
+GROUP BY 1,2,3,4,5
+ORDER BY 1,2,3,4,5]]>
 	</queryString>
 	<field name="asociacion" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="asociacion"/>
@@ -59,15 +65,20 @@ ORDER BY 1,2,3,4]]>
 		<property name="com.jaspersoft.studio.field.label" value="denominacion"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="bascula_producto"/>
 	</field>
-	<field name="total" class="java.lang.Long">
-		<property name="com.jaspersoft.studio.field.name" value="total"/>
-		<property name="com.jaspersoft.studio.field.label" value="total"/>
+	<field name="precio_venta" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="precio_venta"/>
+		<property name="com.jaspersoft.studio.field.label" value="precio_venta"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="bascula_movimiento"/>
+	</field>
+	<field name="cant_total" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="cant_total"/>
+		<property name="com.jaspersoft.studio.field.label" value="cant_total"/>
 	</field>
 	<variable name="V_HOY" class="java.util.Date" resetType="None">
 		<variableExpression><![CDATA[NOW( )]]></variableExpression>
 	</variable>
-	<variable name="V_TOT_PRO_ASOCIACION" class="java.lang.Long" resetType="Group" resetGroup="Group1" calculation="Sum">
-		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+	<variable name="V_TOT_PRO_ASOCIACION" class="java.math.BigDecimal" resetType="Group" resetGroup="Group1" calculation="Sum">
+		<variableExpression><![CDATA[$F{cant_total}]]></variableExpression>
 	</variable>
 	<variable name="V_FECHA_DESDE" class="java.lang.String" resetType="None">
 		<variableExpression><![CDATA[(($P{P_FECHA_DESDE} != null && $P{P_FECHA_DESDE}.length() == 10) ? $P{P_FECHA_DESDE}.substring(8,10)+"/"+$P{P_FECHA_DESDE}.substring(5,7)+"/"+$P{P_FECHA_DESDE}.substring(0,4) : null)]]></variableExpression>
@@ -75,12 +86,18 @@ ORDER BY 1,2,3,4]]>
 	<variable name="V_FECHA_HASTA" class="java.lang.String" resetType="None">
 		<variableExpression><![CDATA[(($P{P_FECHA_HASTA} != null && $P{P_FECHA_HASTA}.length() == 10) ? $P{P_FECHA_HASTA}.substring(8,10)+"/"+$P{P_FECHA_HASTA}.substring(5,7)+"/"+$P{P_FECHA_HASTA}.substring(0,4) : null)]]></variableExpression>
 	</variable>
+	<variable name="V_SUM_TOTAL_X_PRECIO" class="java.math.BigDecimal" resetType="Group" resetGroup="Group1" calculation="Sum">
+		<variableExpression><![CDATA[$V{V_DET_TOTAL_X_PRECIO}]]></variableExpression>
+	</variable>
+	<variable name="V_DET_TOTAL_X_PRECIO" class="java.math.BigDecimal" resetType="None">
+		<variableExpression><![CDATA[$F{cant_total}.multiply($F{precio_venta})]]></variableExpression>
+	</variable>
 	<group name="Group1" isReprintHeaderOnEachPage="true" keepTogether="true">
 		<groupExpression><![CDATA[$F{asociacion}]]></groupExpression>
 		<groupHeader>
-			<band height="41">
+			<band height="46">
 				<staticText>
-					<reportElement x="149" y="22" width="348" height="19" uuid="3229a025-cbd4-4afe-af61-b014ffa312a9"/>
+					<reportElement x="149" y="22" width="198" height="19" uuid="3229a025-cbd4-4afe-af61-b014ffa312a9"/>
 					<box padding="2">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -107,7 +124,7 @@ ORDER BY 1,2,3,4]]>
 					<textFieldExpression><![CDATA[$F{asociacion}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="497" y="22" width="75" height="19" uuid="f475a542-7a57-48d1-b7f6-375b68c447d0"/>
+					<reportElement x="422" y="22" width="75" height="19" uuid="f475a542-7a57-48d1-b7f6-375b68c447d0"/>
 					<box padding="2">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -117,7 +134,7 @@ ORDER BY 1,2,3,4]]>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="7" isBold="true"/>
 					</textElement>
-					<text><![CDATA[TOTAL (kg)]]></text>
+					<text><![CDATA[CANT. TOTAL (Ton.)]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="9" y="22" width="70" height="19" uuid="e09aeb6f-66c5-44dc-b31b-9cc8488022fa"/>
@@ -145,13 +162,39 @@ ORDER BY 1,2,3,4]]>
 					</textElement>
 					<text><![CDATA[COD. PRODUCTO]]></text>
 				</staticText>
+				<staticText>
+					<reportElement x="347" y="22" width="75" height="19" uuid="86793cd7-5c9e-453c-8da1-37fe67a042f2"/>
+					<box padding="2">
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7" isBold="true"/>
+					</textElement>
+					<text><![CDATA[PRECIO (Gs.)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="497" y="22" width="75" height="19" uuid="a413f4a9-73ef-43f0-a506-12be535e0a81"/>
+					<box padding="2">
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL (Gs.)]]></text>
+				</staticText>
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="20">
-				<textField pattern="#,##0">
-					<reportElement x="480" y="1" width="92" height="18" uuid="a8ee3226-7fb2-42b7-83f9-e1f57dcee50e"/>
-					<box padding="1">
+			<band height="24">
+				<textField pattern="#,##0.00">
+					<reportElement x="422" y="1" width="75" height="18" uuid="a8ee3226-7fb2-42b7-83f9-e1f57dcee50e"/>
+					<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 						<topPen lineWidth="1.0"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -160,15 +203,25 @@ ORDER BY 1,2,3,4]]>
 					<textFieldExpression><![CDATA[$V{V_TOT_PRO_ASOCIACION}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="360" y="1" width="120" height="18" uuid="2e6a1a06-f2a8-48d2-8b8d-261bc3c44ed7"/>
+					<reportElement x="302" y="1" width="120" height="18" uuid="2e6a1a06-f2a8-48d2-8b8d-261bc3c44ed7"/>
 					<box>
 						<topPen lineWidth="1.0"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
 					</textElement>
-					<text><![CDATA[TOTAL POR ASOCIACION (kg):]]></text>
+					<text><![CDATA[TOTAL POR ASOCIACION:]]></text>
 				</staticText>
+				<textField pattern="#,##0">
+					<reportElement x="497" y="1" width="75" height="18" uuid="9e66d4f1-2e07-45b1-9f9c-f2f6b6c4d780"/>
+					<box padding="1">
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{V_SUM_TOTAL_X_PRECIO}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupFooter>
 	</group>
@@ -229,10 +282,10 @@ ORDER BY 1,2,3,4]]>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
+		<band height="13" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout"/>
 			<textField textAdjust="StretchHeight">
-				<reportElement stretchType="ElementGroupHeight" x="79" y="2" width="70" height="13" uuid="6aea157a-8e1f-4010-8773-5887e433f05d">
+				<reportElement stretchType="ElementGroupHeight" x="79" y="0" width="70" height="13" uuid="6aea157a-8e1f-4010-8773-5887e433f05d">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box padding="2"/>
@@ -242,7 +295,7 @@ ORDER BY 1,2,3,4]]>
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" pattern="#,##0">
-				<reportElement stretchType="ElementGroupHeight" x="149" y="2" width="348" height="13" uuid="6750c0ca-701f-4833-8e9a-35694dcf0b37">
+				<reportElement stretchType="ElementGroupHeight" x="149" y="0" width="198" height="13" uuid="6750c0ca-701f-4833-8e9a-35694dcf0b37">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box padding="2"/>
@@ -251,16 +304,16 @@ ORDER BY 1,2,3,4]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{denominacion}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0">
-				<reportElement x="497" y="2" width="75" height="13" uuid="f2ad971b-bf1a-4bb0-b6eb-ae17ca893462"/>
-				<box padding="0"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="422" y="0" width="75" height="13" uuid="f2ad971b-bf1a-4bb0-b6eb-ae17ca893462"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="1"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{cant_total}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" pattern="#,##0" isBlankWhenNull="true">
-				<reportElement stretchType="ElementGroupHeight" x="9" y="2" width="70" height="13" uuid="3af51eab-9b9f-49c5-bbcc-5c2199640271">
+				<reportElement stretchType="ElementGroupHeight" x="9" y="0" width="70" height="13" uuid="3af51eab-9b9f-49c5-bbcc-5c2199640271">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box padding="2"/>
@@ -268,6 +321,22 @@ ORDER BY 1,2,3,4]]>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="347" y="0" width="75" height="13" uuid="5da8386b-562d-4403-ab1e-f739bc0ce357"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="1"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{precio_venta}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="497" y="0" width="75" height="13" uuid="d4c9990a-71be-4a14-a04d-8ef60a2ff170"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="1"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{V_DET_TOTAL_X_PRECIO}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
