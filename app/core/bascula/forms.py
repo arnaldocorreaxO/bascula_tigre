@@ -1,4 +1,3 @@
-from core.bascula.admin import VehiculoAdmin
 import datetime
 
 from django import forms
@@ -344,11 +343,14 @@ class MovimientoSalidaForm(ModelForm):
         self.fields['cliente'].queryset = Cliente.objects.filter(activo__exact=True)
         self.fields['chofer'].queryset = Chofer.objects.filter(activo__exact=True)
         self.fields['vehiculo'].queryset = Vehiculo.objects.filter(activo__exact=True)
+        
         '''NUMERACION TICKET'''
         max_nro_ticket = Movimiento.objects.aggregate(Max('nro_ticket'))['nro_ticket__max']
         if max_nro_ticket is None:
-            max_nro_ticket = 0  
+            max_nro_ticket = 0 
+
         '''NUMERACION REMISION'''
+        import datetime
         year = datetime.datetime.now().year 
         if not self.instance.nro_remision:
             max_nro_remision = Movimiento.objects.filter(fecha__year=year).aggregate(Max('nro_remision'))['nro_remision__max']
