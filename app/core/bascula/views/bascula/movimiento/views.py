@@ -359,29 +359,49 @@ def leer_peso_bascula(request):
 				#os.remove("peso.txt")			
 	return JsonResponse({ 'peso': data })          
 
-def getPeso(config,buffer):
+def getPeso(config,buffer):	
+	# VISOR BALPAR YOAWA A9+
 	"""OBTENER VALORES DEL BUFFER DE LA BASCULA 1"""
-	if config.cod == 'BSC1': 
-		pos_ini = config.pos_ini
+	if config.cod == 'BSC1' or config.cod == 'BSC2': 
+		pos_ini = buffer.find('+') + 1
 		print('Posicion Inicial:', pos_ini)
-		pos_fin = config.pos_fin
+		pos_fin = pos_ini + (config.pos_fin - config.pos_ini)
 		print('Posicion Final\t:', pos_fin)
 		return buffer[pos_ini:pos_fin]
-	# """OBTENER VALORES DEL BUFFER DE LA BASCULA 1"""
-	# if config.cod == 'BSC1': 
-	# 	pos_ini = buffer.find('+') + 1
-	# 	print('Posicion Inicial:', pos_ini)
-	# 	pos_fin = pos_ini + (config.pos_fin - config.pos_ini)
-	# 	print('Posicion Final\t:', pos_fin)
-	# 	return buffer[pos_ini:pos_fin]
 	
 	"""OBTENER VALORES DEL BUFFER DE LA BASCULA 2"""
-	if config.cod == 'BSC2': 
+	# VISOR TOLEDO DESHABILITADO
+	if config.cod == 'BSC2' and True == False: #Para el simulador habilitar este 
 		pos_ini = config.pos_ini
 		print('Posicion Inicial:', pos_ini)
 		pos_fin = config.pos_fin
 		print('Posicion Final\t:', pos_fin)
 		return buffer[pos_ini:pos_fin]
+		
+	# ORIGINAL 12/12/22023	
+	if 1==0: #DESHABILITADO POR CAMBIO DE VISOR
+		"""OBTENER VALORES DEL BUFFER DE LA BASCULA 1"""
+		if config.cod == 'BSC1': 
+			pos_ini = config.pos_ini
+			print('Posicion Inicial:', pos_ini)
+			pos_fin = config.pos_fin
+			print('Posicion Final\t:', pos_fin)
+			return buffer[pos_ini:pos_fin]
+		# """OBTENER VALORES DEL BUFFER DE LA BASCULA 1"""
+		# if config.cod == 'BSC1': 
+		# 	pos_ini = buffer.find('+') + 1
+		# 	print('Posicion Inicial:', pos_ini)
+		# 	pos_fin = pos_ini + (config.pos_fin - config.pos_ini)
+		# 	print('Posicion Final\t:', pos_fin)
+		# 	return buffer[pos_ini:pos_fin]
+		
+		"""OBTENER VALORES DEL BUFFER DE LA BASCULA 2"""
+		if config.cod == 'BSC2': 
+			pos_ini = config.pos_ini
+			print('Posicion Inicial:', pos_ini)
+			pos_fin = config.pos_fin
+			print('Posicion Final\t:', pos_fin)
+			return buffer[pos_ini:pos_fin]
 
 
 '''IMPRESION DE TICKET'''
