@@ -12,23 +12,47 @@ from core.bascula.models import *
 ====================
 ===   SHEARCH    ===
 ==================== '''
-class SearchForm(forms.ModelForm):
-    # Extra Fields
+# Tiene problemas de rendimiento VEHICULOS tiene asignada MARCAS y hace un producto cartesiano
+# se soluciona con select_related: ejemplo queryset=Vehiculo.objects.select_related('marca').all()
+# class SearchForm(forms.ModelForm):
+#     # Extra Fields
+#     date_range = forms.CharField(widget=forms.TextInput(attrs={
+#         'class': 'form-control',
+#         'autocomplete': 'off'
+#     }))
+
+#     class Meta:
+#         model = Asociacion
+#         fields = '__all__'
+#         widgets = {
+#             'cliente': forms.Select(attrs={'class': 'form-control select2', }),
+#             'producto': forms.Select(attrs={'class': 'form-control select2', }),
+#             #'vehiculo': forms.Select(attrs={'class': 'form-control select2', }),
+#             'chofer': forms.Select(attrs={'class': 'form-control select2', }),
+#             # 'tipo_voto': forms.Select(attrs={'class': 'form-control select2', }),
+#         }
+
+class SearchForm(forms.Form):
     date_range = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         'autocomplete': 'off'
     }))
-
-    class Meta:
-        model = Movimiento
-        fields = '__all__'
-        widgets = {
-            'cliente': forms.Select(attrs={'class': 'form-control select2', }),
-            'producto': forms.Select(attrs={'class': 'form-control select2', }),
-            'vehiculo': forms.Select(attrs={'class': 'form-control select2', }),
-            'chofer': forms.Select(attrs={'class': 'form-control select2', }),
-            # 'tipo_voto': forms.Select(attrs={'class': 'form-control select2', }),
-        }
+    fecha_fin = forms.DateField(widget=forms.DateInput(attrs={
+        'class': 'form-control',
+        'autocomplete': 'off'
+    }))
+    cliente = forms.ModelChoiceField(queryset=Cliente.objects.select_related('asociacion').all(), widget=forms.Select(attrs={
+        'class': 'form-control select2',
+    }))
+    producto = forms.ModelChoiceField(queryset=Producto.objects.select_related('categoria').all(), widget=forms.Select(attrs={
+        'class': 'form-control select2',
+    }))
+    vehiculo = forms.ModelChoiceField(queryset=Vehiculo.objects.select_related('marca').all(), widget=forms.Select(attrs={
+        'class': 'form-control select2',
+    }))
+    chofer = forms.ModelChoiceField(queryset=Chofer.objects.all(), widget=forms.Select(attrs={
+        'class': 'form-control select2',
+    }))
       
 
 ''' 

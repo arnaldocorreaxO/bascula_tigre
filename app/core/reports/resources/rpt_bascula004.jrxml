@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.20.1-7584acb244139816654f64e2fd57a00d3e31921e  -->
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_bascula003" pageWidth="612" pageHeight="936" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ba0f302e-7940-4e06-a588-1bee7ec99b04">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PG_BASCULA_TIGRE"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PGSQL_BASCULA_LOCAL"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
@@ -43,6 +43,7 @@ AND  (MOV.FECHA >= TO_DATE($P{P_FECHA_DESDE},'YYYY-MM-DD') OR $P{P_FECHA_DESDE} 
 AND  (MOV.FECHA <= TO_DATE($P{P_FECHA_HASTA},'YYYY-MM-DD') OR $P{P_FECHA_HASTA} IS NULL)
 AND MOV.PESO_NETO > 0 
 AND MOV.ANULADO = FALSE
+AND ASO.ID NOT IN (6)
 GROUP BY 1,2,3,4,5
 ORDER BY 1,2,3,4,5]]>
 	</queryString>
@@ -77,20 +78,26 @@ ORDER BY 1,2,3,4,5]]>
 	<variable name="V_HOY" class="java.util.Date" resetType="None">
 		<variableExpression><![CDATA[NOW( )]]></variableExpression>
 	</variable>
-	<variable name="V_TOT_PRO_ASOCIACION" class="java.math.BigDecimal" resetType="Group" resetGroup="Group1" calculation="Sum">
-		<variableExpression><![CDATA[$F{cant_total}]]></variableExpression>
-	</variable>
 	<variable name="V_FECHA_DESDE" class="java.lang.String" resetType="None">
 		<variableExpression><![CDATA[(($P{P_FECHA_DESDE} != null && $P{P_FECHA_DESDE}.length() == 10) ? $P{P_FECHA_DESDE}.substring(8,10)+"/"+$P{P_FECHA_DESDE}.substring(5,7)+"/"+$P{P_FECHA_DESDE}.substring(0,4) : null)]]></variableExpression>
 	</variable>
 	<variable name="V_FECHA_HASTA" class="java.lang.String" resetType="None">
 		<variableExpression><![CDATA[(($P{P_FECHA_HASTA} != null && $P{P_FECHA_HASTA}.length() == 10) ? $P{P_FECHA_HASTA}.substring(8,10)+"/"+$P{P_FECHA_HASTA}.substring(5,7)+"/"+$P{P_FECHA_HASTA}.substring(0,4) : null)]]></variableExpression>
 	</variable>
+	<variable name="V_TOT_PRO_ASOCIACION" class="java.math.BigDecimal" resetType="Group" resetGroup="Group1" calculation="Sum">
+		<variableExpression><![CDATA[$F{cant_total}]]></variableExpression>
+	</variable>
 	<variable name="V_SUM_TOTAL_X_PRECIO" class="java.math.BigDecimal" resetType="Group" resetGroup="Group1" calculation="Sum">
 		<variableExpression><![CDATA[$V{V_DET_TOTAL_X_PRECIO}]]></variableExpression>
 	</variable>
 	<variable name="V_DET_TOTAL_X_PRECIO" class="java.math.BigDecimal" resetType="None">
 		<variableExpression><![CDATA[$F{cant_total}.multiply($F{precio_venta})]]></variableExpression>
+	</variable>
+	<variable name="V_TOT_PRO_ASOCIACION_ALL" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{cant_total}]]></variableExpression>
+	</variable>
+	<variable name="V_SUM_TOTAL_X_PRECIO_ALL" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$V{V_DET_TOTAL_X_PRECIO}]]></variableExpression>
 	</variable>
 	<group name="Group1" isReprintHeaderOnEachPage="true" keepTogether="true">
 		<groupExpression><![CDATA[$F{asociacion}]]></groupExpression>
@@ -359,4 +366,38 @@ ORDER BY 1,2,3,4,5]]>
 			</textField>
 		</band>
 	</pageFooter>
+	<summary>
+		<band height="50">
+			<staticText>
+				<reportElement x="301" y="3" width="120" height="18" uuid="951c47cf-6336-4c27-a113-b7a19c8fff50"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL GENERAL:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="496" y="3" width="75" height="18" uuid="bf443e94-3bab-4dd0-bb8d-35cbe2f16714"/>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{V_SUM_TOTAL_X_PRECIO_ALL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="421" y="3" width="75" height="18" uuid="bca0c27e-7031-4387-bad5-9a3587a1fe21"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{V_TOT_PRO_ASOCIACION_ALL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
 </jasperReport>

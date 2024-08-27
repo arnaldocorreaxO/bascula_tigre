@@ -16,6 +16,9 @@ class VehiculoList(PermissionMixin, ListView):
     template_name = 'vehiculo/list.html'
     permission_required = 'view_vehiculo'
 
+    def get_queryset(self):
+        return Vehiculo.objects.select_related('marca')
+    
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
