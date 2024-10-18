@@ -80,7 +80,7 @@ $(function () {
                     };
                     return false;
                 }             
-                $('#id_vehiculo').val('').change();                
+                $('#id_vehiculo').val('').change();   
                 message_error(data.error);
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 alert(textStatus + ': ' + errorThrown);

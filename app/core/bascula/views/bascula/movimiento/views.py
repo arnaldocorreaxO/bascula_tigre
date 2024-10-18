@@ -10,7 +10,7 @@ from core.bascula.forms import (ChoferForm, MovimientoEntradaForm,
 from core.views import printSeparador
 from core.bascula.models import Chofer, Cliente, ClienteProducto, ConfigSerial, Movimiento, Producto, Vehiculo
 from core.base.comserial import *
-from core.base.models import Empresa
+from core.base.models import Empresa, Parametro
 from core.security.mixins import PermissionMixin
 
 #DJANGO
@@ -27,6 +27,7 @@ from django.views.generic import ListView,CreateView, UpdateView, DeleteView
 from django.views.generic.base import View
 from django.views.generic.edit import FormView
 from weasyprint import CSS, HTML
+from django.db.models import Min,Max
 
 """LISTADO DE MOVIMIENTO DE BASCULA"""
 class MovimientoList(PermissionMixin,FormView):	
@@ -152,27 +153,51 @@ class MovimientoCreate(PermissionMixin,CreateView):
 				with transaction.atomic():
 					frmChofer = ChoferForm(request.POST)
 					data = frmChofer.save()
-			elif action == 'search_peso_tara_interno':
-				data = {'peso':'0'}
-				if request.POST['id']:
-					vehiculo = Vehiculo.objects.filter(id=request.POST['id']).first()
-					movimiento = Movimiento.objects.filter(fecha = datetime.datetime.now() ,
-														vehiculo=vehiculo)\
-												.order_by('-id')
-					if movimiento:
-						peso_tara = movimiento.first().peso_tara
-						if peso_tara > 0:						
-							data = {'peso':peso_tara}				
-							# Retornamos data como diccionario y recuperos directo data['peso']
-							# Si enviamos como lista de diccionarios debemos definir una lista 
-							# data[] y usar append
-							# data.append({'peso':movimiento.first().peso_tara}) y recuperar
-							# data[0]['peso'], pero en este caso solo enviamos una clave y valor 											
-						# print(data)
+			elif action == 'search_peso_tara_interno':		
+
+				if request.POST['id']!='':
+					# Recuperar el valor del parámetro PROCESO_CARGA_AUTOMATICO
+					parametro = Parametro.objects.filter(parametro='PROCESO_CARGA_AUTOMATICA').first()		
+					if parametro and parametro.valor=='SI':					
+						# Obtener el menor peso tara mínimo
+						vehiculo = Vehiculo.objects.filter(id=request.POST['id']).first()
+						if vehiculo:
+							movimiento = Movimiento.objects.filter(vehiculo=vehiculo,activo__exact=True).first()
+							if movimiento:
+								movimiento_maximo = Movimiento.objects.filter(vehiculo=vehiculo).order_by('-peso_neto').first()
+								peso_tara = movimiento_maximo.peso_tara	
+								if peso_tara > 0:
+									data = {'peso': peso_tara}
+								else:			
+									data['error'] = 'No se ha encontrado peso para el vehiculo %s' % (vehiculo)
+							else:	
+								data['error'] = 'Vehiculo sin movimiento encontrado'
 						else:
-
-							data['error'] = 'Movimiento de Entrada ya está registrado para el vehiculo %s' % (vehiculo)
-
+							data['error'] = 'Vehiculo no encontrado'
+					else:
+						# ORIGINAL-------------------------------------------------------------------------------------------------
+							data = {'peso':'0'}
+						
+							vehiculo = Vehiculo.objects.filter(id=request.POST['id']).first()						
+							movimiento = Movimiento.objects.filter(fecha = datetime.datetime.now() ,
+																vehiculo=vehiculo)\
+														.order_by('-id')
+							if movimiento:
+								peso_tara = movimiento.first().peso_tara
+								print(peso_tara)
+								if peso_tara > 0:						
+									data = {'peso':peso_tara}				
+									# Retornamos data como diccionario y recuperos directo data['peso']
+									# Si enviamos como lista de diccionarios debemos definir una lista 
+									# data[] y usar append
+									# data.append({'peso':movimiento.first().peso_tara}) y recuperar
+									# data[0]['peso'], pero en este caso solo enviamos una clave y valor 											
+								# print(data)
+								else:
+									data['error'] = 'Movimiento de Entrada ya está registrado para el vehiculo %s' % (vehiculo)
+								
+						#ORIGINAL-------------------------------------------------------------------------------------------------------
+			
 			elif action == 'search_producto_id':
 				data = [{'id': '', 'text': '------------'}]
 				for i in ClienteProducto.objects.values('producto__id','producto__codigo','producto__denominacion').filter(cliente_id=request.POST['id']):	
@@ -181,6 +206,9 @@ class MovimientoCreate(PermissionMixin,CreateView):
 			else:
 				data['error'] = 'No ha ingresado a ninguna opción'
 		except Exception as e:
+			print('ERRRROROROR')
+			print(e)
+			print(data)
 			data['error'] = str(e)
 		# return JsonResponse(data,safe=False)
 		return HttpResponse(json.dumps(data), content_type='application/json')
@@ -216,7 +244,17 @@ class MovimientoUpdate(PermissionMixin,UpdateView):
 		# Una vez tenga PESO NETO ya no se puede modificar la salida
 		try:		
 			obj = self.model.objects.get(pk=self.kwargs['pk'],peso_neto__exact=0)
-			#obj = self.model.objects.get(pk=self.kwargs['pk'])
+			
+			#PROCESO AUTOMATICO DE CARGA
+			parametro = Parametro.objects.filter(parametro='PROCESO_CARGA_AUTOMATICA').first()		
+			print(obj.vehiculo)
+			if parametro and parametro.valor=='SI':					
+				movimiento_maximo = Movimiento.objects.filter(vehiculo=obj.vehiculo).order_by('-peso_neto').first()
+				peso_bruto = movimiento_maximo.peso_bruto
+				obj.peso_salida = peso_bruto
+				print (movimiento_maximo)
+			#FIN PROCESO AUTOMATICO DE CARGA
+
 			return obj
 		except self.model.DoesNotExist:
 			raise Http404("INFORMACION: Movimiento de Bascula NO existe o ya fue realizada la SALIDA")

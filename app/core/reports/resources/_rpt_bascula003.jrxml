@@ -5,42 +5,20 @@
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
 	<property name="com.jaspersoft.studio.report.description" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PGSQL_BASCULA_CT_REPLICA"/>
-	<property name="ireport.jasperserver.url" value="http://informes.inc.gov.py:8080/jasperserver/"/>
-	<property name="ireport.jasperserver.user" value="acorrea"/>
-	<property name="ireport.jasperserver.report.resource" value="/reports/INC/FINANCIERA/TESORERIA/SPMP/CT/rpt_bascula003_files/main_jrxml"/>
-	<property name="ireport.jasperserver.reportUnit" value="/reports/INC/FINANCIERA/TESORERIA/SPMP/CT/rpt_bascula003"/>
-	<parameter name="P_REPORTE" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="P_USUARIO" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="P_TITULO1" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[IF($P{P_TITULO1}==null,"INDUSTRIA NACIONAL DEL CEMENTO",$P{P_TITULO1})]]></defaultValueExpression>
-	</parameter>
-	<parameter name="P_TITULO2" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[IF($P{P_TITULO2}==null,"PUESTO DE PESAJE 'BASCULA CERRO TIGRE'",$P{P_TITULO2})]]></defaultValueExpression>
-	</parameter>
-	<parameter name="P_TITULO3" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[IF($P{P_TITULO3}==null,"RESUMEN POR ASOCIACION DE CLIENTES",$P{P_TITULO3})]]></defaultValueExpression>
-	</parameter>
-	<parameter name="P_TITULO4" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[IF($P{P_TITULO4}==null,"03 - Total x Asoc. Clientes",$P{P_TITULO4})]]></defaultValueExpression>
-	</parameter>
-	<parameter name="P_RUTA" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="P_ASOCIACION_ID" class="java.lang.String" nestedType="java.lang.Integer">
-		<property name="com.jaspersoft.studio.js.ic.path" value="/Controles/PGSQL_CT/P_ASOCIACION_ID"/>
-	</parameter>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PGSQL_BASCULA_LOCAL"/>
+	<parameter name="P_REPORTE" class="java.lang.String"/>
+	<parameter name="P_USUARIO" class="java.lang.String"/>
+	<parameter name="P_TITULO1" class="java.lang.String"/>
+	<parameter name="P_TITULO2" class="java.lang.String"/>
+	<parameter name="P_TITULO3" class="java.lang.String"/>
+	<parameter name="P_TITULO4" class="java.lang.String"/>
+	<parameter name="P_RUTA" class="java.lang.String"/>
+	<parameter name="P_ASOCIACION_ID" class="java.lang.String" nestedType="java.lang.Long"/>
 	<parameter name="P_CLIENTE_ID" class="java.lang.String"/>
 	<parameter name="P_PRODUCTO_ID" class="java.lang.String"/>
 	<parameter name="P_CHOFER_ID" class="java.lang.String"/>
-	<parameter name="P_FECHA_DESDE" class="java.lang.String" evaluationTime="Early">
-		<parameterDescription><![CDATA[Fecha Desde:]]></parameterDescription>
-	</parameter>
-	<parameter name="P_FECHA_HASTA" class="java.lang.String" evaluationTime="Early">
-		<parameterDescription><![CDATA[Fecha Hasta:]]></parameterDescription>
-	</parameter>
-	<parameter name="JASPER_REPORT_MAIN" class="java.lang.String">
-		<defaultValueExpression><![CDATA[$P{JASPER_REPORT}.getName()]]></defaultValueExpression>
-	</parameter>
-	<parameter name="LoggedInUsername" class="java.lang.String"/>
+	<parameter name="P_FECHA_DESDE" class="java.lang.String"/>
+	<parameter name="P_FECHA_HASTA" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT  
 ASO.DENOMINACION ||' - '|| ASO.CODIGO AS ASOCIACION,
@@ -119,7 +97,7 @@ ORDER BY 1,2,3]]>
 		<variableExpression><![CDATA[NOW( )]]></variableExpression>
 	</variable>
 	<variable name="V_FECHA_DESDE" class="java.lang.String" resetType="None">
-		<variableExpression><![CDATA[(($P{P_FECHA_DESDE}.toString() != null && $P{P_FECHA_DESDE}.toString().length() == 10) ? $P{P_FECHA_DESDE}.toString().substring(8,10)+"/"+$P{P_FECHA_DESDE}.toString().substring(5,7)+"/"+$P{P_FECHA_DESDE}.toString().substring(0,4) : null)]]></variableExpression>
+		<variableExpression><![CDATA[(($P{P_FECHA_DESDE} != null && $P{P_FECHA_DESDE}.length() == 10) ? $P{P_FECHA_DESDE}.substring(8,10)+"/"+$P{P_FECHA_DESDE}.substring(5,7)+"/"+$P{P_FECHA_DESDE}.substring(0,4) : null)]]></variableExpression>
 	</variable>
 	<variable name="V_FECHA_HASTA" class="java.lang.String" resetType="None">
 		<variableExpression><![CDATA[(($P{P_FECHA_HASTA} != null && $P{P_FECHA_HASTA}.length() == 10) ? $P{P_FECHA_HASTA}.substring(8,10)+"/"+$P{P_FECHA_HASTA}.substring(5,7)+"/"+$P{P_FECHA_HASTA}.substring(0,4) : null)]]></variableExpression>
@@ -141,9 +119,6 @@ ORDER BY 1,2,3]]>
 	</variable>
 	<variable name="V_TOT_MONTO_PRO_ASOCIACION_ALL" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$V{V_SUM_COLS_MONTOS}]]></variableExpression>
-	</variable>
-	<variable name="V_INFO" class="java.lang.String" resetType="Page">
-		<initialValueExpression><![CDATA["Impresion:\n " +$P{JASPER_REPORT_MAIN}+ "\nFecha: "+new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + "\nHora: "+new SimpleDateFormat("HH:mm:ss").format(new Date()) + "\nUsuario: "+IF($P{P_USUARIO}==null,$P{LoggedInUsername},$P{P_USUARIO})]]></initialValueExpression>
 	</variable>
 	<group name="Group1" isReprintHeaderOnEachPage="true" keepTogether="true">
 		<groupExpression><![CDATA[$F{asociacion}]]></groupExpression>
@@ -326,7 +301,7 @@ VENTA
 		</groupFooter>
 	</group>
 	<pageHeader>
-		<band height="71">
+		<band height="70">
 			<textField>
 				<reportElement x="80" y="1" width="399" height="18" uuid="c90e11db-aa81-4780-b751-a4d623570501"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -357,8 +332,19 @@ VENTA
 			</textField>
 			<image onErrorType="Icon">
 				<reportElement x="9" y="-4" width="60" height="59" uuid="b0312ba4-0922-41f9-bd0c-e8c99988ccd3"/>
-				<imageExpression><![CDATA[IF($P{P_RUTA}==null,"repo:/images/logo_hd.png",$P{P_RUTA} +  "logo_empresa.png" )]]></imageExpression>
+				<imageExpression><![CDATA[$P{P_RUTA} +  "logo_empresa.png"]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement stretchType="ContainerHeight" x="490" y="0" width="88" height="50" uuid="ec6b5d4d-e404-4c4d-a110-465dd06dc84d"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Impresión\n"
++ $P{P_REPORTE} 
++"\nFecha: " + DATEFORMAT($V{V_HOY},"dd/MM/yyyy") 
++"\nHora: " + DATEFORMAT($V{V_HOY},"HH:mm:ss")
++"\nUsuario: " + $P{P_USUARIO}]]></textFieldExpression>
+			</textField>
 			<textField>
 				<reportElement x="80" y="55" width="399" height="12" uuid="07f705a0-71ba-4dee-be93-f1e6f0c4c55e">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -367,13 +353,6 @@ VENTA
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA["FECHA DESDE : " +  ($V{V_FECHA_DESDE}!=null?$V{V_FECHA_DESDE}:"Todas") + " HASTA: " + ($V{V_FECHA_HASTA}!=null?$V{V_FECHA_HASTA}:"Todas")]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement stretchType="ContainerHeight" x="484" y="2" width="88" height="66" uuid="3978cdea-1e96-49df-b784-a7f9b2d9894e"/>
-				<textElement textAlignment="Right">
-					<font size="6"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{V_INFO}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -478,7 +457,7 @@ VENTA
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="19">
+		<band height="50">
 			<textField pattern="#,##0">
 				<reportElement x="505" y="1" width="66" height="18" uuid="4bfdd2fa-b527-4313-808a-67964a51fef8"/>
 				<box rightPadding="1">
