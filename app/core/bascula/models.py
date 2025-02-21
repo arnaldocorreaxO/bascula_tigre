@@ -140,6 +140,7 @@ class Asociacion(ModeloBase):
 	codigo = models.CharField(max_length=10,unique=True)
 	denominacion = models.CharField(max_length=100,unique=True)
 	denominacion_corta = models.CharField(max_length=30,unique=True,null=True,blank=True)
+	bloqueado = models.BooleanField(default=False)
 	
 	def toJSON(self):
 		item = model_to_dict(self)
@@ -150,6 +151,12 @@ class Asociacion(ModeloBase):
 	
 	def get_full_name(self):
 		return f"{self.codigo}-{self.denominacion}"
+	
+	def estado_bloqueo(self):
+		return "SI" if self.bloqueado else "NO"
+	
+	def estado_bloqueo_referencia(self):
+		return "BLOQUEADO" if self.bloqueado else "ACTIVO"
 
 	class Meta:
 	# ordering = ['1',]
@@ -162,16 +169,21 @@ class Cliente(ModeloBase):
 	codigo = models.CharField(max_length=10,unique=True)
 	denominacion = models.CharField(max_length=100)
 	asociacion = models.ForeignKey(Asociacion,on_delete=models.PROTECT,null=True,blank=True)
+	bloqueado = models.BooleanField(default=False)
 	
 	def toJSON(self):
 		item = model_to_dict(self)
 		return item
 	
 	def __str__(self):
-		return f"{self.codigo} - {self.denominacion}"
+		return f"{self.codigo} - {self.denominacion} - {self.asociacion.denominacion_corta} - {self.asociacion.estado_bloqueo_referencia()}"
 	
 	def get_full_name(self):
 		return f"{self.codigo}-{self.denominacion}"
+	
+	def estado_bloqueo(self):
+		return "SI" if self.bloqueado else "NO"
+	
 
 	class Meta:
 	# ordering = ['1',]

@@ -285,7 +285,7 @@ class MovimientoEntradaForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['producto'].queryset = Producto.objects.select_related('categoria').filter(activo__exact=True)
-        self.fields['cliente'].queryset = Cliente.objects.select_related('asociacion').filter(activo__exact=True)
+        self.fields['cliente'].queryset = Cliente.objects.select_related('asociacion').filter(activo__exact=True).order_by('denominacion')
         self.fields['chofer'].queryset = Chofer.objects.filter(activo__exact=True)
         self.fields['vehiculo'].queryset = Vehiculo.objects.select_related('marca').filter(activo__exact=True)
         # self.fields['vehiculo'].queryset = Vehiculo.objects.none()
@@ -318,17 +318,20 @@ class MovimientoEntradaForm(ModelForm):
             ),
             'chofer': forms.Select(attrs={
                 'class': 'custom-select select2',
-                 'style': 'width: 90%'
+                 'style': 'width: 90%',
+                 'required': True
                 }
             ),
             'cliente': forms.Select(attrs={
                 'class': 'custom-select select2',
-                'style': 'width: 100%'
+                'style': 'width: 100%',
+                'required': True
                 }
             ),
             'producto': forms.Select(attrs={
                 'class': 'custom-select select2',
-                'style': 'width: 100%'
+                'style': 'width: 100%',
+                'required': True
             }
             ),
             'fecha': forms.TextInput(attrs={

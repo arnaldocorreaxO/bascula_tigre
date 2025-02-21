@@ -162,9 +162,11 @@ class MovimientoCreate(PermissionMixin,CreateView):
 						# Obtener el menor peso tara mínimo
 						vehiculo = Vehiculo.objects.filter(id=request.POST['id']).first()
 						if vehiculo:
-							movimiento = Movimiento.objects.filter(vehiculo=vehiculo,activo__exact=True).first()
+							movimiento = Movimiento.objects.filter(vehiculo=vehiculo,nro_ticket__gt=0,activo__exact=True).first()
+							
 							if movimiento:
-								movimiento_maximo = Movimiento.objects.filter(vehiculo=vehiculo).order_by('-peso_neto').first()
+								movimiento_maximo = Movimiento.objects.filter(nro_ticket__gt=0,vehiculo=vehiculo).order_by('-peso_neto').first()
+								
 								peso_tara = movimiento_maximo.peso_tara	
 								if peso_tara > 0:
 									data = {'peso': peso_tara}

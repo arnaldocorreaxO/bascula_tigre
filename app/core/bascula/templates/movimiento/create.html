@@ -4,6 +4,44 @@
 {% block head_form %}
     <script src="{% static 'movimiento/js/form.js' %}"></script>
     <script src="{% static '/js/select2_cliente_producto.js' %}"></script>
+    
+    <style>
+        /* Estilo para la opción bloqueada */
+        .bloqueado {
+            color: red; /* Cambia el color a rojo */
+        }
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            // Inicializa Select2 solo para el campo cliente
+            //{% comment %} $('#id_cliente').select2(); {% endcomment %}
+        
+            // Cambia el color de los elementos bloqueados cuando se abre el select
+            $('#id_cliente').on('select2:open', function() {
+                // Espera un momento para asegurarte de que los elementos estén renderizados
+                setTimeout(function() {
+                    $('.select2-results__option').each(function() {
+                        if ($(this).text().includes('BLOQUEADO')) {
+                            $(this).css('color', 'red'); // Cambia el color a rojo
+                            $(this).attr('aria-disabled', 'true'); // Marca como deshabilitado
+                            $(this).css('pointer-events', 'none'); // Deshabilita la selección
+                            
+                        }
+                    });
+                }, 1); // Timeout de 1 milisegundo
+            });
+
+            // Deshabilitar opciones en el select original
+            $('#id_cliente option').each(function() {
+                if ($(this).text().includes('BLOQUEADO')) {
+                    $(this).prop('disabled', true); // Deshabilita la opción en el select original
+                }
+            });
+
+        });       
+        
+        </script>
 {% endblock %}
 
 {% block content %}
@@ -117,11 +155,13 @@
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6 mb-0">
+                                <div class="form-group col-md-12 mb-0">
                                     <label for="{{ form.cliente.id_for_label }}">{{form.cliente.label}}*</label>
                                     {{ form.cliente}}
                                 </div>
-                                <div class="form-group col-md-6 mb-0">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12 mb-0">
                                     <label for="{{ form.producto.id_for_label }}">{{form.producto.label}}*</label>
                                     {{ form.producto}}
                                 </div>
