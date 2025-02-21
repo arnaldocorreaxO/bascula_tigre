@@ -313,7 +313,8 @@ class MovimientoEntradaForm(ModelForm):
         widgets = {
             'vehiculo': forms.Select(attrs={
                 'class': 'custom-select select2',
-                'style': 'width: 90%'
+                'style': 'width: 90%',
+                'required': True
                 }
             ),
             'chofer': forms.Select(attrs={
@@ -336,14 +337,17 @@ class MovimientoEntradaForm(ModelForm):
             ),
             'fecha': forms.TextInput(attrs={
                 'readonly': True,
+                'required': True
             }
             ),
             'nro_ticket': forms.TextInput(attrs={
                 'readonly': True,
+                'required': True
             }
             ),
             'peso_entrada': forms.TextInput(attrs={
                 'readonly': True,
+                'required': True
             }
             ),
         }
@@ -413,27 +417,31 @@ class MovimientoSalidaForm(ModelForm):
                 'class': 'custom-select select2',
                 'style': 'width: 100%',
                 'disabled': True,
+                'required': True
             }
             ),
             'cliente': forms.Select(attrs={
                 'class': 'custom-select select2',
                 'style': 'width: 100%',
+                'required': True
             }
             ),
             'producto': forms.Select(attrs={
                 'class': 'custom-select select2',
                 'style': 'width: 100%',
+                'required': True
             }
             ),
             'fecha': forms.TextInput(attrs={
                 'readonly': True,
                 'style': 'width: 100%',
+                'required': True
             }
             ),
             'nro_ticket': forms.TextInput(attrs={
                 'readonly': True,
                 'style': 'width: 100%',
-
+                'required': True
             }
             ),
             'peso_entrada': forms.TextInput(attrs={
@@ -443,6 +451,7 @@ class MovimientoSalidaForm(ModelForm):
             ),
             'peso_salida': forms.TextInput(attrs={
                 'readonly': True,
+                'required': True
             }
             ),
             'nro_mic': forms.TextInput(attrs={

@@ -176,7 +176,9 @@ class Cliente(ModeloBase):
 		return item
 	
 	def __str__(self):
-		return f"{self.codigo} - {self.denominacion} - {self.asociacion.denominacion_corta} - {self.asociacion.estado_bloqueo_referencia()}"
+		estado_bloqueo = "BLOQUEADO" if self.bloqueado else "ACTIVO" #Bloqueo a Nivel de Cliente
+		estado_bloqueo = "BLOQUEADO" if self.asociacion.bloqueado else estado_bloqueo #Bloqueo a Nivel de Asociacion
+		return f"{self.codigo} - {self.denominacion} - {self.asociacion.denominacion_corta} - {estado_bloqueo}"
 	
 	def get_full_name(self):
 		return f"{self.codigo}-{self.denominacion}"
