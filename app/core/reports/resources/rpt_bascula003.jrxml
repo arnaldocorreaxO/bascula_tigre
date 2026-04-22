@@ -5,7 +5,7 @@
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
 	<property name="com.jaspersoft.studio.report.description" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PGSQL_BASCULA_CT_REPLICA"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PGSQL_BASCULA_SE_DIRECTO"/>
 	<property name="ireport.jasperserver.url" value="http://informes.inc.gov.py:8080/jasperserver/"/>
 	<property name="ireport.jasperserver.user" value="acorrea"/>
 	<property name="ireport.jasperserver.report.resource" value="/reports/INC/FINANCIERA/TESORERIA/SPMP/CT/rpt_bascula003_files/main_jrxml"/>
@@ -52,9 +52,9 @@
     ROUND(SUM(CASE WHEN PRO.ID = 2 THEN MOV.PESO_NETO ELSE 0 END)/1000.00, 2) AS CALIZA,
     ROUND(SUM(CASE WHEN PRO.ID = 1 THEN MOV.PESO_NETO ELSE 0 END)/1000.00, 2) AS DOLOMITA,
 
-    ROUND(SUM(CASE WHEN PRO.ID = 3 THEN MOV.PESO_NETO*MOV.PRECIO_VENTA ELSE 0 END)/1000.00, 2) AS MTO_CALIZA_CAL_VIVA,
-    ROUND(SUM(CASE WHEN PRO.ID = 2 THEN MOV.PESO_NETO*MOV.PRECIO_VENTA ELSE 0 END)/1000.00, 2) AS MTO_CALIZA,
-    ROUND(SUM(CASE WHEN PRO.ID = 1 THEN MOV.PESO_NETO*MOV.PRECIO_VENTA ELSE 0 END)/1000.00, 2) AS MTO_DOLOMITA
+    ROUND(SUM(CASE WHEN PRO.ID = 3 THEN MOV.PESO_NETO ELSE 0 END)/1000.00, 2) * MOV.PRECIO_VENTA AS MTO_CALIZA_CAL_VIVA,
+    ROUND(SUM(CASE WHEN PRO.ID = 2 THEN MOV.PESO_NETO ELSE 0 END)/1000.00, 2) * MOV.PRECIO_VENTA AS MTO_CALIZA,
+    ROUND(SUM(CASE WHEN PRO.ID = 1 THEN MOV.PESO_NETO ELSE 0 END)/1000.00, 2) * MOV.PRECIO_VENTA AS MTO_DOLOMITA
 
 FROM BASCULA_MOVIMIENTO MOV
 INNER JOIN BASCULA_PRODUCTO PRO ON MOV.PRODUCTO_ID = PRO.ID 
